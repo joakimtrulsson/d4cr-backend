@@ -2,7 +2,7 @@
 
 ## Konfigurera miljövariabler
 
-- Skapa en .env-fil i /backend med nedanstående variabler och ange dina egna värden.
+- Skapa en .env-fil med nedanstående variabler och ange dina egna värden.
 
 ```
 NODE_ENV=development
