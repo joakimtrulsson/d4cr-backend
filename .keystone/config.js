@@ -2199,9 +2199,10 @@ var keystone_default = withAuth(
       }
     },
     db: {
-      provider: "mysql",
+      provider: "postgresql",
       url: DATABASE_URL,
       idField: { kind: "uuid" }
+      // shadowDatabaseUrl: 'postgres://dbuser:dbpass@localhost:5432/shadowdb'
     },
     lists,
     session,

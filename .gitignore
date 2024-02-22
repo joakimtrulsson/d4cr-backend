@@ -49,12 +49,15 @@ Thumbs.db
 *.wmv
 
 
-backend/.keystone/admin
+.keystone/admin
 database.db
 keystone.db
 .env
-backend/public/*
-!backend/public/images/
-backend/public/images/*
-!backend/public/images/logo/
-backend/todo.md
+public/*
+!public/images/
+public/images/*
+!public/images/logo/
+todo.md
+
+
+

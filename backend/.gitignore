@@ -1,4 +1,0 @@
-node_modules
-backend/.keystone/admin
-database.db
-*.log
