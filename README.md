@@ -1,7 +1,7 @@
 # D4CR Keystone Server Installations Guide
 
-1. Konfigurera miljövariabler
-   Skapa en .env-fil i /backend med nedanstående variabler och ange dina egna värden.
+- Konfigurera miljövariabler
+  1. Skapa en .env-fil i /backend med nedanstående variabler och ange dina egna värden.
 
 ```
 NODE_ENV=development
@@ -16,7 +16,7 @@ SESSION_SECRET="myultrasecretstringmyultrasecretstring"
 SESSION_MAX_AGE=2592000
 
 # Database
-DATABASE_URL="mysql://root@127.0.0.1:3306/d4cr_database"
+DATABASE_URL="postgres://username@localhost:5432/db_name"
 
 # Media
 MEDIA_URL="${BASE_URL}public/media"
@@ -39,12 +39,12 @@ EMAIL_PORT=
 
 ```
 
-2. Mailtrap
-   Gå till Mailtrap och skapa ett konto om du inte redan har ett.
-   Efter att du har loggat in, skapa en ny inkorg genom att klicka på "Add Inbox" (Lägg till inkorg) och följ instruktionerna för att konfigurera den.
-   När inkorgen är skapad, klicka på den för att få tillgång till dess inställningar.
-   I inställningarna kommer du att hitta SMTP-serverinformation som du behöver för att fylla i din .env-fil. Notera användarnamn, lösenord, host och port.
-   Återgå till din .env-fil och fyll i följande fält under "Mail - Development (Mailtrap)":
+- Mailtrap
+  1.  Gå till Mailtrap och skapa ett konto om du inte redan har ett.
+  2.  Efter att du har loggat in, skapa en ny inkorg genom att klicka på "Add Inbox" (Lägg till inkorg) och följ instruktionerna för att konfigurera den.
+  3.  När inkorgen är skapad, klicka på den för att få tillgång till dess inställningar.
+  4.  I inställningarna kommer du att hitta SMTP-serverinformation som du behöver för att fylla i din .env-fil. Notera användarnamn, lösenord, host och port.
+  5.  Återgå till din .env-fil och fyll i följande fält under "Mail - Development (Mailtrap)":
 
 ```
    EMAIL_USERNAME_DEV: Ditt Mailtrap-användarnamn
@@ -53,18 +53,21 @@ EMAIL_PORT=
    EMAIL_PORT_DEV: SMTP-port som tillhandahålls av Mailtrap
 ```
 
-3. Postman
-   Importera "postman_collection.json" till din Postman app.
-   Denna fil innehåller en samling av fördefinierade API-förfrågningar som du kan använda för att interagera med.
-   .nosync
+- Postman
 
-4. Skapa en mysql databas lokalt
-   Följ dessa steg för att skapa en MySQL-databas lokalt:
-   Installera MySQL på din dator om du inte redan har det.
-   Använd MySQL-kommandotolken eller ett grafiskt verktyg som MySQL Workbench för att skapa en ny databas. Ange användarnamn, lösenord och andra nödvändiga inställningar enligt din .env-fil.
+  1.  Importera "postman_collection.json" till din Postman app.
+  2.  Denna fil innehåller en samling av fördefinierade API-förfrågningar som du kan använda för att interagera med.
 
-5. Start Keystone Js
-   Använd följande kommando för att installera och starta din Keystone JS-server:
+- Skapa en Postgres databas lokalt
+
+  1. Följ dessa steg för att skapa en Postgres-databas lokalt:
+  2. Installera Postgres via [Download Postgres](https://postgresapp.com/downloads.html) om du inte redan har det.
+  3. Skapa en ny databas via GUI.
+  4. Uppdatera DATABASE_URL i .env.
+
+- Start Keystone Js
+
+1. Använd följande kommando för att installera och starta din Keystone JS-server:
 
 ```
 cd /backend
