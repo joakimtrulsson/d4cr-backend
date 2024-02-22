@@ -1,7 +1,8 @@
 # D4CR Keystone Server Installations Guide
 
-- Konfigurera miljövariabler
-  1. Skapa en .env-fil i /backend med nedanstående variabler och ange dina egna värden.
+## Konfigurera miljövariabler
+
+- Skapa en .env-fil i /backend med nedanstående variabler och ange dina egna värden.
 
 ```
 NODE_ENV=development
@@ -39,12 +40,13 @@ EMAIL_PORT=
 
 ```
 
-- Mailtrap
-  1.  Gå till Mailtrap och skapa ett konto om du inte redan har ett.
-  2.  Efter att du har loggat in, skapa en ny inkorg genom att klicka på "Add Inbox" (Lägg till inkorg) och följ instruktionerna för att konfigurera den.
-  3.  När inkorgen är skapad, klicka på den för att få tillgång till dess inställningar.
-  4.  I inställningarna kommer du att hitta SMTP-serverinformation som du behöver för att fylla i din .env-fil. Notera användarnamn, lösenord, host och port.
-  5.  Återgå till din .env-fil och fyll i följande fält under "Mail - Development (Mailtrap)":
+## Mailtrap
+
+- Gå till Mailtrap och skapa ett konto om du inte redan har ett.
+- Efter att du har loggat in, skapa en ny inkorg genom att klicka på "Add Inbox" (Lägg till inkorg) och följ instruktionerna för att konfigurera den.
+- När inkorgen är skapad, klicka på den för att få tillgång till dess inställningar.
+- I inställningarna kommer du att hitta SMTP-serverinformation som du behöver för att fylla i din .env-fil. Notera användarnamn, lösenord, host och port.
+- Återgå till din .env-fil och fyll i följande fält under "Mail - Development (Mailtrap)":
 
 ```
    EMAIL_USERNAME_DEV: Ditt Mailtrap-användarnamn
@@ -53,21 +55,21 @@ EMAIL_PORT=
    EMAIL_PORT_DEV: SMTP-port som tillhandahålls av Mailtrap
 ```
 
-- Postman
+## Postman
 
-  1.  Importera "postman_collection.json" till din Postman app.
-  2.  Denna fil innehåller en samling av fördefinierade API-förfrågningar som du kan använda för att interagera med.
+- Importera "postman_collection.json" till din Postman app.
+- Denna fil innehåller en samling av fördefinierade API-förfrågningar som du kan använda för att interagera med.
 
-- Skapa en Postgres databas lokalt
+## Skapa en Postgres databas lokalt
 
-  1. Följ dessa steg för att skapa en Postgres-databas lokalt:
-  2. Installera Postgres via [Download Postgres](https://postgresapp.com/downloads.html) om du inte redan har det.
-  3. Skapa en ny databas via GUI.
-  4. Uppdatera DATABASE_URL i .env.
+- Följ dessa steg för att skapa en Postgres-databas lokalt:
+- Installera Postgres via [Download Postgres](https://postgresapp.com/downloads.html) om du inte redan har det.
+- Skapa en ny databas via GUI.
+- Uppdatera DATABASE_URL i .env.
 
-- Start Keystone Js
+## Start Keystone Js
 
-1. Använd följande kommando för att installera och starta din Keystone JS-server:
+- Använd följande kommando för att installera och starta din Keystone JS-server:
 
 ```
 cd /backend
@@ -76,8 +78,8 @@ npm run dev
 
 ```
 
-## Problem att lösa.
+### Problem att lösa.
 
-1. När News hämtas som tillhör ett visst Chapter inkluderas även nyheter som inte är kopplade till något Chapter. Det förväntade beteendet är att endast nyheter som är associerade med det specifika Chapter ska hämtas. För att komma runt problemet just nu, får ni kontrollera om relatedChapters är falsy(!relatedChapters).
+- När News hämtas som tillhör ett visst Chapter inkluderas även nyheter som inte är kopplade till något Chapter. Det förväntade beteendet är att endast nyheter som är associerade med det specifika Chapter ska hämtas. För att komma runt problemet just nu, får ni kontrollera om relatedChapters är falsy(!relatedChapters).
 
-2. När News hämtas som tillhör ett visst Chapter och en viss News Category inkluderas även nyheter som inte är kopplade till något Chapter. Det förväntade beteendet är att endast nyheter som är associerade med det specifika Chapter och NewsCategory ska hämtas. För att komma runt problemet just nu, får ni kontrollera om relatedChapters är falsy(!relatedChapters).
+- När News hämtas som tillhör ett visst Chapter och en viss News Category inkluderas även nyheter som inte är kopplade till något Chapter. Det förväntade beteendet är att endast nyheter som är associerade med det specifika Chapter och NewsCategory ska hämtas. För att komma runt problemet just nu, får ni kontrollera om relatedChapters är falsy(!relatedChapters).
