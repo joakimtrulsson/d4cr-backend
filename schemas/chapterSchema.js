@@ -1,8 +1,16 @@
 import { list } from '@keystone-6/core';
-import { text, json, image, select, relationship } from '@keystone-6/core/fields';
+import {
+  text,
+  json,
+  image,
+  select,
+  relationship,
+  virtual,
+} from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access';
+import { graphql } from '@keystone-6/core';
 
 import { languageCodesData } from '../data/languageCodes';
 import { buildSlug } from '../utils/buildSlug';
@@ -117,6 +125,35 @@ export const chapterSchema = list({
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
+      },
+    }),
+
+    news: virtual({
+      field: (lists) =>
+        graphql.field({
+          type: graphql.list(lists.News.types.output),
+          async resolve(item, args, context) {
+            const newsData = await context.query.News.findMany({
+              where: { relatedChapters: { some: { slug: { equals: item.slug } } } },
+              orderBy: [{ createdAt: 'desc' }],
+              query: 'id status createdAt title slug image sections',
+            });
+
+            newsData.forEach((newsItem) => {
+              if (typeof newsItem.createdAt === 'string') {
+                newsItem.createdAt = new Date(newsItem.createdAt);
+              }
+            });
+            return newsData;
+          },
+        }),
+      ui: {
+        listView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'hidden',
+        },
       },
     }),
   },

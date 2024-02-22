@@ -221,7 +221,7 @@ __export(keystone_exports, {
   default: () => keystone_default
 });
 module.exports = __toCommonJS(keystone_exports);
-var import_core24 = require("@keystone-6/core");
+var import_core25 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
 var import_dotenv = __toESM(require("dotenv"));
 var import_morgan = __toESM(require("morgan"));
@@ -397,6 +397,7 @@ var import_core3 = require("@keystone-6/core");
 var import_fields3 = require("@keystone-6/core/fields");
 var import_fields_document = require("@keystone-6/fields-document");
 var import_access5 = require("@keystone-6/core/access");
+var import_core4 = require("@keystone-6/core");
 
 // data/languageCodes.js
 var languageCodesData = [
@@ -741,16 +742,42 @@ var chapterSchema = (0, import_core3.list)({
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
+    }),
+    news: (0, import_fields3.virtual)({
+      field: (lists2) => import_core4.graphql.field({
+        type: import_core4.graphql.list(lists2.News.types.output),
+        async resolve(item, args, context) {
+          const newsData = await context.query.News.findMany({
+            where: { relatedChapters: { some: { slug: { equals: item.slug } } } },
+            orderBy: [{ createdAt: "desc" }],
+            query: "id status createdAt title slug image sections"
+          });
+          newsData.forEach((newsItem) => {
+            if (typeof newsItem.createdAt === "string") {
+              newsItem.createdAt = new Date(newsItem.createdAt);
+            }
+          });
+          return newsData;
+        }
+      }),
+      ui: {
+        listView: {
+          fieldMode: "hidden"
+        },
+        itemView: {
+          fieldMode: "hidden"
+        }
+      }
     })
   }
 });
 
 // schemas/pageSchema.js
-var import_core4 = require("@keystone-6/core");
+var import_core5 = require("@keystone-6/core");
 var import_fields4 = require("@keystone-6/core/fields");
 var import_fields_document2 = require("@keystone-6/fields-document");
 var import_access7 = require("@keystone-6/core/access");
-var pageSchema = (0, import_core4.list)({
+var pageSchema = (0, import_core5.list)({
   access: {
     operation: {
       ...(0, import_access7.allOperations)(isSignedIn),
@@ -854,11 +881,11 @@ var pageSchema = (0, import_core4.list)({
 });
 
 // schemas/frontPageSchema.js
-var import_core5 = require("@keystone-6/core");
+var import_core6 = require("@keystone-6/core");
 var import_fields5 = require("@keystone-6/core/fields");
 var import_fields_document3 = require("@keystone-6/fields-document");
 var import_access9 = require("@keystone-6/core/access");
-var frontPageSchema = (0, import_core5.list)({
+var frontPageSchema = (0, import_core6.list)({
   access: {
     operation: {
       ...(0, import_access9.allOperations)(isSignedIn),
@@ -944,11 +971,11 @@ var frontPageSchema = (0, import_core5.list)({
 });
 
 // schemas/footerBannerSchema.js
-var import_core6 = require("@keystone-6/core");
+var import_core7 = require("@keystone-6/core");
 var import_fields6 = require("@keystone-6/core/fields");
 var import_fields_document4 = require("@keystone-6/fields-document");
 var import_access11 = require("@keystone-6/core/access");
-var footerBannerSchema = (0, import_core6.list)({
+var footerBannerSchema = (0, import_core7.list)({
   access: {
     operation: {
       ...(0, import_access11.allOperations)(isSignedIn),
@@ -981,7 +1008,7 @@ var footerBannerSchema = (0, import_core6.list)({
 });
 
 // schemas/formEmailSchema.js
-var import_core7 = require("@keystone-6/core");
+var import_core8 = require("@keystone-6/core");
 var import_fields7 = require("@keystone-6/core/fields");
 var import_access13 = require("@keystone-6/core/access");
 
@@ -992,7 +1019,7 @@ function validateEmail(email) {
 }
 
 // schemas/formEmailSchema.js
-var formEmailSchema = (0, import_core7.list)({
+var formEmailSchema = (0, import_core8.list)({
   access: {
     operation: {
       ...(0, import_access13.allOperations)(isSignedIn),
@@ -1054,10 +1081,10 @@ var formEmailSchema = (0, import_core7.list)({
 });
 
 // schemas/footerJoinUsSchema.js
-var import_core8 = require("@keystone-6/core");
+var import_core9 = require("@keystone-6/core");
 var import_fields8 = require("@keystone-6/core/fields");
 var import_access15 = require("@keystone-6/core/access");
-var footerJoinUsSchema = (0, import_core8.list)({
+var footerJoinUsSchema = (0, import_core9.list)({
   access: {
     operation: {
       ...(0, import_access15.allOperations)(isSignedIn),
@@ -1120,10 +1147,10 @@ var footerJoinUsSchema = (0, import_core8.list)({
 });
 
 // schemas/mainMenuSchema.js
-var import_core9 = require("@keystone-6/core");
+var import_core10 = require("@keystone-6/core");
 var import_fields9 = require("@keystone-6/core/fields");
 var import_access17 = require("@keystone-6/core/access");
-var mainMenuSchema = (0, import_core9.list)({
+var mainMenuSchema = (0, import_core10.list)({
   access: {
     operation: {
       ...(0, import_access17.allOperations)(isSignedIn),
@@ -1165,10 +1192,10 @@ var mainMenuSchema = (0, import_core9.list)({
 });
 
 // schemas/footerMenuSchema.js
-var import_core10 = require("@keystone-6/core");
+var import_core11 = require("@keystone-6/core");
 var import_fields10 = require("@keystone-6/core/fields");
 var import_access19 = require("@keystone-6/core/access");
-var footerMenuSchema = (0, import_core10.list)({
+var footerMenuSchema = (0, import_core11.list)({
   access: {
     operation: {
       ...(0, import_access19.allOperations)(isSignedIn),
@@ -1196,10 +1223,10 @@ var footerMenuSchema = (0, import_core10.list)({
 });
 
 // schemas/newsSchema.js
-var import_core11 = require("@keystone-6/core");
+var import_core12 = require("@keystone-6/core");
 var import_fields11 = require("@keystone-6/core/fields");
 var import_access21 = require("@keystone-6/core/access");
-var newsSchema = (0, import_core11.list)({
+var newsSchema = (0, import_core12.list)({
   access: {
     operation: {
       ...(0, import_access21.allOperations)(isSignedIn),
@@ -1297,10 +1324,10 @@ var newsSchema = (0, import_core11.list)({
 });
 
 // schemas/newsCategorySchema.js
-var import_core12 = require("@keystone-6/core");
+var import_core13 = require("@keystone-6/core");
 var import_fields12 = require("@keystone-6/core/fields");
 var import_access23 = require("@keystone-6/core/access");
-var newsCategorySchema = (0, import_core12.list)({
+var newsCategorySchema = (0, import_core13.list)({
   access: {
     operation: {
       ...(0, import_access23.allOperations)(isSignedIn),
@@ -1339,10 +1366,10 @@ var newsCategorySchema = (0, import_core12.list)({
 });
 
 // schemas/resourceSchema.js
-var import_core13 = require("@keystone-6/core");
+var import_core14 = require("@keystone-6/core");
 var import_fields13 = require("@keystone-6/core/fields");
 var import_access25 = require("@keystone-6/core/access");
-var resourceSchema = (0, import_core13.list)({
+var resourceSchema = (0, import_core14.list)({
   access: {
     operation: {
       ...(0, import_access25.allOperations)(isSignedIn),
@@ -1399,10 +1426,10 @@ var resourceSchema = (0, import_core13.list)({
 });
 
 // schemas/resourceCategorySchema.js
-var import_core14 = require("@keystone-6/core");
+var import_core15 = require("@keystone-6/core");
 var import_fields14 = require("@keystone-6/core/fields");
 var import_access27 = require("@keystone-6/core/access");
-var resourceCategorySchema = (0, import_core14.list)({
+var resourceCategorySchema = (0, import_core15.list)({
   access: {
     operation: {
       ...(0, import_access27.allOperations)(isSignedIn),
@@ -1433,10 +1460,10 @@ var resourceCategorySchema = (0, import_core14.list)({
 });
 
 // schemas/resourceTypeSchema.js
-var import_core15 = require("@keystone-6/core");
+var import_core16 = require("@keystone-6/core");
 var import_fields15 = require("@keystone-6/core/fields");
 var import_access29 = require("@keystone-6/core/access");
-var resourceTypeSchema = (0, import_core15.list)({
+var resourceTypeSchema = (0, import_core16.list)({
   access: {
     operation: {
       ...(0, import_access29.allOperations)(isSignedIn),
@@ -1481,10 +1508,10 @@ var resourceTypeSchema = (0, import_core15.list)({
 });
 
 // schemas/principleSchema.js
-var import_core16 = require("@keystone-6/core");
+var import_core17 = require("@keystone-6/core");
 var import_fields16 = require("@keystone-6/core/fields");
 var import_access31 = require("@keystone-6/core/access");
-var principleSchema = (0, import_core16.list)({
+var principleSchema = (0, import_core17.list)({
   access: {
     operation: {
       ...(0, import_access31.allOperations)(isSignedIn),
@@ -1612,10 +1639,10 @@ var principleSchema = (0, import_core16.list)({
 });
 
 // schemas/principleNumberSchema.js
-var import_core17 = require("@keystone-6/core");
+var import_core18 = require("@keystone-6/core");
 var import_fields17 = require("@keystone-6/core/fields");
 var import_access33 = require("@keystone-6/core/access");
-var principleNumberSchema = (0, import_core17.list)({
+var principleNumberSchema = (0, import_core18.list)({
   access: {
     operation: {
       ...(0, import_access33.allOperations)(isSignedIn),
@@ -1645,10 +1672,10 @@ var principleNumberSchema = (0, import_core17.list)({
 });
 
 // schemas/principleCategorySchema.js
-var import_core18 = require("@keystone-6/core");
+var import_core19 = require("@keystone-6/core");
 var import_fields18 = require("@keystone-6/core/fields");
 var import_access35 = require("@keystone-6/core/access");
-var principleCategorySchema = (0, import_core18.list)({
+var principleCategorySchema = (0, import_core19.list)({
   access: {
     operation: {
       ...(0, import_access35.allOperations)(isSignedIn),
@@ -1679,11 +1706,11 @@ var principleCategorySchema = (0, import_core18.list)({
 });
 
 // schemas/caseSchema.js
-var import_core19 = require("@keystone-6/core");
+var import_core20 = require("@keystone-6/core");
 var import_fields19 = require("@keystone-6/core/fields");
 var import_fields_document5 = require("@keystone-6/fields-document");
 var import_access37 = require("@keystone-6/core/access");
-var caseSchema = (0, import_core19.list)({
+var caseSchema = (0, import_core20.list)({
   access: {
     operation: {
       ...(0, import_access37.allOperations)(isSignedIn),
@@ -1796,10 +1823,10 @@ var caseSchema = (0, import_core19.list)({
 });
 
 // schemas/steeringGroupMemberSchema.js
-var import_core20 = require("@keystone-6/core");
+var import_core21 = require("@keystone-6/core");
 var import_fields20 = require("@keystone-6/core/fields");
 var import_access39 = require("@keystone-6/core/access");
-var steeringGroupMemberSchema = (0, import_core20.list)({
+var steeringGroupMemberSchema = (0, import_core21.list)({
   access: {
     operation: {
       ...(0, import_access39.allOperations)(isSignedIn),
@@ -1875,10 +1902,10 @@ var steeringGroupMemberSchema = (0, import_core20.list)({
 });
 
 // schemas/imageSchema.js
-var import_core21 = require("@keystone-6/core");
+var import_core22 = require("@keystone-6/core");
 var import_fields21 = require("@keystone-6/core/fields");
 var import_access41 = require("@keystone-6/core/access");
-var imageSchema = (0, import_core21.list)({
+var imageSchema = (0, import_core22.list)({
   access: {
     operation: {
       ...(0, import_access41.allOperations)(isSignedIn),
@@ -1936,10 +1963,10 @@ var imageSchema = (0, import_core21.list)({
 });
 
 // schemas/videoSchema.js
-var import_core22 = require("@keystone-6/core");
+var import_core23 = require("@keystone-6/core");
 var import_fields22 = require("@keystone-6/core/fields");
 var import_access43 = require("@keystone-6/core/access");
-var videoSchema = (0, import_core22.list)({
+var videoSchema = (0, import_core23.list)({
   access: {
     operation: {
       ...(0, import_access43.allOperations)(isSignedIn),
@@ -1989,11 +2016,11 @@ var videoSchema = (0, import_core22.list)({
 });
 
 // schemas/testSchema.js
-var import_core23 = require("@keystone-6/core");
+var import_core24 = require("@keystone-6/core");
 var import_fields23 = require("@keystone-6/core/fields");
 var import_access45 = require("@keystone-6/core/access");
 var import_fields_document6 = require("@keystone-6/fields-document");
-var testSchema = (0, import_core23.list)({
+var testSchema = (0, import_core24.list)({
   access: {
     operation: {
       ...(0, import_access45.allOperations)(isSignedIn),
@@ -2184,14 +2211,13 @@ var import_emailRoutes = __toESM(require_emailRoutes());
 import_dotenv.default.config();
 var { PORT, MAX_FILE_SIZE, DATABASE_URL } = process.env;
 var keystone_default = withAuth(
-  (0, import_core24.config)({
+  (0, import_core25.config)({
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,
       cors: { origin: ["*"], credentials: true },
       extendExpressApp: (app, commonContext) => {
         if (process.env.NODE_ENV === "development") {
-          app.use((0, import_morgan.default)("dev"));
         }
         app.use(import_express.default.json());
         app.use("/public", import_express.default.static("public"));

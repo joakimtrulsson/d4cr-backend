@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields';
+import {
+  FieldContainer,
+  FieldLabel,
+  FieldDescription,
+  TextInput,
+} from '@keystone-ui/fields';
 
 import Wysiwyg from '../components/Wysiwyg/Wysiwyg';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton';
@@ -24,7 +29,7 @@ function Accordion({
       return editData;
     } else {
       return {
-        title: '',
+        accordionTitle: '',
         fields: [{ heading: '', bodyText: '' }],
       };
     }
@@ -104,6 +109,14 @@ function Accordion({
         }}
       >
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section title</FieldLabel>
+        <FieldDescription>Unique identifier for this section</FieldDescription>
+        <TextInput
+          autoFocus={autoFocus}
+          onChange={(event) => handleChange('sectionTitle', event.target.value)}
+          value={value.sectionTitle}
+        />
+
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Accordion title</FieldLabel>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}

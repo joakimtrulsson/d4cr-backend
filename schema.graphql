@@ -239,6 +239,7 @@ type Chapter {
   translatedChaptersCount(where: ChapterWhereInput! = {}): Int
   status: String
   sections: JSON
+  news: [News]
 }
 
 type Chapter_preamble_Document {

@@ -21,7 +21,7 @@ export default withAuth(
       cors: { origin: ['*'], credentials: true },
       extendExpressApp: (app, commonContext) => {
         if (process.env.NODE_ENV === 'development') {
-          app.use(morgan('dev'));
+          // app.use(morgan('dev'));
         }
         app.use(express.json());
         app.use('/public', express.static('public'));

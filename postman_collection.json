@@ -417,7 +417,7 @@
 			"name": "News",
 			"item": [
 				{
-					"name": "Get all News orderBy CreatedAt",
+					"name": "Get all News orderBy newest first",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -480,15 +480,15 @@
 					"response": []
 				},
 				{
-					"name": "Get all News related to a Chapter and CreatedAt",
+					"name": "Get all News by Chapter and  newest first",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query NewsItems($orderBy: [NewsOrderByInput!]!, $where: ChapterWhereInput!) {\n  newsItems(orderBy: $orderBy) {\n    id\n    title\n    slug\n    status\n    image\n    sections\n    newsCategory {\n      categoryTitle\n    }\n    relatedChapters(where: $where) {\n      title\n    }\n    createdAt\n  }\n}",
-								"variables": "{\n  \"orderBy\": [\n    {\n      \"createdAt\": \"desc\"\n    }\n  ],\n  \"where\": {\n    \"title\": {\n      \"equals\": \"Malmo\"\n    }\n  }\n}"
+								"query": "query Query($where: ChapterWhereUniqueInput!) {\n  chapter(where: $where) {\n    id\n    title\n    slug\n    news {\n      id\n      status\n      createdAt\n      title\n      slug\n      image\n      sections\n    }\n  }\n}",
+								"variables": "{\n  \"where\": {\n    \"slug\": \"/chapters/malmo\"\n  }\n}"
 							}
 						},
 						"url": {
@@ -534,7 +534,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query {\n    tests{\n        sections\n    }\n}",
+								"query": "query {\n    tests{\ncontent {\n    document\n}\n\n    }\n}",
 								"variables": ""
 							}
 						},
