@@ -130,7 +130,7 @@ function Accordion({
             style={{
               paddingTop: '1rem',
 
-              borderTop: '1px solid #e1e5e9',
+              // borderTop: '1px solid #e1e5e9',
             }}
           >{`Heading ${index + 1}`}</FieldLabel>
           <TextInput

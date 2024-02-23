@@ -12,7 +12,7 @@ import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access';
 import { graphql } from '@keystone-6/core';
 
-import { languageCodesData } from '../data/languageCodes';
+import { languageCodesData } from '../utils/languageCodes';
 import { buildSlug } from '../utils/buildSlug';
 
 export const chapterSchema = list({

@@ -399,7 +399,7 @@ var import_fields_document = require("@keystone-6/fields-document");
 var import_access5 = require("@keystone-6/core/access");
 var import_core4 = require("@keystone-6/core");
 
-// data/languageCodes.js
+// utils/languageCodes.js
 var languageCodesData = [
   { label: "Afghanistan", value: "AF" },
   { label: "Albania", value: "AL" },
