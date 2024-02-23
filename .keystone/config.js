@@ -43,7 +43,7 @@ var require_email = __commonJS({
         this.to = mailData.targetEmail, this.name = mailData.name, this.url = url, this.contactEmail = mailData.contactEmail, this.message = mailData.message, this.linkedIn = mailData.linkedIn, this.usingD4CRGuideAndPrinciples = mailData.usingD4CRGuideAndPrinciples, this.logoFeaturedOnWebpage = mailData.logoFeaturedOnWebpage, this.from = fromEmail;
       }
       newTransport() {
-        if (process.env.NODE_ENV === "production") {
+        if (process.env.USE_MAILTRAP === "false") {
           return import_nodemailer.default.createTransport({
             host: process.env.EMAIL_HOST,
             port: process.env.EMAIL_PORT,

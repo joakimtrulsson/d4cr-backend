@@ -24,6 +24,7 @@ MEDIA_URL="${BASE_URL}public/media"
 IMAGE_URL="${BASE_URL}public/images"
 
 # Mail
+USE_MAILTRAP="true"
 ## Development (Mailtrap)
 EMAIL_USERNAME_DEV=yourusername
 EMAIL_PASSWORD_DEV=yourpassword
