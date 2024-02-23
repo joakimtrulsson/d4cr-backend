@@ -224,7 +224,6 @@ module.exports = __toCommonJS(keystone_exports);
 var import_core25 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
 var import_dotenv = __toESM(require("dotenv"));
-var import_morgan = __toESM(require("morgan"));
 
 // schemas/userSchema.js
 var import_core = require("@keystone-6/core");
@@ -2217,8 +2216,6 @@ var keystone_default = withAuth(
       maxFileSize: MAX_FILE_SIZE,
       cors: { origin: ["*"], credentials: true },
       extendExpressApp: (app, commonContext) => {
-        if (process.env.NODE_ENV === "development") {
-        }
         app.use(import_express.default.json());
         app.use("/public", import_express.default.static("public"));
         app.post("/api/email", import_emailRoutes.default);

@@ -51,7 +51,7 @@ function MediaText({
     setValue(editData);
     setSelectedFile(editData.image);
 
-    if (editData.cta1.url && editData.cta1.url.startsWith('/')) {
+    if (editData.cta1?.url && editData.cta1.url.startsWith('/')) {
       setPageOneValue(editData.cta1.url);
       setValue((prev) => ({
         ...prev,
@@ -59,7 +59,7 @@ function MediaText({
       }));
     }
 
-    if (editData.cta2.url && editData.cta2.url.startsWith('/')) {
+    if (editData.cta2?.url && editData.cta2.url.startsWith('/')) {
       setPageTwoValue(editData.cta2.url);
       setValue((prev) => ({
         ...prev,
