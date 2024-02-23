@@ -11,7 +11,7 @@ import withEquation from './plugins/withEquation.js';
 import withTables from './plugins/withTable.js';
 import { convertKeystoneToSlate } from './utils/convertKeystoneToSlate.js';
 
-import './Editor.css';
+import './editor.css';
 
 const Element = (props) => {
   return getBlock(props);
