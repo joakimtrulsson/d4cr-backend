@@ -18,26 +18,15 @@ module.exports = class Email {
   }
 
   newTransport() {
-    // if (process.env.NODE_ENV === 'production') {
-    if (process.env.USE_MAILTRAP === 'false') {
-      // Sendgrid
-      return nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
-        auth: {
-          user: process.env.EMAIL_USERNAME,
-          pass: process.env.EMAIL_PASSWORD,
-        },
-      });
-    }
+    // Sendgrid
     return nodemailer.createTransport({
-      host: process.env.EMAIL_HOST_DEV,
-      port: process.env.EMAIL_PORT_DEV,
-      secure: false,
-      // logger: true,
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      // Om i Production-miljö, så ska secure vara true, annars false.
+      secure: process.env.EMAIL_SECURE,
       auth: {
-        user: process.env.EMAIL_USERNAME_DEV,
-        pass: process.env.EMAIL_PASSWORD_DEV,
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
   }

@@ -43,24 +43,14 @@ var require_email = __commonJS({
         this.to = mailData.targetEmail, this.name = mailData.name, this.url = url, this.contactEmail = mailData.contactEmail, this.message = mailData.message, this.linkedIn = mailData.linkedIn, this.usingD4CRGuideAndPrinciples = mailData.usingD4CRGuideAndPrinciples, this.logoFeaturedOnWebpage = mailData.logoFeaturedOnWebpage, this.from = fromEmail;
       }
       newTransport() {
-        if (process.env.USE_MAILTRAP === "false") {
-          return import_nodemailer.default.createTransport({
-            host: process.env.EMAIL_HOST,
-            port: process.env.EMAIL_PORT,
-            auth: {
-              user: process.env.EMAIL_USERNAME,
-              pass: process.env.EMAIL_PASSWORD
-            }
-          });
-        }
         return import_nodemailer.default.createTransport({
-          host: process.env.EMAIL_HOST_DEV,
-          port: process.env.EMAIL_PORT_DEV,
-          secure: false,
-          // logger: true,
+          host: process.env.EMAIL_HOST,
+          port: process.env.EMAIL_PORT,
+          // Om i Production-miljö, så ska secure vara true, annars false.
+          secure: process.env.EMAIL_SECURE,
           auth: {
-            user: process.env.EMAIL_USERNAME_DEV,
-            pass: process.env.EMAIL_PASSWORD_DEV
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
           }
         });
       }
