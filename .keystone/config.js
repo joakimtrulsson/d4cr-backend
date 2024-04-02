@@ -749,7 +749,7 @@ var chapterSchema = (0, import_core3.list)({
           const newsData = await context.query.News.findMany({
             where: { relatedChapters: { some: { slug: { equals: item.slug } } } },
             orderBy: [{ createdAt: "desc" }],
-            query: "id status createdAt title slug image sections"
+            query: "id status createdAt newsCategory {categoryTitle} title slug image sections"
           });
           newsData.forEach((newsItem) => {
             if (typeof newsItem.createdAt === "string") {
@@ -2157,14 +2157,9 @@ var storage = {
 };
 
 // auth/auth.js
-var import_crypto = require("crypto");
 var import_auth = require("@keystone-6/auth");
 var import_session = require("@keystone-6/core/session");
 var sessionSecret = process.env.SESSION_SECRET;
-if (!sessionSecret && process.env.NODE_ENV !== "production") {
-  sessionSecret = (0, import_crypto.randomBytes)(32).toString("hex");
-}
-var sessionMaxAge = process.env.SESSION_MAX_AGE;
 var { withAuth } = (0, import_auth.createAuth)({
   listKey: "User",
   // Ett identity field på usern.
@@ -2201,7 +2196,8 @@ var { withAuth } = (0, import_auth.createAuth)({
     }`
 });
 var session = (0, import_session.statelessSessions)({
-  maxAge: sessionMaxAge,
+  // maxAge: sessionMaxAge,
+  maxAge: 60 * 60 * 24 * 30,
   secret: sessionSecret
 });
 

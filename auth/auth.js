@@ -1,15 +1,8 @@
-import { randomBytes } from 'crypto';
 import { createAuth } from '@keystone-6/auth';
-
 import { statelessSessions } from '@keystone-6/core/session';
 
-let sessionSecret = process.env.SESSION_SECRET;
-
-if (!sessionSecret && process.env.NODE_ENV !== 'production') {
-  sessionSecret = randomBytes(32).toString('hex');
-}
-
-const sessionMaxAge = process.env.SESSION_MAX_AGE;
+const sessionSecret = process.env.SESSION_SECRET;
+// const sessionMaxAge = process.env.SESSION_MAX_AGE;
 
 const { withAuth } = createAuth({
   listKey: 'User',
@@ -50,7 +43,8 @@ const { withAuth } = createAuth({
 });
 
 const session = statelessSessions({
-  maxAge: sessionMaxAge,
+  // maxAge: sessionMaxAge,
+  maxAge: 60 * 60 * 24 * 30,
   secret: sessionSecret,
 });
 

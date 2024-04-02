@@ -1,12 +1,5 @@
 import { list } from '@keystone-6/core';
-import {
-  text,
-  json,
-  image,
-  select,
-  relationship,
-  virtual,
-} from '@keystone-6/core/fields';
+import { text, json, select, relationship, virtual } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access';
@@ -136,7 +129,8 @@ export const chapterSchema = list({
             const newsData = await context.query.News.findMany({
               where: { relatedChapters: { some: { slug: { equals: item.slug } } } },
               orderBy: [{ createdAt: 'desc' }],
-              query: 'id status createdAt title slug image sections',
+              query:
+                'id status createdAt newsCategory {categoryTitle} title slug image sections',
             });
 
             newsData.forEach((newsItem) => {
