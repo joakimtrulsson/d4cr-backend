@@ -47,7 +47,7 @@ var require_email = __commonJS({
           host: process.env.EMAIL_HOST,
           port: process.env.EMAIL_PORT,
           // Om i Production-miljö, så ska secure vara true, annars false.
-          secure: process.env.EMAIL_SECURE,
+          secure: process.env.EMAIL_SECURE === "true",
           auth: {
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD
