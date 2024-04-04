@@ -6,13 +6,14 @@ import { lists } from './schema';
 import { storage } from './storage';
 import { withAuth, session } from './auth/auth';
 
-import sendEmail from './routes/emailRoutes';
+import sendEmail from './routes/sendEmail';
+import validateRecaptcha from './routes/validateRecaptcha';
 
 dotenv.config();
 
 const { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
 
-const corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(',') ?? [];
+const corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(',');
 
 export default withAuth(
   config({
@@ -23,8 +24,11 @@ export default withAuth(
       extendExpressApp: (app, commonContext) => {
         app.use(express.json());
         app.post('/api/email', sendEmail);
+        // Denna ska bort när vi gått över till S3-Bucket
         app.use('/public', express.static('public'));
+
         app.get('/signin', (req, res) => res.redirect('/sign-in'));
+        app.post('/api/validate-recaptcha', validateRecaptcha);
       },
     },
     db: {

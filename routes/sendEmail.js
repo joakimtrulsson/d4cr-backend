@@ -97,4 +97,4 @@ const sendEmail = async (req, res) => {
   }
 };
 
-module.exports = sendEmail;
+export default sendEmail;

@@ -4,9 +4,6 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
@@ -90,119 +87,6 @@ var require_email = __commonJS({
         await this.send("oneTimeAuth", "One-time authentication link, valid for 10 minutes.");
       }
     };
-  }
-});
-
-// utils/fetchFormEmails.js
-async function fetchFormEmails() {
-  try {
-    const response = await fetch(`${process.env.API_URL}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        query: `
-          query FormEmail {
-            formEmail {
-              id
-              contactEmail
-              joinSlackEmail
-              shareStoryEmail
-            }
-          }
-        `
-      })
-    });
-    const responseData = await response.json();
-    if (response.ok) {
-      return responseData.data.formEmail;
-    } else {
-      throw new Error(responseData.errors[0].message);
-    }
-  } catch (error) {
-    console.error("Error fetching form email:", error);
-    throw error;
-  }
-}
-var init_fetchFormEmails = __esm({
-  "utils/fetchFormEmails.js"() {
-  }
-});
-
-// routes/emailRoutes.js
-var require_emailRoutes = __commonJS({
-  "routes/emailRoutes.js"(exports2, module2) {
-    var import_email2 = __toESM(require_email());
-    init_fetchFormEmails();
-    var sendEmail2 = async (req, res) => {
-      try {
-        const targetEmails = await fetchFormEmails();
-        const fromEmail = `${process.env.EMAIL_FROM}}`;
-        const url = "https://d4cr.com";
-        if (!req.body.target) {
-          return res.status(400).send({
-            success: false,
-            message: "Missing or invalid required fields"
-          });
-        }
-        if (req.body.target === "contactus") {
-          if (!req.body.name || !req.body.contactEmail || !req.body.message) {
-            return res.status(400).send({
-              succuess: false,
-              message: "Missing or invalid required fields"
-            });
-          } else {
-            const mailData = {
-              targetEmail: targetEmails.contactEmail,
-              name: req.body.name,
-              contactEmail: req.body.contactEmail,
-              message: req.body.message
-            };
-            await new import_email2.default(fromEmail, mailData, url).sendContactUs();
-          }
-        }
-        if (req.body.target === "joinslack") {
-          if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn) {
-            res.status(400).send({
-              succuess: false,
-              message: "Missing or invalid required fields"
-            });
-          }
-          const mailData = {
-            targetEmail: targetEmails.joinSlackEmail,
-            name: req.body.name,
-            linkedIn: req.body.linkedIn,
-            contactEmail: req.body.contactEmail,
-            message: req.body.message
-          };
-          await new import_email2.default(fromEmail, mailData, url).sendJoinSlack();
-        }
-        if (req.body.target === "shareyourstory") {
-          if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn || req.body.usingD4CRGuideAndPrinciples === null || req.body.usingD4CRGuideAndPrinciples === void 0 || typeof req.body.usingD4CRGuideAndPrinciples !== "boolean" || req.body.logoFeaturedOnWebpage === null || req.body.logoFeaturedOnWebpage === void 0 || typeof req.body.logoFeaturedOnWebpage !== "boolean") {
-            return res.status(400).send({
-              succuess: false,
-              message: "Missing or invalid required fields"
-            });
-          }
-          const mailData = {
-            targetEmail: targetEmails.shareStoryEmail,
-            name: req.body.name,
-            linkedIn: req.body.linkedIn,
-            contactEmail: req.body.contactEmail,
-            message: req.body.message,
-            usingD4CRGuideAndPrinciples: req.body.usingD4CRGuideAndPrinciples,
-            logoFeaturedOnWebpage: req.body.logoFeaturedOnWebpage
-          };
-          await new import_email2.default(fromEmail, mailData, url).sendShareStory();
-        }
-        res.status(200).send({ success: true, message: "Email sent" });
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: err.message });
-      }
-    };
-    module2.exports = sendEmail2;
   }
 });
 
@@ -2208,11 +2092,132 @@ var session = (0, import_session.statelessSessions)({
   secret: sessionSecret
 });
 
+// routes/sendEmail.js
+var import_email2 = __toESM(require_email());
+
+// utils/fetchFormEmails.js
+async function fetchFormEmails() {
+  try {
+    const response = await fetch(`${process.env.API_URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query: `
+          query FormEmail {
+            formEmail {
+              id
+              contactEmail
+              joinSlackEmail
+              shareStoryEmail
+            }
+          }
+        `
+      })
+    });
+    const responseData = await response.json();
+    if (response.ok) {
+      return responseData.data.formEmail;
+    } else {
+      throw new Error(responseData.errors[0].message);
+    }
+  } catch (error) {
+    console.error("Error fetching form email:", error);
+    throw error;
+  }
+}
+
+// routes/sendEmail.js
+var sendEmail = async (req, res) => {
+  try {
+    const targetEmails = await fetchFormEmails();
+    const fromEmail = `${process.env.EMAIL_FROM}}`;
+    const url = "https://d4cr.com";
+    if (!req.body.target) {
+      return res.status(400).send({
+        success: false,
+        message: "Missing or invalid required fields"
+      });
+    }
+    if (req.body.target === "contactus") {
+      if (!req.body.name || !req.body.contactEmail || !req.body.message) {
+        return res.status(400).send({
+          succuess: false,
+          message: "Missing or invalid required fields"
+        });
+      } else {
+        const mailData = {
+          targetEmail: targetEmails.contactEmail,
+          name: req.body.name,
+          contactEmail: req.body.contactEmail,
+          message: req.body.message
+        };
+        await new import_email2.default(fromEmail, mailData, url).sendContactUs();
+      }
+    }
+    if (req.body.target === "joinslack") {
+      if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn) {
+        res.status(400).send({
+          succuess: false,
+          message: "Missing or invalid required fields"
+        });
+      }
+      const mailData = {
+        targetEmail: targetEmails.joinSlackEmail,
+        name: req.body.name,
+        linkedIn: req.body.linkedIn,
+        contactEmail: req.body.contactEmail,
+        message: req.body.message
+      };
+      await new import_email2.default(fromEmail, mailData, url).sendJoinSlack();
+    }
+    if (req.body.target === "shareyourstory") {
+      if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn || req.body.usingD4CRGuideAndPrinciples === null || req.body.usingD4CRGuideAndPrinciples === void 0 || typeof req.body.usingD4CRGuideAndPrinciples !== "boolean" || req.body.logoFeaturedOnWebpage === null || req.body.logoFeaturedOnWebpage === void 0 || typeof req.body.logoFeaturedOnWebpage !== "boolean") {
+        return res.status(400).send({
+          succuess: false,
+          message: "Missing or invalid required fields"
+        });
+      }
+      const mailData = {
+        targetEmail: targetEmails.shareStoryEmail,
+        name: req.body.name,
+        linkedIn: req.body.linkedIn,
+        contactEmail: req.body.contactEmail,
+        message: req.body.message,
+        usingD4CRGuideAndPrinciples: req.body.usingD4CRGuideAndPrinciples,
+        logoFeaturedOnWebpage: req.body.logoFeaturedOnWebpage
+      };
+      await new import_email2.default(fromEmail, mailData, url).sendShareStory();
+    }
+    res.status(200).send({ success: true, message: "Email sent" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+var sendEmail_default = sendEmail;
+
+// routes/validateRecaptcha.js
+var validateRecaptcha = async (req, res) => {
+  try {
+    const { captchaValue } = req.body;
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SITE_SECRET}&response=${captchaValue}`,
+      { method: "POST" }
+    );
+    const data = await response.json();
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+var validateRecaptcha_default = validateRecaptcha;
+
 // keystone.js
-var import_emailRoutes = __toESM(require_emailRoutes());
 import_dotenv.default.config();
 var { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
-var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",") ?? [];
+var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",");
 var keystone_default = withAuth(
   (0, import_core25.config)({
     server: {
@@ -2221,9 +2226,10 @@ var keystone_default = withAuth(
       cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
         app.use(import_express.default.json());
-        app.post("/api/email", import_emailRoutes.default);
+        app.post("/api/email", sendEmail_default);
         app.use("/public", import_express.default.static("public"));
         app.get("/signin", (req, res) => res.redirect("/sign-in"));
+        app.post("/api/validate-recaptcha", validateRecaptcha_default);
       }
     },
     db: {
