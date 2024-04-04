@@ -301,7 +301,7 @@ var userSchema = (0, import_core.list)({
     fullName: (0, import_fields.text)({
       isFilterable: false,
       isOrderable: false,
-      isIndexed: "unique",
+      // isIndexed: 'unique',
       validation: {
         isRequired: true
       }

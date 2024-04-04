@@ -43,7 +43,7 @@ export const userSchema = list({
     fullName: text({
       isFilterable: false,
       isOrderable: false,
-      isIndexed: 'unique',
+      // isIndexed: 'unique',
       validation: {
         isRequired: true,
       },
