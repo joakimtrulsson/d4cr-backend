@@ -86,8 +86,8 @@ var require_email = __commonJS({
       async sendJoinSlack() {
         await this.send("slack", "Someone wants to join our Slack!");
       }
-      async sendPasswordReset() {
-        await this.send("passwordReset", "L\xF6senord\xE5terst\xE4llning, giltigt i 10 minuter.");
+      async sendOneTimeAuthenticationLink() {
+        await this.send("oneTimeAuth", "One-time authentication link, valid for 10 minutes.");
       }
     };
   }
@@ -133,7 +133,7 @@ var init_fetchFormEmails = __esm({
 // routes/emailRoutes.js
 var require_emailRoutes = __commonJS({
   "routes/emailRoutes.js"(exports2, module2) {
-    var import_email = __toESM(require_email());
+    var import_email2 = __toESM(require_email());
     init_fetchFormEmails();
     var sendEmail2 = async (req, res) => {
       try {
@@ -141,25 +141,26 @@ var require_emailRoutes = __commonJS({
         const fromEmail = `${process.env.EMAIL_FROM}}`;
         const url = "https://d4cr.com";
         if (!req.body.target) {
-          res.status(400).send({
+          return res.status(400).send({
             success: false,
             message: "Missing or invalid required fields"
           });
         }
         if (req.body.target === "contactus") {
           if (!req.body.name || !req.body.contactEmail || !req.body.message) {
-            res.status(400).send({
+            return res.status(400).send({
               succuess: false,
               message: "Missing or invalid required fields"
             });
+          } else {
+            const mailData = {
+              targetEmail: targetEmails.contactEmail,
+              name: req.body.name,
+              contactEmail: req.body.contactEmail,
+              message: req.body.message
+            };
+            await new import_email2.default(fromEmail, mailData, url).sendContactUs();
           }
-          const mailData = {
-            targetEmail: targetEmails.contactEmail,
-            name: req.body.name,
-            contactEmail: req.body.contactEmail,
-            message: req.body.message
-          };
-          await new import_email.default(fromEmail, mailData, url).sendContactUs();
         }
         if (req.body.target === "joinslack") {
           if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn) {
@@ -175,7 +176,7 @@ var require_emailRoutes = __commonJS({
             contactEmail: req.body.contactEmail,
             message: req.body.message
           };
-          await new import_email.default(fromEmail, mailData, url).sendJoinSlack();
+          await new import_email2.default(fromEmail, mailData, url).sendJoinSlack();
         }
         if (req.body.target === "shareyourstory") {
           if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn || req.body.usingD4CRGuideAndPrinciples === null || req.body.usingD4CRGuideAndPrinciples === void 0 || typeof req.body.usingD4CRGuideAndPrinciples !== "boolean" || req.body.logoFeaturedOnWebpage === null || req.body.logoFeaturedOnWebpage === void 0 || typeof req.body.logoFeaturedOnWebpage !== "boolean") {
@@ -193,7 +194,7 @@ var require_emailRoutes = __commonJS({
             usingD4CRGuideAndPrinciples: req.body.usingD4CRGuideAndPrinciples,
             logoFeaturedOnWebpage: req.body.logoFeaturedOnWebpage
           };
-          await new import_email.default(fromEmail, mailData, url).sendShareStory();
+          await new import_email2.default(fromEmail, mailData, url).sendShareStory();
         }
         res.status(200).send({ success: true, message: "Email sent" });
       } catch (err) {
@@ -282,9 +283,9 @@ var userSchema = (0, import_core.list)({
     },
     hideCreate: (args) => !permissions.canManageUsers(args),
     hideDelete: (args) => !permissions.canManageUsers(args),
-    labelField: "username",
+    labelField: "email",
     listView: {
-      initialColumns: ["username", "email", "role"]
+      initialColumns: ["email", "fullName", "role"]
     },
     itemView: {
       defaultFieldMode: ({ session: session2, item }) => {
@@ -297,7 +298,7 @@ var userSchema = (0, import_core.list)({
     }
   },
   fields: {
-    username: (0, import_fields.text)({
+    fullName: (0, import_fields.text)({
       isFilterable: false,
       isOrderable: false,
       isIndexed: "unique",
@@ -306,7 +307,10 @@ var userSchema = (0, import_core.list)({
       }
     }),
     email: (0, import_fields.text)({
-      isIndexed: "unique"
+      isIndexed: "unique",
+      validation: {
+        isRequired: true
+      }
     }),
     password: (0, import_fields.password)({
       access: {
@@ -2149,14 +2153,26 @@ var storage = {
 // auth/auth.js
 var import_auth = require("@keystone-6/auth");
 var import_session = require("@keystone-6/core/session");
+var import_email = __toESM(require_email());
 var sessionSecret = process.env.SESSION_SECRET;
 var { withAuth } = (0, import_auth.createAuth)({
   listKey: "User",
   // Ett identity field på usern.
-  identityField: "username",
+  identityField: "email",
   secretField: "password",
+  magicAuthLink: {
+    sendToken: async ({ itemId, identity, token, context }) => {
+      const fromEmail = process.env.EMAIL_FROM;
+      const url = `${process.env.BASE_URL}validate-token?token=${token}&email=${identity}`;
+      const mailData = {
+        targetEmail: identity
+      };
+      await new import_email.default(fromEmail, mailData, url).sendOneTimeAuthenticationLink();
+    },
+    tokensValidForMins: 10
+  },
   initFirstItem: {
-    fields: ["username", "password"],
+    fields: ["fullName", "email", "password"],
     // Följande data sparas som default på den första användaren.
     itemData: {
       role: {
@@ -2173,7 +2189,8 @@ var { withAuth } = (0, import_auth.createAuth)({
     }
   },
   sessionData: `
-    username
+    fullName
+    email
     role {
       id
       name
@@ -2194,17 +2211,19 @@ var session = (0, import_session.statelessSessions)({
 // keystone.js
 var import_emailRoutes = __toESM(require_emailRoutes());
 import_dotenv.default.config();
-var { PORT, MAX_FILE_SIZE, DATABASE_URL } = process.env;
+var { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
+var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",") ?? [];
 var keystone_default = withAuth(
   (0, import_core25.config)({
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,
-      cors: { origin: ["*"], credentials: true },
+      cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
         app.use(import_express.default.json());
-        app.use("/public", import_express.default.static("public"));
         app.post("/api/email", import_emailRoutes.default);
+        app.use("/public", import_express.default.static("public"));
+        app.get("/signin", (req, res) => res.redirect("/sign-in"));
       }
     },
     db: {
@@ -2217,7 +2236,7 @@ var keystone_default = withAuth(
     session,
     storage,
     ui: {
-      publicPages: ["public"]
+      publicPages: ["/validate-token", "/forgot-password", "/sign-in"]
     }
   })
 );

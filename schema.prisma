@@ -12,13 +12,16 @@ generator client {
 }
 
 model User {
-  id       String    @id @default(uuid()) @postgresql.Uuid
-  username String    @unique @default("")
-  email    String    @unique @default("")
-  password String
-  chapters Chapter[] @relation("User_chapters")
-  role     Role?     @relation("User_role", fields: [roleId], references: [id])
-  roleId   String?   @map("role") @postgresql.Uuid
+  id                  String    @id @default(uuid()) @postgresql.Uuid
+  fullName            String    @unique @default("")
+  email               String    @unique @default("")
+  password            String
+  chapters            Chapter[] @relation("User_chapters")
+  role                Role?     @relation("User_role", fields: [roleId], references: [id])
+  roleId              String?   @map("role") @postgresql.Uuid
+  magicAuthToken      String?
+  magicAuthIssuedAt   DateTime?
+  magicAuthRedeemedAt DateTime?
 
   @@index([roleId])
 }

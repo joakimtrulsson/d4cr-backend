@@ -70,8 +70,8 @@ module.exports = class Email {
     // this  eftersom dom defineras på det akutella objektet.
     await this.send('slack', 'Someone wants to join our Slack!');
   }
-  async sendPasswordReset() {
+  async sendOneTimeAuthenticationLink() {
     // this  eftersom dom defineras på det akutella objektet.
-    await this.send('passwordReset', 'Lösenordåterställning, giltigt i 10 minuter.');
+    await this.send('oneTimeAuth', 'One-time authentication link, valid for 10 minutes.');
   }
 };

@@ -23,9 +23,9 @@ export const userSchema = list({
     },
     hideCreate: (args) => !permissions.canManageUsers(args),
     hideDelete: (args) => !permissions.canManageUsers(args),
-    labelField: 'username',
+    labelField: 'email',
     listView: {
-      initialColumns: ['username', 'email', 'role'],
+      initialColumns: ['email', 'fullName', 'role'],
     },
     itemView: {
       defaultFieldMode: ({ session, item }) => {
@@ -40,7 +40,7 @@ export const userSchema = list({
     },
   },
   fields: {
-    username: text({
+    fullName: text({
       isFilterable: false,
       isOrderable: false,
       isIndexed: 'unique',
@@ -51,6 +51,9 @@ export const userSchema = list({
 
     email: text({
       isIndexed: 'unique',
+      validation: {
+        isRequired: true,
+      },
     }),
 
     password: password({

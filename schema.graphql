@@ -3,17 +3,22 @@
 
 type User {
   id: ID!
-  username: String
+  fullName: String
   email: String
   password: PasswordState
   chapters(where: ChapterWhereInput! = {}, orderBy: [ChapterOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ChapterWhereUniqueInput): [Chapter!]
   chaptersCount(where: ChapterWhereInput! = {}): Int
   role: Role
+  magicAuthToken: PasswordState
+  magicAuthIssuedAt: DateTime
+  magicAuthRedeemedAt: DateTime
 }
 
 type PasswordState {
   isSet: Boolean!
 }
+
+scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
 
 input UserWhereUniqueInput {
   id: ID
@@ -28,6 +33,9 @@ input UserWhereInput {
   email: StringFilter
   chapters: ChapterManyRelationFilter
   role: RoleWhereInput
+  magicAuthToken: PasswordFilter
+  magicAuthIssuedAt: DateTimeNullableFilter
+  magicAuthRedeemedAt: DateTimeNullableFilter
 }
 
 input IDFilter {
@@ -81,9 +89,26 @@ input ChapterManyRelationFilter {
   none: ChapterWhereInput
 }
 
+input PasswordFilter {
+  isSet: Boolean!
+}
+
+input DateTimeNullableFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: DateTimeNullableFilter
+}
+
 input UserOrderByInput {
   id: OrderDirection
   email: OrderDirection
+  magicAuthIssuedAt: OrderDirection
+  magicAuthRedeemedAt: OrderDirection
 }
 
 enum OrderDirection {
@@ -92,11 +117,14 @@ enum OrderDirection {
 }
 
 input UserUpdateInput {
-  username: String
+  fullName: String
   email: String
   password: String
   chapters: ChapterRelateToManyForUpdateInput
   role: RoleRelateToOneForUpdateInput
+  magicAuthToken: String
+  magicAuthIssuedAt: DateTime
+  magicAuthRedeemedAt: DateTime
 }
 
 input ChapterRelateToManyForUpdateInput {
@@ -118,11 +146,14 @@ input UserUpdateArgs {
 }
 
 input UserCreateInput {
-  username: String
+  fullName: String
   email: String
   password: String
   chapters: ChapterRelateToManyForCreateInput
   role: RoleRelateToOneForCreateInput
+  magicAuthToken: String
+  magicAuthIssuedAt: DateTime
+  magicAuthRedeemedAt: DateTime
 }
 
 input ChapterRelateToManyForCreateInput {
@@ -690,8 +721,6 @@ type News {
   createdAt: DateTime
 }
 
-scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
-
 input NewsWhereUniqueInput {
   id: ID
   title: String
@@ -709,17 +738,6 @@ input NewsWhereInput {
   relatedChapters: ChapterManyRelationFilter
   status: StringFilter
   createdAt: DateTimeNullableFilter
-}
-
-input DateTimeNullableFilter {
-  equals: DateTime
-  in: [DateTime!]
-  notIn: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  gt: DateTime
-  gte: DateTime
-  not: DateTimeNullableFilter
 }
 
 input NewsOrderByInput {
@@ -1754,8 +1772,10 @@ type Mutation {
   deleteTest(where: TestWhereUniqueInput!): Test
   deleteTests(where: [TestWhereUniqueInput!]!): [Test]
   endSession: Boolean!
-  authenticateUserWithPassword(username: String!, password: String!): UserAuthenticationWithPasswordResult
+  authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
+  sendUserMagicAuthLink(email: String!): Boolean!
+  redeemUserMagicAuthToken(email: String!, token: String!): RedeemUserMagicAuthTokenResult!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -1770,8 +1790,27 @@ type UserAuthenticationWithPasswordFailure {
 }
 
 input CreateInitialUserInput {
-  username: String
+  fullName: String
+  email: String
   password: String
+}
+
+union RedeemUserMagicAuthTokenResult = RedeemUserMagicAuthTokenSuccess | RedeemUserMagicAuthTokenFailure
+
+type RedeemUserMagicAuthTokenSuccess {
+  token: String!
+  item: User!
+}
+
+type RedeemUserMagicAuthTokenFailure {
+  code: MagicLinkRedemptionErrorCode!
+  message: String!
+}
+
+enum MagicLinkRedemptionErrorCode {
+  FAILURE
+  TOKEN_EXPIRED
+  TOKEN_REDEEMED
 }
 
 type Query {

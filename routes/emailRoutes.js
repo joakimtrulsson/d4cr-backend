@@ -10,7 +10,7 @@ const sendEmail = async (req, res) => {
     const url = 'https://d4cr.com';
 
     if (!req.body.target) {
-      res.status(400).send({
+      return res.status(400).send({
         success: false,
         message: 'Missing or invalid required fields',
       });
@@ -19,19 +19,19 @@ const sendEmail = async (req, res) => {
     // Contact us form
     if (req.body.target === 'contactus') {
       if (!req.body.name || !req.body.contactEmail || !req.body.message) {
-        res.status(400).send({
+        return res.status(400).send({
           succuess: false,
           message: 'Missing or invalid required fields',
         });
+      } else {
+        const mailData = {
+          targetEmail: targetEmails.contactEmail,
+          name: req.body.name,
+          contactEmail: req.body.contactEmail,
+          message: req.body.message,
+        };
+        await new Email(fromEmail, mailData, url).sendContactUs();
       }
-
-      const mailData = {
-        targetEmail: targetEmails.contactEmail,
-        name: req.body.name,
-        contactEmail: req.body.contactEmail,
-        message: req.body.message,
-      };
-      await new Email(fromEmail, mailData, url).sendContactUs();
     }
 
     // Join slack form

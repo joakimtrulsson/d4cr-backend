@@ -1,7 +1,6 @@
 import { config } from '@keystone-6/core';
 import express from 'express';
 import dotenv from 'dotenv';
-// import morgan from 'morgan';
 
 import { lists } from './schema';
 import { storage } from './storage';
@@ -11,21 +10,21 @@ import sendEmail from './routes/emailRoutes';
 
 dotenv.config();
 
-const { PORT, MAX_FILE_SIZE, DATABASE_URL } = process.env;
+const { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
+
+const corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(',') ?? [];
 
 export default withAuth(
   config({
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,
-      cors: { origin: ['*'], credentials: true },
+      cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
-        // if (process.env.NODE_ENV === 'development') {
-        //    app.use(morgan('dev'));
-        // }
         app.use(express.json());
-        app.use('/public', express.static('public'));
         app.post('/api/email', sendEmail);
+        app.use('/public', express.static('public'));
+        app.get('/signin', (req, res) => res.redirect('/sign-in'));
       },
     },
     db: {
@@ -38,7 +37,7 @@ export default withAuth(
     session,
     storage,
     ui: {
-      publicPages: ['public'],
+      publicPages: ['/validate-token', '/forgot-password', '/sign-in'],
     },
   })
 );
