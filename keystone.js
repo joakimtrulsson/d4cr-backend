@@ -2,12 +2,12 @@ import { config } from '@keystone-6/core';
 import express from 'express';
 import dotenv from 'dotenv';
 
-import { lists } from './schema';
-import { storage } from './storage';
-import { withAuth, session } from './auth/auth';
+import { lists } from './schema.js';
+import { storage } from './storage.js';
+import { withAuth, session } from './auth/auth.js';
 
-import sendEmail from './routes/sendEmail';
-import validateRecaptcha from './routes/validateRecaptcha';
+import sendEmail from './routes/sendEmail.js';
+import validateRecaptcha from './routes/validateRecaptcha.js';
 
 dotenv.config();
 

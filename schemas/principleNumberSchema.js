@@ -2,7 +2,7 @@ import { list } from '@keystone-6/core';
 import { relationship, integer } from '@keystone-6/core/fields';
 
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 
 export const principleNumberSchema = list({
   access: {
@@ -19,6 +19,9 @@ export const principleNumberSchema = list({
     },
   },
   ui: {
+    isHidden: (args) => {
+      return !permissions?.canManageAllItems(args);
+    },
     labelField: 'number',
   },
   fields: {

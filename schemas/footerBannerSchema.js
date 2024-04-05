@@ -3,7 +3,7 @@ import { text } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 
 export const footerBannerSchema = list({
   access: {

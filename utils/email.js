@@ -3,7 +3,7 @@ import pug from 'pug';
 import { htmlToText } from 'html-to-text';
 
 // Skicka ett nytt email => new Email(user, url).sendWelcome .sendPasswordReset
-module.exports = class Email {
+export default class Email {
   constructor(fromEmail, mailData, url) {
     (this.to = mailData.targetEmail),
       (this.name = mailData.name),
@@ -74,4 +74,4 @@ module.exports = class Email {
     // this  eftersom dom defineras på det akutella objektet.
     await this.send('oneTimeAuth', 'One-time authentication link, valid for 10 minutes.');
   }
-};
+}

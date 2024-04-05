@@ -2,9 +2,9 @@ import { list } from '@keystone-6/core';
 import { text } from '@keystone-6/core/fields';
 
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 
-import validateEmail from '../utils/validateEmail';
+import validateEmail from '../utils/validateEmail.js';
 
 export const formEmailSchema = list({
   access: {

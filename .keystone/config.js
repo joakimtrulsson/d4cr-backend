@@ -4,9 +4,6 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -29,67 +26,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// utils/email.js
-var require_email = __commonJS({
-  "utils/email.js"(exports2, module2) {
-    var import_nodemailer = __toESM(require("nodemailer"));
-    var import_pug = __toESM(require("pug"));
-    var import_html_to_text = require("html-to-text");
-    module2.exports = class Email {
-      constructor(fromEmail, mailData, url) {
-        this.to = mailData.targetEmail, this.name = mailData.name, this.url = url, this.contactEmail = mailData.contactEmail, this.message = mailData.message, this.linkedIn = mailData.linkedIn, this.usingD4CRGuideAndPrinciples = mailData.usingD4CRGuideAndPrinciples, this.logoFeaturedOnWebpage = mailData.logoFeaturedOnWebpage, this.from = fromEmail;
-      }
-      newTransport() {
-        return import_nodemailer.default.createTransport({
-          host: process.env.EMAIL_HOST,
-          port: process.env.EMAIL_PORT,
-          // Om i Production-miljö, så ska secure vara true, annars false.
-          secure: process.env.EMAIL_SECURE === "true",
-          auth: {
-            user: process.env.EMAIL_USERNAME,
-            pass: process.env.EMAIL_PASSWORD
-          }
-        });
-      }
-      // Skickar mailet.
-      async send(template, subject) {
-        const html = import_pug.default.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
-          name: this.name,
-          contactEmail: this.contactEmail,
-          linkedIn: this.linkedIn,
-          message: this.message,
-          url: this.url,
-          usingD4CRGuideAndPrinciples: this.usingD4CRGuideAndPrinciples,
-          logoFeaturedOnWebpage: this.logoFeaturedOnWebpage,
-          subject
-        });
-        const mailOptions = {
-          from: this.from,
-          // from: process.env.EMAIL_USERNAME,
-          to: this.to,
-          subject,
-          html,
-          text: (0, import_html_to_text.htmlToText)(html)
-        };
-        await this.newTransport().sendMail(mailOptions);
-      }
-      // Transport
-      async sendContactUs() {
-        await this.send("contact", "Someone used the contact form!");
-      }
-      async sendShareStory() {
-        await this.send("shareStory", "Someone wants to share a story!");
-      }
-      async sendJoinSlack() {
-        await this.send("slack", "Someone wants to join our Slack!");
-      }
-      async sendOneTimeAuthenticationLink() {
-        await this.send("oneTimeAuth", "One-time authentication link, valid for 10 minutes.");
-      }
-    };
-  }
-});
-
 // keystone.js
 var keystone_exports = {};
 __export(keystone_exports, {
@@ -97,8 +33,8 @@ __export(keystone_exports, {
 });
 module.exports = __toCommonJS(keystone_exports);
 var import_core25 = require("@keystone-6/core");
-var import_express = __toESM(require("express"));
-var import_dotenv = __toESM(require("dotenv"));
+var import_express = __toESM(require("express"), 1);
+var import_dotenv = __toESM(require("dotenv"), 1);
 
 // schemas/userSchema.js
 var import_core = require("@keystone-6/core");
@@ -111,6 +47,7 @@ function isSignedIn({ session: session2 }) {
 }
 var permissions = {
   canCreateItems: ({ session: session2 }) => session2?.data.role?.canCreateItems ?? false,
+  canCreateChapters: ({ session: session2 }) => session2?.data.role?.canCreateChapters ?? false,
   canManageAllItems: ({ session: session2 }) => session2?.data.role?.canManageAllItems ?? false,
   canManageUsers: ({ session: session2 }) => session2?.data.role?.canManageUsers ?? false,
   canManageRoles: ({ session: session2 }) => session2?.data.role?.canManageRoles ?? false
@@ -122,14 +59,14 @@ var rules = {
     if (session2.data.role?.canManageAllItems) {
       return true;
     }
-    return { author: { id: { equals: session2.itemId } } };
+    return { contentOwner: { some: { id: { equals: session2.itemId } } } };
   },
   canManageItems: ({ session: session2 }) => {
     if (!session2)
       return false;
     if (session2.data.role?.canManageAllItems)
       return true;
-    return { author: { id: { equals: session2.itemId } } };
+    return { contentOwner: { some: { id: { equals: session2.itemId } } } };
   },
   canReadUsers: ({ session: session2 }) => {
     if (!session2)
@@ -162,9 +99,9 @@ var userSchema = (0, import_core.list)({
     }
   },
   ui: {
-    isHidden: (args) => {
-      return !permissions?.canManageRoles(args);
-    },
+    // isHidden: (args) => {
+    //   return !permissions?.canManageRoles(args);
+    // },
     hideCreate: (args) => !permissions.canManageUsers(args),
     hideDelete: (args) => !permissions.canManageUsers(args),
     labelField: "email",
@@ -204,11 +141,16 @@ var userSchema = (0, import_core.list)({
       validation: { isRequired: true }
     }),
     chapters: (0, import_fields.relationship)({
-      ref: "Chapter",
+      ref: "Chapter.contentOwner",
       many: true,
       access: {
         create: permissions.canManageUsers,
         update: permissions.canManageUsers
+      },
+      ui: {
+        itemView: {
+          fieldMode: (args) => permissions.canManageUsers(args) ? "edit" : "read"
+        }
       }
     }),
     //  Rolen som är kopplad till användare.
@@ -254,6 +196,7 @@ var roleSchema = (0, import_core2.list)({
   fields: {
     name: (0, import_fields2.text)({ validation: { isRequired: true } }),
     canCreateItems: (0, import_fields2.checkbox)({ defaultValue: false }),
+    canCreateChapters: (0, import_fields2.checkbox)({ defaultValue: false }),
     canManageAllItems: (0, import_fields2.checkbox)({ defaultValue: false }),
     canSeeOtherUsers: (0, import_fields2.checkbox)({ defaultValue: false }),
     canEditOtherUsers: (0, import_fields2.checkbox)({ defaultValue: false }),
@@ -531,20 +474,33 @@ var chapterSchema = (0, import_core3.list)({
     },
     filter: {
       query: () => true,
-      // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems
     }
   },
   ui: {
+    hideCreate: (args) => !permissions.canCreateChapters(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    // Om användaren har canManageAllItems så kan de redigera alla Chapters.
+    // Annars så kan de bara uppdatera sitt egna Chapters.
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        if (session2.data.chapters[0].id === item.id)
+          return "edit";
+        return "read";
+      }
+    },
     labelField: "title",
     listView: {
       initialColumns: [
         "title",
         "slug",
-        "status",
+        "contentOwner",
         "chapterLanguage",
-        "translatedChapters"
+        "translatedChapters",
+        "status"
       ],
       initialSort: { field: "title", direction: "ASC" },
       pageSize: 50
@@ -588,7 +544,15 @@ var chapterSchema = (0, import_core3.list)({
         views: "./customViews/ImageLibrary.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
+        itemView: {
+          fieldMode: ({ session: session2, item }) => {
+            if (session2?.data.role?.canManageAllItems)
+              return "edit";
+            if (session2.data.chapters[0].id === item.id)
+              return "edit";
+            return "hidden";
+          }
+        }
       }
     }),
     chapterLanguage: (0, import_fields3.select)({
@@ -617,7 +581,16 @@ var chapterSchema = (0, import_core3.list)({
         views: "./customViews/AllSections.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
+        // itemView: { fieldMode: 'edit' },
+        itemView: {
+          fieldMode: ({ session: session2, item }) => {
+            if (session2?.data.role?.canManageAllItems)
+              return "edit";
+            if (session2.data.chapters[0].id === item.id)
+              return "edit";
+            return "hidden";
+          }
+        }
       }
     }),
     news: (0, import_fields3.virtual)({
@@ -645,6 +618,27 @@ var chapterSchema = (0, import_core3.list)({
           fieldMode: "hidden"
         }
       }
+    }),
+    contentOwner: (0, import_fields3.relationship)({
+      ref: "User.chapters",
+      many: true,
+      ui: {
+        createView: {
+          fieldMode: (args) => permissions.canManageAllItems(args) ? "edit" : "hidden"
+        },
+        itemView: {
+          fieldMode: (args) => permissions.canManageAllItems(args) ? "edit" : "read"
+        }
+      }
+      // Defaulta alltid nya items till den nuvarande användaren; detta är viktigt eftersom användare utan rättigheten canManageAllItems inte ser detta fält när de skapar nya.
+      // hooks: {
+      //   resolveInput({ operation, resolvedData, context }) {
+      //     if (operation === 'create' && !resolvedData.contentOwner && context.session) {
+      //       return { connect: { id: context.session.itemId } };
+      //     }
+      //     return resolvedData.assignedTo;
+      //   },
+      // },
     })
   }
 });
@@ -669,6 +663,9 @@ var pageSchema = (0, import_core5.list)({
     }
   },
   ui: {
+    isHidden: (args) => {
+      return !permissions?.canManageAllItems(args);
+    },
     labelField: "title",
     listView: {
       initialColumns: ["title", "slug", "status"],
@@ -1403,6 +1400,9 @@ var principleSchema = (0, import_core17.list)({
     }
   },
   ui: {
+    isHidden: (args) => {
+      return !permissions?.canManageAllItems(args);
+    },
     labelField: "title",
     listView: {
       initialColumns: ["title", "principleNumber", "principleCategory", "slug", "status"],
@@ -1534,6 +1534,9 @@ var principleNumberSchema = (0, import_core18.list)({
     }
   },
   ui: {
+    isHidden: (args) => {
+      return !permissions?.canManageAllItems(args);
+    },
     labelField: "number"
   },
   fields: {
@@ -1719,6 +1722,9 @@ var steeringGroupMemberSchema = (0, import_core21.list)({
   },
   labelField: "fullName",
   ui: {
+    isHidden: (args) => {
+      return !permissions?.canManageAllItems(args);
+    },
     listView: {
       initialColumns: ["fullName", "role", "city", "country"],
       initialSort: { field: "fullName", direction: "ASC" },
@@ -2037,7 +2043,65 @@ var storage = {
 // auth/auth.js
 var import_auth = require("@keystone-6/auth");
 var import_session = require("@keystone-6/core/session");
-var import_email = __toESM(require_email());
+
+// utils/email.js
+var import_nodemailer = __toESM(require("nodemailer"), 1);
+var import_pug = __toESM(require("pug"), 1);
+var import_html_to_text = require("html-to-text");
+var Email = class {
+  constructor(fromEmail, mailData, url) {
+    this.to = mailData.targetEmail, this.name = mailData.name, this.url = url, this.contactEmail = mailData.contactEmail, this.message = mailData.message, this.linkedIn = mailData.linkedIn, this.usingD4CRGuideAndPrinciples = mailData.usingD4CRGuideAndPrinciples, this.logoFeaturedOnWebpage = mailData.logoFeaturedOnWebpage, this.from = fromEmail;
+  }
+  newTransport() {
+    return import_nodemailer.default.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      // Om i Production-miljö, så ska secure vara true, annars false.
+      secure: process.env.EMAIL_SECURE === "true",
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    });
+  }
+  // Skickar mailet.
+  async send(template, subject) {
+    const html = import_pug.default.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
+      name: this.name,
+      contactEmail: this.contactEmail,
+      linkedIn: this.linkedIn,
+      message: this.message,
+      url: this.url,
+      usingD4CRGuideAndPrinciples: this.usingD4CRGuideAndPrinciples,
+      logoFeaturedOnWebpage: this.logoFeaturedOnWebpage,
+      subject
+    });
+    const mailOptions = {
+      from: this.from,
+      // from: process.env.EMAIL_USERNAME,
+      to: this.to,
+      subject,
+      html,
+      text: (0, import_html_to_text.htmlToText)(html)
+    };
+    await this.newTransport().sendMail(mailOptions);
+  }
+  // Transport
+  async sendContactUs() {
+    await this.send("contact", "Someone used the contact form!");
+  }
+  async sendShareStory() {
+    await this.send("shareStory", "Someone wants to share a story!");
+  }
+  async sendJoinSlack() {
+    await this.send("slack", "Someone wants to join our Slack!");
+  }
+  async sendOneTimeAuthenticationLink() {
+    await this.send("oneTimeAuth", "One-time authentication link, valid for 10 minutes.");
+  }
+};
+
+// auth/auth.js
 var sessionSecret = process.env.SESSION_SECRET;
 var { withAuth } = (0, import_auth.createAuth)({
   listKey: "User",
@@ -2051,7 +2115,7 @@ var { withAuth } = (0, import_auth.createAuth)({
       const mailData = {
         targetEmail: identity
       };
-      await new import_email.default(fromEmail, mailData, url).sendOneTimeAuthenticationLink();
+      await new Email(fromEmail, mailData, url).sendOneTimeAuthenticationLink();
     },
     tokensValidForMins: 10
   },
@@ -2063,6 +2127,8 @@ var { withAuth } = (0, import_auth.createAuth)({
         create: {
           name: "Admin Role",
           canCreateItems: true,
+          canCreateChapters: true,
+          // Ny
           canManageAllItems: true,
           canSeeOtherUsers: true,
           canEditOtherUsers: true,
@@ -2075,10 +2141,16 @@ var { withAuth } = (0, import_auth.createAuth)({
   sessionData: `
     fullName
     email
+    chapters {
+      id
+      title
+      slug
+    }
     role {
       id
       name
       canCreateItems
+      canCreateChapters
       canManageAllItems
       canSeeOtherUsers
       canEditOtherUsers
@@ -2091,9 +2163,6 @@ var session = (0, import_session.statelessSessions)({
   maxAge: 60 * 60 * 24 * 30,
   secret: sessionSecret
 });
-
-// routes/sendEmail.js
-var import_email2 = __toESM(require_email());
 
 // utils/fetchFormEmails.js
 async function fetchFormEmails() {
@@ -2153,7 +2222,7 @@ var sendEmail = async (req, res) => {
           contactEmail: req.body.contactEmail,
           message: req.body.message
         };
-        await new import_email2.default(fromEmail, mailData, url).sendContactUs();
+        await new Email(fromEmail, mailData, url).sendContactUs();
       }
     }
     if (req.body.target === "joinslack") {
@@ -2170,7 +2239,7 @@ var sendEmail = async (req, res) => {
         contactEmail: req.body.contactEmail,
         message: req.body.message
       };
-      await new import_email2.default(fromEmail, mailData, url).sendJoinSlack();
+      await new Email(fromEmail, mailData, url).sendJoinSlack();
     }
     if (req.body.target === "shareyourstory") {
       if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn || req.body.usingD4CRGuideAndPrinciples === null || req.body.usingD4CRGuideAndPrinciples === void 0 || typeof req.body.usingD4CRGuideAndPrinciples !== "boolean" || req.body.logoFeaturedOnWebpage === null || req.body.logoFeaturedOnWebpage === void 0 || typeof req.body.logoFeaturedOnWebpage !== "boolean") {
@@ -2188,7 +2257,7 @@ var sendEmail = async (req, res) => {
         usingD4CRGuideAndPrinciples: req.body.usingD4CRGuideAndPrinciples,
         logoFeaturedOnWebpage: req.body.logoFeaturedOnWebpage
       };
-      await new import_email2.default(fromEmail, mailData, url).sendShareStory();
+      await new Email(fromEmail, mailData, url).sendShareStory();
     }
     res.status(200).send({ success: true, message: "Email sent" });
   } catch (err) {

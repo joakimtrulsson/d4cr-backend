@@ -2,11 +2,13 @@
   "name": "keystone-app",
   "version": "1.0.2",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "keystone dev",
     "start": "keystone start",
     "build": "keystone build",
-    "postinstall": "keystone build --no-ui --frozen"
+    "postinstall": "keystone build --no-ui --frozen",
+    "test": "node --experimental-vm-modules __tests__/test.js"
   },
   "dependencies": {
     "@emotion/css": "^11.11.2",
@@ -19,21 +21,18 @@
     "@keystone-6/fields-document": "^7.0.0",
     "@mui/icons-material": "^5.15.5",
     "@mui/material": "^5.15.5",
+    "@prisma/client": "^4.16.2",
     "dotenv": "^16.3.1",
     "html-to-text": "^9.0.5",
-    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.9",
     "pug": "^3.0.2",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
-    "react-katex": "^3.0.1",
     "react-media-library": "^2.0.1",
-    "react-select": "^5.8.0",
     "sass": "^1.70.0",
     "slate": "^0.101.5",
     "slate-react": "^0.101.5",
-    "typescript": "^4.9.5",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

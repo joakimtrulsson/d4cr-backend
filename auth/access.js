@@ -5,6 +5,7 @@ export function isSignedIn({ session }) {
 // Permissions är funktioner för att kontrollera om den nuvarande användarens roll värde satt till true.
 export const permissions = {
   canCreateItems: ({ session }) => session?.data.role?.canCreateItems ?? false,
+  canCreateChapters: ({ session }) => session?.data.role?.canCreateChapters ?? false,
   canManageAllItems: ({ session }) => session?.data.role?.canManageAllItems ?? false,
   canManageUsers: ({ session }) => session?.data.role?.canManageUsers ?? false,
   canManageRoles: ({ session }) => session?.data.role?.canManageRoles ?? false,
@@ -20,7 +21,7 @@ export const rules = {
     }
 
     // Gör så en användare bara kan se sina egna items.
-    return { author: { id: { equals: session.itemId } } };
+    return { contentOwner: { some: { id: { equals: session.itemId } } } };
   },
   canManageItems: ({ session }) => {
     if (!session) return false;
@@ -29,7 +30,7 @@ export const rules = {
     if (session.data.role?.canManageAllItems) return true;
 
     // Annars så kan man bara redigera sina egna.
-    return { author: { id: { equals: session.itemId } } };
+    return { contentOwner: { some: { id: { equals: session.itemId } } } };
   },
   canReadUsers: ({ session }) => {
     if (!session) return false;

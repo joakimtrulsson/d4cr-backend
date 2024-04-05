@@ -16,7 +16,7 @@ model User {
   fullName            String    @default("")
   email               String    @unique @default("")
   password            String
-  chapters            Chapter[] @relation("User_chapters")
+  chapters            Chapter[] @relation("Chapter_contentOwner")
   role                Role?     @relation("User_role", fields: [roleId], references: [id])
   roleId              String?   @map("role") @postgresql.Uuid
   magicAuthToken      String?
@@ -30,6 +30,7 @@ model Role {
   id                String  @id @default(uuid()) @postgresql.Uuid
   name              String  @default("")
   canCreateItems    Boolean @default(false)
+  canCreateChapters Boolean @default(false)
   canManageAllItems Boolean @default(false)
   canSeeOtherUsers  Boolean @default(false)
   canEditOtherUsers Boolean @default(false)
@@ -48,7 +49,7 @@ model Chapter {
   translatedChapters              Chapter[] @relation("Chapter_translatedChapters")
   status                          String    @default("draft")
   sections                        Json?
-  from_User_chapters              User[]    @relation("User_chapters")
+  contentOwner                    User[]    @relation("Chapter_contentOwner")
   from_Chapter_translatedChapters Chapter[] @relation("Chapter_translatedChapters")
   from_News_relatedChapters       News[]    @relation("News_relatedChapters")
 }

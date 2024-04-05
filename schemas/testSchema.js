@@ -2,7 +2,7 @@ import { list } from '@keystone-6/core';
 import { text, json } from '@keystone-6/core/fields';
 
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 import { document } from '@keystone-6/fields-document';
 
 export const testSchema = list({

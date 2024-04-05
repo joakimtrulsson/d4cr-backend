@@ -1,5 +1,5 @@
-import Email from '../utils/email';
-import { fetchFormEmails } from '../utils/fetchFormEmails';
+import Email from '../utils/email.js';
+import { fetchFormEmails } from '../utils/fetchFormEmails.js';
 
 const sendEmail = async (req, res) => {
   try {

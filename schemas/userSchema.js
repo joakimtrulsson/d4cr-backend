@@ -2,7 +2,7 @@ import { list } from '@keystone-6/core';
 import { allOperations, denyAll } from '@keystone-6/core/access';
 import { password, relationship, text } from '@keystone-6/core/fields';
 
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 
 export const userSchema = list({
   access: {
@@ -18,9 +18,9 @@ export const userSchema = list({
     },
   },
   ui: {
-    isHidden: (args) => {
-      return !permissions?.canManageRoles(args);
-    },
+    // isHidden: (args) => {
+    //   return !permissions?.canManageRoles(args);
+    // },
     hideCreate: (args) => !permissions.canManageUsers(args),
     hideDelete: (args) => !permissions.canManageUsers(args),
     labelField: 'email',
@@ -66,11 +66,16 @@ export const userSchema = list({
     }),
 
     chapters: relationship({
-      ref: 'Chapter',
+      ref: 'Chapter.contentOwner',
       many: true,
       access: {
         create: permissions.canManageUsers,
         update: permissions.canManageUsers,
+      },
+      ui: {
+        itemView: {
+          fieldMode: (args) => (permissions.canManageUsers(args) ? 'edit' : 'read'),
+        },
       },
     }),
     //  Rolen som är kopplad till användare.

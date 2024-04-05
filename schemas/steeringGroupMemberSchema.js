@@ -2,7 +2,7 @@ import { list } from '@keystone-6/core';
 import { text, timestamp, json } from '@keystone-6/core/fields';
 
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 
 export const steeringGroupMemberSchema = list({
   access: {
@@ -20,6 +20,9 @@ export const steeringGroupMemberSchema = list({
   },
   labelField: 'fullName',
   ui: {
+    isHidden: (args) => {
+      return !permissions?.canManageAllItems(args);
+    },
     listView: {
       initialColumns: ['fullName', 'role', 'city', 'country'],
       initialSort: { field: 'fullName', direction: 'ASC' },

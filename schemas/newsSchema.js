@@ -2,9 +2,9 @@ import { list } from '@keystone-6/core';
 import { text, timestamp, relationship, select, json } from '@keystone-6/core/fields';
 
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 
-import { buildSlug } from '../utils/buildSlug';
+import { buildSlug } from '../utils/buildSlug.js';
 
 export const newsSchema = list({
   access: {

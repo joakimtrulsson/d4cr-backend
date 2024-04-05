@@ -2,9 +2,9 @@ import { list } from '@keystone-6/core';
 import { text, json, select, timestamp } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 
-import { buildSlug } from '../utils/buildSlug';
+import { buildSlug } from '../utils/buildSlug.js';
 
 export const caseSchema = list({
   access: {

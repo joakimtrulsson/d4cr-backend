@@ -1,9 +1,9 @@
 import { list } from '@keystone-6/core';
 import { text, json, select, relationship } from '@keystone-6/core/fields';
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 
-import { buildSlug } from '../utils/buildSlug';
+import { buildSlug } from '../utils/buildSlug.js';
 
 export const principleSchema = list({
   access: {
@@ -20,6 +20,9 @@ export const principleSchema = list({
     },
   },
   ui: {
+    isHidden: (args) => {
+      return !permissions?.canManageAllItems(args);
+    },
     labelField: 'title',
     listView: {
       initialColumns: ['title', 'principleNumber', 'principleCategory', 'slug', 'status'],

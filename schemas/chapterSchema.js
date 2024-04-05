@@ -2,11 +2,11 @@ import { list } from '@keystone-6/core';
 import { text, json, select, relationship, virtual } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
 import { allOperations } from '@keystone-6/core/access';
-import { isSignedIn, permissions, rules } from '../auth/access';
+import { isSignedIn, permissions, rules } from '../auth/access.js';
 import { graphql } from '@keystone-6/core';
 
-import { languageCodesData } from '../utils/languageCodes';
-import { buildSlug } from '../utils/buildSlug';
+import { languageCodesData } from '../utils/languageCodes.js';
+import { buildSlug } from '../utils/buildSlug.js';
 
 export const chapterSchema = list({
   access: {
@@ -17,20 +17,33 @@ export const chapterSchema = list({
     },
     filter: {
       query: () => true,
-      // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems,
     },
   },
   ui: {
+    hideCreate: (args) => !permissions.canCreateChapters(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    // Om användaren har canManageAllItems så kan de redigera alla Chapters.
+    // Annars så kan de bara uppdatera sitt egna Chapters.
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        if (session.data.chapters[0].id === item.id) return 'edit';
+
+        return 'read';
+      },
+    },
     labelField: 'title',
     listView: {
       initialColumns: [
         'title',
         'slug',
-        'status',
+        'contentOwner',
         'chapterLanguage',
         'translatedChapters',
+        'status',
       ],
       initialSort: { field: 'title', direction: 'ASC' },
       pageSize: 50,
@@ -84,7 +97,15 @@ export const chapterSchema = list({
         views: './customViews/ImageLibrary.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
+        itemView: {
+          fieldMode: ({ session, item }) => {
+            if (session?.data.role?.canManageAllItems) return 'edit';
+
+            if (session.data.chapters[0].id === item.id) return 'edit';
+
+            return 'hidden';
+          },
+        },
       },
     }),
 
@@ -117,7 +138,16 @@ export const chapterSchema = list({
         views: './customViews/AllSections.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
+        // itemView: { fieldMode: 'edit' },
+        itemView: {
+          fieldMode: ({ session, item }) => {
+            if (session?.data.role?.canManageAllItems) return 'edit';
+
+            if (session.data.chapters[0].id === item.id) return 'edit';
+
+            return 'hidden';
+          },
+        },
       },
     }),
 
@@ -149,6 +179,28 @@ export const chapterSchema = list({
           fieldMode: 'hidden',
         },
       },
+    }),
+    contentOwner: relationship({
+      ref: 'User.chapters',
+      many: true,
+      ui: {
+        createView: {
+          fieldMode: (args) => (permissions.canManageAllItems(args) ? 'edit' : 'hidden'),
+        },
+        itemView: {
+          fieldMode: (args) => (permissions.canManageAllItems(args) ? 'edit' : 'read'),
+        },
+      },
+      // Defaulta alltid nya items till den nuvarande användaren; detta är viktigt eftersom användare utan rättigheten canManageAllItems inte ser detta fält när de skapar nya.
+      // hooks: {
+      //   resolveInput({ operation, resolvedData, context }) {
+      //     if (operation === 'create' && !resolvedData.contentOwner && context.session) {
+
+      //       return { connect: { id: context.session.itemId } };
+      //     }
+      //     return resolvedData.assignedTo;
+      //   },
+      // },
     }),
   },
 });

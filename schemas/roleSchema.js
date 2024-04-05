@@ -2,7 +2,7 @@ import { list } from '@keystone-6/core';
 import { allOperations } from '@keystone-6/core/access';
 import { checkbox, relationship, text } from '@keystone-6/core/fields';
 
-import { isSignedIn, permissions } from '../auth/access';
+import { isSignedIn, permissions } from '../auth/access.js';
 
 export const roleSchema = list({
   access: {
@@ -28,6 +28,8 @@ export const roleSchema = list({
     name: text({ validation: { isRequired: true } }),
 
     canCreateItems: checkbox({ defaultValue: false }),
+
+    canCreateChapters: checkbox({ defaultValue: false }),
 
     canManageAllItems: checkbox({ defaultValue: false }),
 

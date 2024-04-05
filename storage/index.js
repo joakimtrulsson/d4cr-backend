@@ -1,2 +1,2 @@
-export { imageStorage } from './imageStorage';
-export { videoStorage } from './videoStorage';
+export { imageStorage } from './imageStorage.js';
+export { videoStorage } from './videoStorage.js';

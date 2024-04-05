@@ -22,7 +22,7 @@ import {
   SteeringGroupMember,
   Case,
   Test,
-} from './schemas/index';
+} from './schemas/index.js';
 
 export const lists = {
   User,

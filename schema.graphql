@@ -170,6 +170,7 @@ type Role {
   id: ID!
   name: String
   canCreateItems: Boolean
+  canCreateChapters: Boolean
   canManageAllItems: Boolean
   canSeeOtherUsers: Boolean
   canEditOtherUsers: Boolean
@@ -190,6 +191,7 @@ input RoleWhereInput {
   id: IDFilter
   name: StringFilter
   canCreateItems: BooleanFilter
+  canCreateChapters: BooleanFilter
   canManageAllItems: BooleanFilter
   canSeeOtherUsers: BooleanFilter
   canEditOtherUsers: BooleanFilter
@@ -213,6 +215,7 @@ input RoleOrderByInput {
   id: OrderDirection
   name: OrderDirection
   canCreateItems: OrderDirection
+  canCreateChapters: OrderDirection
   canManageAllItems: OrderDirection
   canSeeOtherUsers: OrderDirection
   canEditOtherUsers: OrderDirection
@@ -223,6 +226,7 @@ input RoleOrderByInput {
 input RoleUpdateInput {
   name: String
   canCreateItems: Boolean
+  canCreateChapters: Boolean
   canManageAllItems: Boolean
   canSeeOtherUsers: Boolean
   canEditOtherUsers: Boolean
@@ -246,6 +250,7 @@ input RoleUpdateArgs {
 input RoleCreateInput {
   name: String
   canCreateItems: Boolean
+  canCreateChapters: Boolean
   canManageAllItems: Boolean
   canSeeOtherUsers: Boolean
   canEditOtherUsers: Boolean
@@ -271,6 +276,8 @@ type Chapter {
   status: String
   sections: JSON
   news: [News]
+  contentOwner(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  contentOwnerCount(where: UserWhereInput! = {}): Int
 }
 
 type Chapter_preamble_Document {
@@ -292,6 +299,7 @@ input ChapterWhereInput {
   chapterLanguage: StringNullableFilter
   translatedChapters: ChapterManyRelationFilter
   status: StringFilter
+  contentOwner: UserManyRelationFilter
 }
 
 input StringNullableFilter {
@@ -326,6 +334,7 @@ input ChapterUpdateInput {
   translatedChapters: ChapterRelateToManyForUpdateInput
   status: String
   sections: JSON
+  contentOwner: UserRelateToManyForUpdateInput
 }
 
 input ChapterUpdateArgs {
@@ -342,6 +351,7 @@ input ChapterCreateInput {
   translatedChapters: ChapterRelateToManyForCreateInput
   status: String
   sections: JSON
+  contentOwner: UserRelateToManyForCreateInput
 }
 
 type Page {
