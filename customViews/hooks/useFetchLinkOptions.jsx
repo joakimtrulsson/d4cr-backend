@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { staticPages } from '../utils/constants';
 
 const useFetchLinkOptions = () => {
   const [pagesOptions, setPagesOptions] = useState([]);
@@ -53,7 +54,14 @@ const useFetchLinkOptions = () => {
         //   value: `${resource.url}`,
         // }));
 
-        const options = chaptersOptions.concat(
+        // const options = chaptersOptions.concat(
+        //   pagesOptions,
+        //   principlesOptions
+        //   // resourcesOptions
+        // );
+
+        const options = [...staticPages].concat(
+          chaptersOptions,
           pagesOptions,
           principlesOptions
           // resourcesOptions

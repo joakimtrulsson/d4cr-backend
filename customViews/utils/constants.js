@@ -12,3 +12,11 @@ export const options = [
   { value: 'STEERINGGROUP', label: 'Steering Group' },
   { value: 'WYSIWYG', label: 'WYSIWYG' },
 ];
+
+export const staticPages = [
+  { value: '/share-story', label: 'Share a story (Modal)' },
+  { value: '/contact-us', label: '/contact-us (Predefined Page)' },
+  { value: '/resources', label: '/resources (Predefined Page)' },
+  { value: '/cases', label: '/cases (Predefined Page)' },
+  { value: '/news', label: '/news (Predefined Page)' },
+];

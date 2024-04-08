@@ -1599,8 +1599,10 @@ input CaseCreateInput {
 
 type Test {
   id: ID!
-  content: Test_content_Document
+  someFieldName: String
+  anotherFieldName: String
   sections: JSON
+  content: Test_content_Document
 }
 
 type Test_content_Document {
@@ -1616,15 +1618,21 @@ input TestWhereInput {
   OR: [TestWhereInput!]
   NOT: [TestWhereInput!]
   id: IDFilter
+  someFieldName: StringFilter
+  anotherFieldName: StringFilter
 }
 
 input TestOrderByInput {
   id: OrderDirection
+  someFieldName: OrderDirection
+  anotherFieldName: OrderDirection
 }
 
 input TestUpdateInput {
-  content: JSON
+  someFieldName: String
+  anotherFieldName: String
   sections: JSON
+  content: JSON
 }
 
 input TestUpdateArgs {
@@ -1633,8 +1641,10 @@ input TestUpdateArgs {
 }
 
 input TestCreateInput {
-  content: JSON
+  someFieldName: String
+  anotherFieldName: String
   sections: JSON
+  content: JSON
 }
 
 """

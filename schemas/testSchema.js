@@ -1,5 +1,6 @@
 import { list } from '@keystone-6/core';
 import { text, json } from '@keystone-6/core/fields';
+import { group } from '@keystone-6/core';
 
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
@@ -20,6 +21,34 @@ export const testSchema = list({
     },
   },
   fields: {
+    ...group({
+      label: 'Group label',
+      description: 'Group description',
+      fields: {
+        someFieldName: text({
+          /* ... */
+        }),
+        anotherFieldName: text({}),
+        /* ... */
+      },
+    }),
+
+    ...group({
+      label: 'Sections',
+      description: 'Sections description',
+      fields: {
+        sections: json({
+          ui: {
+            views: './customViews/AllSections.jsx',
+            createView: { fieldMode: 'edit' },
+            listView: { fieldMode: 'hidden' },
+            itemView: { fieldMode: 'edit', fieldPosition: 'sidebar' },
+          },
+        }),
+        /* ... */
+      },
+    }),
+
     content: document({
       layouts: [
         [1, 1],
@@ -61,14 +90,14 @@ export const testSchema = list({
     //     itemView: { fieldMode: 'edit' },
     //   },
     // }),
-    sections: json({
-      ui: {
-        views: './customViews/AllSections.jsx',
-        createView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
-      },
-    }),
+    // sections: json({
+    //   ui: {
+    //     views: './customViews/AllSections.jsx',
+    //     createView: { fieldMode: 'edit' },
+    //     listView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'edit' },
+    //   },
+    // }),
     // principles: json({
     //   ui: {
     //     views: './customViews/Principles.jsx',

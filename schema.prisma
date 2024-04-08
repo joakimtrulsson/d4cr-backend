@@ -253,7 +253,9 @@ model Case {
 }
 
 model Test {
-  id       String @id @default(uuid()) @postgresql.Uuid
-  content  Json   @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  sections Json?
+  id               String @id @default(uuid()) @postgresql.Uuid
+  someFieldName    String @default("")
+  anotherFieldName String @default("")
+  sections         Json?
+  content          Json   @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
 }

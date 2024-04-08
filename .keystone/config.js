@@ -32,7 +32,7 @@ __export(keystone_exports, {
   default: () => keystone_default
 });
 module.exports = __toCommonJS(keystone_exports);
-var import_core25 = require("@keystone-6/core");
+var import_core26 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
 var import_dotenv = __toESM(require("dotenv"));
 
@@ -1901,6 +1901,7 @@ var videoSchema = (0, import_core23.list)({
 // schemas/testSchema.js
 var import_core24 = require("@keystone-6/core");
 var import_fields23 = require("@keystone-6/core/fields");
+var import_core25 = require("@keystone-6/core");
 var import_access45 = require("@keystone-6/core/access");
 var import_fields_document6 = require("@keystone-6/fields-document");
 var testSchema = (0, import_core24.list)({
@@ -1918,6 +1919,32 @@ var testSchema = (0, import_core24.list)({
     }
   },
   fields: {
+    ...(0, import_core25.group)({
+      label: "Group label",
+      description: "Group description",
+      fields: {
+        someFieldName: (0, import_fields23.text)({
+          /* ... */
+        }),
+        anotherFieldName: (0, import_fields23.text)({})
+        /* ... */
+      }
+    }),
+    ...(0, import_core25.group)({
+      label: "Sections",
+      description: "Sections description",
+      fields: {
+        sections: (0, import_fields23.json)({
+          ui: {
+            views: "./customViews/AllSections.jsx",
+            createView: { fieldMode: "edit" },
+            listView: { fieldMode: "hidden" },
+            itemView: { fieldMode: "edit", fieldPosition: "sidebar" }
+          }
+        })
+        /* ... */
+      }
+    }),
     content: (0, import_fields_document6.document)({
       layouts: [
         [1, 1],
@@ -1949,7 +1976,7 @@ var testSchema = (0, import_core24.list)({
         },
         softBreaks: true
       }
-    }),
+    })
     // image: json({
     //   ui: {
     //     views: './customViews/ImageLibrary.jsx',
@@ -1958,14 +1985,14 @@ var testSchema = (0, import_core24.list)({
     //     itemView: { fieldMode: 'edit' },
     //   },
     // }),
-    sections: (0, import_fields23.json)({
-      ui: {
-        views: "./customViews/AllSections.jsx",
-        createView: { fieldMode: "edit" },
-        listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
-      }
-    })
+    // sections: json({
+    //   ui: {
+    //     views: './customViews/AllSections.jsx',
+    //     createView: { fieldMode: 'edit' },
+    //     listView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'edit' },
+    //   },
+    // }),
     // principles: json({
     //   ui: {
     //     views: './customViews/Principles.jsx',
@@ -2288,7 +2315,7 @@ import_dotenv.default.config();
 var { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
 var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",");
 var keystone_default = withAuth(
-  (0, import_core25.config)({
+  (0, import_core26.config)({
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,
