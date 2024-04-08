@@ -49,17 +49,6 @@ const useFetchLinkOptions = () => {
           value: `${principle.slug}`,
         }));
 
-        // const resourcesOptions = data.resources.map((resource) => ({
-        //   label: `${resource.url}`,
-        //   value: `${resource.url}`,
-        // }));
-
-        // const options = chaptersOptions.concat(
-        //   pagesOptions,
-        //   principlesOptions
-        //   // resourcesOptions
-        // );
-
         const options = [...staticPages].concat(
           chaptersOptions,
           pagesOptions,
