@@ -118,16 +118,19 @@ model FooterMenu {
 }
 
 model News {
-  id              String        @id @default(uuid()) @postgresql.Uuid
-  title           String        @unique @default("")
-  slug            String        @unique @default("")
-  newsCategory    NewsCategory? @relation("News_newsCategory", fields: [newsCategoryId], references: [id])
-  newsCategoryId  String?       @map("newsCategory") @postgresql.Uuid
-  relatedChapters Chapter[]     @relation("News_relatedChapters")
-  image           Json?
-  status          String        @default("draft")
-  sections        Json?
-  createdAt       DateTime?     @default(now())
+  id                String        @id @default(uuid()) @postgresql.Uuid
+  title             String        @unique @default("")
+  slug              String        @unique @default("")
+  newsCategory      NewsCategory? @relation("News_newsCategory", fields: [newsCategoryId], references: [id])
+  newsCategoryId    String?       @map("newsCategory") @postgresql.Uuid
+  relatedChapters   Chapter[]     @relation("News_relatedChapters")
+  image             Json?
+  sections          Json?
+  resourcesTitle    String        @default("")
+  resourcesPreamble String        @default("")
+  resources         Resource[]    @relation("News_resources")
+  createdAt         DateTime?     @default(now())
+  status            String        @default("draft")
 
   @@index([newsCategoryId])
 }
@@ -140,15 +143,18 @@ model NewsCategory {
 }
 
 model Resource {
-  id             String            @id @default(uuid()) @postgresql.Uuid
-  title          String            @unique @default("")
-  url            String            @default("")
-  image          Json?
-  category       ResourceCategory? @relation("Resource_category", fields: [categoryId], references: [id])
-  categoryId     String?           @map("category") @postgresql.Uuid
-  resourceType   ResourceType?     @relation("Resource_resourceType", fields: [resourceTypeId], references: [id])
-  resourceTypeId String?           @map("resourceType") @postgresql.Uuid
-  createdAt      DateTime?         @default(now())
+  id                       String            @id @default(uuid()) @postgresql.Uuid
+  title                    String            @unique @default("")
+  url                      String            @default("")
+  image                    Json?
+  category                 ResourceCategory? @relation("Resource_category", fields: [categoryId], references: [id])
+  categoryId               String?           @map("category") @postgresql.Uuid
+  resourceType             ResourceType?     @relation("Resource_resourceType", fields: [resourceTypeId], references: [id])
+  resourceTypeId           String?           @map("resourceType") @postgresql.Uuid
+  createdAt                DateTime?         @default(now())
+  from_News_resources      News[]            @relation("News_resources")
+  from_Principle_resources Principle[]       @relation("Principle_resources")
+  from_Case_resources      Case[]            @relation("Case_resources")
 
   @@index([categoryId])
   @@index([resourceTypeId])
@@ -203,7 +209,9 @@ model Principle {
   quoteAuthor       String              @default("")
   image             Json?
   subPrinciples     Json?
-  resources         Json?
+  resourcesTitle    String              @default("")
+  resourcesPreamble String              @default("")
+  resources         Resource[]          @relation("Principle_resources")
   principleCategory PrincipleCategory[] @relation("Principle_principleCategory")
   principleNumber   PrincipleNumber?    @relation("Principle_principleNumber", fields: [principleNumberId], references: [id])
   principleNumberId String?             @unique @map("principleNumber") @postgresql.Uuid
@@ -238,18 +246,20 @@ model SteeringGroupMember {
 }
 
 model Case {
-  id         String    @id @default(uuid()) @postgresql.Uuid
-  title      String    @default("")
-  slug       String    @unique @default("")
-  preamble   Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  sections   Json?
-  caseImage  Json?
-  quote      String    @default("")
-  caseLink   Json?
-  principles Json?
-  resources  Json?
-  status     String    @default("draft")
-  createdAt  DateTime? @default(now())
+  id                String     @id @default(uuid()) @postgresql.Uuid
+  title             String     @default("")
+  slug              String     @unique @default("")
+  preamble          Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  sections          Json?
+  caseImage         Json?
+  quote             String     @default("")
+  caseLink          Json?
+  principles        Json?
+  resourcesTitle    String     @default("")
+  resourcesPreamble String     @default("")
+  resources         Resource[] @relation("Case_resources")
+  status            String     @default("draft")
+  createdAt         DateTime?  @default(now())
 }
 
 model Test {

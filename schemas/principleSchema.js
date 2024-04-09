@@ -1,5 +1,6 @@
 import { list } from '@keystone-6/core';
 import { text, json, select, relationship } from '@keystone-6/core/fields';
+import { group } from '@keystone-6/core';
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
 
@@ -114,29 +115,51 @@ export const principleSchema = list({
       },
     }),
 
-    resources: json({
-      ui: {
-        views: './customViews/Resources.jsx',
-        createView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
+    ...group({
+      label: 'Resources',
+      description: 'Select resources to be displayed in the resources section.',
+      fields: {
+        resourcesTitle: text({}),
+        resourcesPreamble: text({}),
+        resources: relationship({
+          ref: 'Resource',
+          many: true,
+          // ui: {
+          //   description: 'Select resources to be displayed in the resources section.',
+          // },
+        }),
       },
     }),
 
-    principleCategory: relationship({
-      ref: 'PrincipleCategory.principles',
-      many: true,
-      ui: {
-        description: 'Reference to principle category.',
-      },
-    }),
+    // resources: json({
+    //   ui: {
+    //     views: './customViews/Resources.jsx',
+    //     createView: { fieldMode: 'edit' },
+    //     listView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'edit' },
+    //   },
+    // }),
 
-    principleNumber: relationship({
-      validation: { isRequired: true },
-      ref: 'PrincipleNumber.principles',
-      many: false,
-      ui: {
-        description: 'Reference to principle number.',
+    ...group({
+      label: 'Principle Taxonomy',
+      description: 'Select the principle category and number for this principle.',
+      fields: {
+        principleCategory: relationship({
+          ref: 'PrincipleCategory.principles',
+          many: true,
+          ui: {
+            description: 'Reference to principle category.',
+          },
+        }),
+
+        principleNumber: relationship({
+          validation: { isRequired: true },
+          ref: 'PrincipleNumber.principles',
+          many: false,
+          ui: {
+            description: 'Reference to principle number.',
+          },
+        }),
       },
     }),
 

@@ -32,7 +32,7 @@ __export(keystone_exports, {
   default: () => keystone_default
 });
 module.exports = __toCommonJS(keystone_exports);
-var import_core26 = require("@keystone-6/core");
+var import_core29 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
 var import_dotenv = __toESM(require("dotenv"));
 
@@ -1099,6 +1099,7 @@ var footerMenuSchema = (0, import_core11.list)({
 // schemas/newsSchema.js
 var import_core12 = require("@keystone-6/core");
 var import_fields11 = require("@keystone-6/core/fields");
+var import_core13 = require("@keystone-6/core");
 var import_access21 = require("@keystone-6/core/access");
 var newsSchema = (0, import_core12.list)({
   access: {
@@ -1173,15 +1174,6 @@ var newsSchema = (0, import_core12.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    status: (0, import_fields11.select)({
-      options: [
-        { label: "Published", value: "published" },
-        { label: "Draft", value: "draft" }
-      ],
-      validation: { isRequired: true },
-      defaultValue: "draft",
-      ui: { displayMode: "segmented-control" }
-    }),
     sections: (0, import_fields11.json)({
       ui: {
         views: "./customViews/AllSections.jsx",
@@ -1190,18 +1182,42 @@ var newsSchema = (0, import_core12.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
+    ...(0, import_core13.group)({
+      label: "Resources",
+      description: "Select resources to be displayed in the resources section.",
+      fields: {
+        resourcesTitle: (0, import_fields11.text)({}),
+        resourcesPreamble: (0, import_fields11.text)({}),
+        resources: (0, import_fields11.relationship)({
+          ref: "Resource",
+          many: true
+          // ui: {
+          //   description: 'Select resources to be displayed in the resources section.',
+          // },
+        })
+      }
+    }),
     createdAt: (0, import_fields11.timestamp)({
       isRequired: true,
       defaultValue: { kind: "now" }
+    }),
+    status: (0, import_fields11.select)({
+      options: [
+        { label: "Published", value: "published" },
+        { label: "Draft", value: "draft" }
+      ],
+      validation: { isRequired: true },
+      defaultValue: "draft",
+      ui: { displayMode: "segmented-control" }
     })
   }
 });
 
 // schemas/newsCategorySchema.js
-var import_core13 = require("@keystone-6/core");
+var import_core14 = require("@keystone-6/core");
 var import_fields12 = require("@keystone-6/core/fields");
 var import_access23 = require("@keystone-6/core/access");
-var newsCategorySchema = (0, import_core13.list)({
+var newsCategorySchema = (0, import_core14.list)({
   access: {
     operation: {
       ...(0, import_access23.allOperations)(isSignedIn),
@@ -1240,10 +1256,10 @@ var newsCategorySchema = (0, import_core13.list)({
 });
 
 // schemas/resourceSchema.js
-var import_core14 = require("@keystone-6/core");
+var import_core15 = require("@keystone-6/core");
 var import_fields13 = require("@keystone-6/core/fields");
 var import_access25 = require("@keystone-6/core/access");
-var resourceSchema = (0, import_core14.list)({
+var resourceSchema = (0, import_core15.list)({
   access: {
     operation: {
       ...(0, import_access25.allOperations)(isSignedIn),
@@ -1300,10 +1316,10 @@ var resourceSchema = (0, import_core14.list)({
 });
 
 // schemas/resourceCategorySchema.js
-var import_core15 = require("@keystone-6/core");
+var import_core16 = require("@keystone-6/core");
 var import_fields14 = require("@keystone-6/core/fields");
 var import_access27 = require("@keystone-6/core/access");
-var resourceCategorySchema = (0, import_core15.list)({
+var resourceCategorySchema = (0, import_core16.list)({
   access: {
     operation: {
       ...(0, import_access27.allOperations)(isSignedIn),
@@ -1334,10 +1350,10 @@ var resourceCategorySchema = (0, import_core15.list)({
 });
 
 // schemas/resourceTypeSchema.js
-var import_core16 = require("@keystone-6/core");
+var import_core17 = require("@keystone-6/core");
 var import_fields15 = require("@keystone-6/core/fields");
 var import_access29 = require("@keystone-6/core/access");
-var resourceTypeSchema = (0, import_core16.list)({
+var resourceTypeSchema = (0, import_core17.list)({
   access: {
     operation: {
       ...(0, import_access29.allOperations)(isSignedIn),
@@ -1382,10 +1398,11 @@ var resourceTypeSchema = (0, import_core16.list)({
 });
 
 // schemas/principleSchema.js
-var import_core17 = require("@keystone-6/core");
+var import_core18 = require("@keystone-6/core");
 var import_fields16 = require("@keystone-6/core/fields");
+var import_core19 = require("@keystone-6/core");
 var import_access31 = require("@keystone-6/core/access");
-var principleSchema = (0, import_core17.list)({
+var principleSchema = (0, import_core18.list)({
   access: {
     operation: {
       ...(0, import_access31.allOperations)(isSignedIn),
@@ -1480,27 +1497,48 @@ var principleSchema = (0, import_core17.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    resources: (0, import_fields16.json)({
-      ui: {
-        views: "./customViews/Resources.jsx",
-        createView: { fieldMode: "edit" },
-        listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
+    ...(0, import_core19.group)({
+      label: "Resources",
+      description: "Select resources to be displayed in the resources section.",
+      fields: {
+        resourcesTitle: (0, import_fields16.text)({}),
+        resourcesPreamble: (0, import_fields16.text)({}),
+        resources: (0, import_fields16.relationship)({
+          ref: "Resource",
+          many: true
+          // ui: {
+          //   description: 'Select resources to be displayed in the resources section.',
+          // },
+        })
       }
     }),
-    principleCategory: (0, import_fields16.relationship)({
-      ref: "PrincipleCategory.principles",
-      many: true,
-      ui: {
-        description: "Reference to principle category."
-      }
-    }),
-    principleNumber: (0, import_fields16.relationship)({
-      validation: { isRequired: true },
-      ref: "PrincipleNumber.principles",
-      many: false,
-      ui: {
-        description: "Reference to principle number."
+    // resources: json({
+    //   ui: {
+    //     views: './customViews/Resources.jsx',
+    //     createView: { fieldMode: 'edit' },
+    //     listView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'edit' },
+    //   },
+    // }),
+    ...(0, import_core19.group)({
+      label: "Principle Taxonomy",
+      description: "Select the principle category and number for this principle.",
+      fields: {
+        principleCategory: (0, import_fields16.relationship)({
+          ref: "PrincipleCategory.principles",
+          many: true,
+          ui: {
+            description: "Reference to principle category."
+          }
+        }),
+        principleNumber: (0, import_fields16.relationship)({
+          validation: { isRequired: true },
+          ref: "PrincipleNumber.principles",
+          many: false,
+          ui: {
+            description: "Reference to principle number."
+          }
+        })
       }
     }),
     status: (0, import_fields16.select)({
@@ -1516,10 +1554,10 @@ var principleSchema = (0, import_core17.list)({
 });
 
 // schemas/principleNumberSchema.js
-var import_core18 = require("@keystone-6/core");
+var import_core20 = require("@keystone-6/core");
 var import_fields17 = require("@keystone-6/core/fields");
 var import_access33 = require("@keystone-6/core/access");
-var principleNumberSchema = (0, import_core18.list)({
+var principleNumberSchema = (0, import_core20.list)({
   access: {
     operation: {
       ...(0, import_access33.allOperations)(isSignedIn),
@@ -1552,10 +1590,10 @@ var principleNumberSchema = (0, import_core18.list)({
 });
 
 // schemas/principleCategorySchema.js
-var import_core19 = require("@keystone-6/core");
+var import_core21 = require("@keystone-6/core");
 var import_fields18 = require("@keystone-6/core/fields");
 var import_access35 = require("@keystone-6/core/access");
-var principleCategorySchema = (0, import_core19.list)({
+var principleCategorySchema = (0, import_core21.list)({
   access: {
     operation: {
       ...(0, import_access35.allOperations)(isSignedIn),
@@ -1586,11 +1624,12 @@ var principleCategorySchema = (0, import_core19.list)({
 });
 
 // schemas/caseSchema.js
-var import_core20 = require("@keystone-6/core");
+var import_core22 = require("@keystone-6/core");
 var import_fields19 = require("@keystone-6/core/fields");
+var import_core23 = require("@keystone-6/core");
 var import_fields_document5 = require("@keystone-6/fields-document");
 var import_access37 = require("@keystone-6/core/access");
-var caseSchema = (0, import_core20.list)({
+var caseSchema = (0, import_core22.list)({
   access: {
     operation: {
       ...(0, import_access37.allOperations)(isSignedIn),
@@ -1678,12 +1717,27 @@ var caseSchema = (0, import_core20.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    resources: (0, import_fields19.json)({
-      ui: {
-        views: "./customViews/Resources.jsx",
-        createView: { fieldMode: "edit" },
-        listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
+    // resources: json({
+    //   ui: {
+    //     views: './customViews/Resources.jsx',
+    //     createView: { fieldMode: 'edit' },
+    //     listView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'edit' },
+    //   },
+    // }),
+    ...(0, import_core23.group)({
+      label: "Resources",
+      description: "Select resources to be displayed in the resources section.",
+      fields: {
+        resourcesTitle: (0, import_fields19.text)({}),
+        resourcesPreamble: (0, import_fields19.text)({}),
+        resources: (0, import_fields19.relationship)({
+          ref: "Resource",
+          many: true
+          // ui: {
+          //   description: 'Select resources to be displayed in the resources section.',
+          // },
+        })
       }
     }),
     status: (0, import_fields19.select)({
@@ -1703,10 +1757,10 @@ var caseSchema = (0, import_core20.list)({
 });
 
 // schemas/steeringGroupMemberSchema.js
-var import_core21 = require("@keystone-6/core");
+var import_core24 = require("@keystone-6/core");
 var import_fields20 = require("@keystone-6/core/fields");
 var import_access39 = require("@keystone-6/core/access");
-var steeringGroupMemberSchema = (0, import_core21.list)({
+var steeringGroupMemberSchema = (0, import_core24.list)({
   access: {
     operation: {
       ...(0, import_access39.allOperations)(isSignedIn),
@@ -1785,10 +1839,10 @@ var steeringGroupMemberSchema = (0, import_core21.list)({
 });
 
 // schemas/imageSchema.js
-var import_core22 = require("@keystone-6/core");
+var import_core25 = require("@keystone-6/core");
 var import_fields21 = require("@keystone-6/core/fields");
 var import_access41 = require("@keystone-6/core/access");
-var imageSchema = (0, import_core22.list)({
+var imageSchema = (0, import_core25.list)({
   access: {
     operation: {
       ...(0, import_access41.allOperations)(isSignedIn),
@@ -1846,10 +1900,10 @@ var imageSchema = (0, import_core22.list)({
 });
 
 // schemas/videoSchema.js
-var import_core23 = require("@keystone-6/core");
+var import_core26 = require("@keystone-6/core");
 var import_fields22 = require("@keystone-6/core/fields");
 var import_access43 = require("@keystone-6/core/access");
-var videoSchema = (0, import_core23.list)({
+var videoSchema = (0, import_core26.list)({
   access: {
     operation: {
       ...(0, import_access43.allOperations)(isSignedIn),
@@ -1899,12 +1953,12 @@ var videoSchema = (0, import_core23.list)({
 });
 
 // schemas/testSchema.js
-var import_core24 = require("@keystone-6/core");
+var import_core27 = require("@keystone-6/core");
 var import_fields23 = require("@keystone-6/core/fields");
-var import_core25 = require("@keystone-6/core");
+var import_core28 = require("@keystone-6/core");
 var import_access45 = require("@keystone-6/core/access");
 var import_fields_document6 = require("@keystone-6/fields-document");
-var testSchema = (0, import_core24.list)({
+var testSchema = (0, import_core27.list)({
   access: {
     operation: {
       ...(0, import_access45.allOperations)(isSignedIn),
@@ -1919,7 +1973,7 @@ var testSchema = (0, import_core24.list)({
     }
   },
   fields: {
-    ...(0, import_core25.group)({
+    ...(0, import_core28.group)({
       label: "Group label",
       description: "Group description",
       fields: {
@@ -1930,7 +1984,7 @@ var testSchema = (0, import_core24.list)({
         /* ... */
       }
     }),
-    ...(0, import_core25.group)({
+    ...(0, import_core28.group)({
       label: "Sections",
       description: "Sections description",
       fields: {
@@ -2315,7 +2369,7 @@ import_dotenv.default.config();
 var { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
 var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",");
 var keystone_default = withAuth(
-  (0, import_core26.config)({
+  (0, import_core29.config)({
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,

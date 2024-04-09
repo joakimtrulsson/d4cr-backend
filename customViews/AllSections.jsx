@@ -15,7 +15,7 @@ const {
   Banner,
   NewsTeaser,
   WysiwygSection,
-  Resources,
+  // Resources,
   Principles,
   SteeringGroup,
 } = SectionComponents;
@@ -29,7 +29,7 @@ const SECTIONS = {
   BANNER: Banner,
   NEWSTEASER: NewsTeaser,
   WYSIWYG: WysiwygSection,
-  RESOURCES: Resources,
+  // RESOURCES: Resources,
   PRINCIPLES: Principles,
   STEERINGGROUP: SteeringGroup,
 };

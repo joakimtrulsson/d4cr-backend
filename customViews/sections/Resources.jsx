@@ -31,19 +31,19 @@ function Resources({
       };
     }
   });
-  const [groups, setGroups] = useState(() => {
-    if (editData) {
-      return editData.resources || [];
-    } else {
-      return [
-        {
-          id: uuidv4(),
-          title: '',
-          resources: [],
-        },
-      ];
-    }
-  });
+  // const [groups, setGroups] = useState(() => {
+  //   if (editData) {
+  //     return editData.resources || [];
+  //   } else {
+  //     return [
+  //       {
+  //         id: uuidv4(),
+  //         title: '',
+  //         resources: [],
+  //       },
+  //     ];
+  //   }
+  // });
   const [newItems, setNewItems] = useState([]);
 
   async function handleSave() {
@@ -96,23 +96,24 @@ function Resources({
   }
 
   const handleAddGroupDataToNewItems = (newItem) => {
-    const groupIndex = newItems.findIndex(
-      (item) => item.groupTitle === newItem.groupTitle
-    );
+    setNewItems((prevNewItems) => [...prevNewItems, newItem]);
+    // const groupIndex = newItems.findIndex(
+    //   (item) => item.groupTitle === newItem.groupTitle
+    // );
 
-    if (groupIndex !== -1) {
-      const updatedGroup = newItems[groupIndex];
-      newItem.resources.forEach((resource) => {
-        const existingResource = updatedGroup.resources.find(
-          (existingResource) => existingResource.id === resource.id
-        );
-        if (!existingResource) {
-          updatedGroup.resources.push(resource);
-        }
-      });
-    } else {
-      setNewItems((prevNewItems) => [...prevNewItems, newItem]);
-    }
+    // if (groupIndex !== -1) {
+    //   const updatedGroup = newItems[groupIndex];
+    //   newItem.resources.forEach((resource) => {
+    //     const existingResource = updatedGroup.resources.find(
+    //       (existingResource) => existingResource.id === resource.id
+    //     );
+    //     if (!existingResource) {
+    //       updatedGroup.resources.push(resource);
+    //     }
+    //   });
+    // } else {
+    //   setNewItems((prevNewItems) => [...prevNewItems, newItem]);
+    // }
   };
 
   const handleUpdateItem = (updatedGroup) => {
@@ -188,27 +189,27 @@ function Resources({
       </div>
 
       <div>
-        {groups.map((group, index) => (
-          <div key={group.id}>
-            <ResourcesForm
-              autoFocus={autoFocus}
-              onAddNewItem={handleAddGroupDataToNewItems}
-              onUpdateItem={handleUpdateItem}
-              value={group}
-              editData={editData?.resources[index]}
-            />
+        {/* {groups.map((group, index) => ( */}
+        <div>
+          <ResourcesForm
+            autoFocus={autoFocus}
+            onAddNewItem={handleAddGroupDataToNewItems}
+            onUpdateItem={handleUpdateItem}
+            // value={group}
+            editData={editData?.resources}
+          />
 
-            {groups.length > 1 && (
+          {/* {groups.length > 1 && (
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <RemoveEntryButton handleRemove={handleRemoveGroup} indexToRemove={index}>
                   Remove group
                 </RemoveEntryButton>
               </div>
-            )}
-          </div>
-        ))}
+            )} */}
+        </div>
+        {/* ))} */}
       </div>
-      <AddEntryButton handleAdd={handleAddGroup}>Add new group</AddEntryButton>
+      {/* <AddEntryButton handleAdd={handleAddGroup}>Add new group</AddEntryButton> */}
 
       {editData ? (
         <UpdateSectionButton handleUpdate={handleSaveUpdate}>Update</UpdateSectionButton>

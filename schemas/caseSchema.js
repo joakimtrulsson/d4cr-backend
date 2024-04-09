@@ -1,5 +1,6 @@
 import { list } from '@keystone-6/core';
-import { text, json, select, timestamp } from '@keystone-6/core/fields';
+import { text, json, select, timestamp, relationship } from '@keystone-6/core/fields';
+import { group } from '@keystone-6/core';
 import { document } from '@keystone-6/fields-document';
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
@@ -109,12 +110,28 @@ export const caseSchema = list({
       },
     }),
 
-    resources: json({
-      ui: {
-        views: './customViews/Resources.jsx',
-        createView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
+    // resources: json({
+    //   ui: {
+    //     views: './customViews/Resources.jsx',
+    //     createView: { fieldMode: 'edit' },
+    //     listView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'edit' },
+    //   },
+    // }),
+
+    ...group({
+      label: 'Resources',
+      description: 'Select resources to be displayed in the resources section.',
+      fields: {
+        resourcesTitle: text({}),
+        resourcesPreamble: text({}),
+        resources: relationship({
+          ref: 'Resource',
+          many: true,
+          // ui: {
+          //   description: 'Select resources to be displayed in the resources section.',
+          // },
+        }),
       },
     }),
 

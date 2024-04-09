@@ -726,9 +726,13 @@ type News {
   relatedChapters(where: ChapterWhereInput! = {}, orderBy: [ChapterOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ChapterWhereUniqueInput): [Chapter!]
   relatedChaptersCount(where: ChapterWhereInput! = {}): Int
   image: JSON
-  status: String
   sections: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceWhereUniqueInput): [Resource!]
+  resourcesCount(where: ResourceWhereInput! = {}): Int
   createdAt: DateTime
+  status: String
 }
 
 input NewsWhereUniqueInput {
@@ -746,16 +750,27 @@ input NewsWhereInput {
   slug: StringFilter
   newsCategory: NewsCategoryWhereInput
   relatedChapters: ChapterManyRelationFilter
-  status: StringFilter
+  resourcesTitle: StringFilter
+  resourcesPreamble: StringFilter
+  resources: ResourceManyRelationFilter
   createdAt: DateTimeNullableFilter
+  status: StringFilter
+}
+
+input ResourceManyRelationFilter {
+  every: ResourceWhereInput
+  some: ResourceWhereInput
+  none: ResourceWhereInput
 }
 
 input NewsOrderByInput {
   id: OrderDirection
   title: OrderDirection
   slug: OrderDirection
-  status: OrderDirection
+  resourcesTitle: OrderDirection
+  resourcesPreamble: OrderDirection
   createdAt: OrderDirection
+  status: OrderDirection
 }
 
 input NewsUpdateInput {
@@ -764,15 +779,25 @@ input NewsUpdateInput {
   newsCategory: NewsCategoryRelateToOneForUpdateInput
   relatedChapters: ChapterRelateToManyForUpdateInput
   image: JSON
-  status: String
   sections: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources: ResourceRelateToManyForUpdateInput
   createdAt: DateTime
+  status: String
 }
 
 input NewsCategoryRelateToOneForUpdateInput {
   create: NewsCategoryCreateInput
   connect: NewsCategoryWhereUniqueInput
   disconnect: Boolean
+}
+
+input ResourceRelateToManyForUpdateInput {
+  disconnect: [ResourceWhereUniqueInput!]
+  set: [ResourceWhereUniqueInput!]
+  create: [ResourceCreateInput!]
+  connect: [ResourceWhereUniqueInput!]
 }
 
 input NewsUpdateArgs {
@@ -786,14 +811,22 @@ input NewsCreateInput {
   newsCategory: NewsCategoryRelateToOneForCreateInput
   relatedChapters: ChapterRelateToManyForCreateInput
   image: JSON
-  status: String
   sections: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources: ResourceRelateToManyForCreateInput
   createdAt: DateTime
+  status: String
 }
 
 input NewsCategoryRelateToOneForCreateInput {
   create: NewsCategoryCreateInput
   connect: NewsCategoryWhereUniqueInput
+}
+
+input ResourceRelateToManyForCreateInput {
+  create: [ResourceCreateInput!]
+  connect: [ResourceWhereUniqueInput!]
 }
 
 type NewsCategory {
@@ -962,12 +995,6 @@ input ResourceCategoryWhereInput {
   resources: ResourceManyRelationFilter
 }
 
-input ResourceManyRelationFilter {
-  every: ResourceWhereInput
-  some: ResourceWhereInput
-  none: ResourceWhereInput
-}
-
 input ResourceCategoryOrderByInput {
   id: OrderDirection
   title: OrderDirection
@@ -980,13 +1007,6 @@ input ResourceCategoryUpdateInput {
   resources: ResourceRelateToManyForUpdateInput
 }
 
-input ResourceRelateToManyForUpdateInput {
-  disconnect: [ResourceWhereUniqueInput!]
-  set: [ResourceWhereUniqueInput!]
-  create: [ResourceCreateInput!]
-  connect: [ResourceWhereUniqueInput!]
-}
-
 input ResourceCategoryUpdateArgs {
   where: ResourceCategoryWhereUniqueInput!
   data: ResourceCategoryUpdateInput!
@@ -996,11 +1016,6 @@ input ResourceCategoryCreateInput {
   title: String
   createdAt: DateTime
   resources: ResourceRelateToManyForCreateInput
-}
-
-input ResourceRelateToManyForCreateInput {
-  create: [ResourceCreateInput!]
-  connect: [ResourceWhereUniqueInput!]
 }
 
 type ResourceType {
@@ -1220,7 +1235,10 @@ type Principle {
   quoteAuthor: String
   image: JSON
   subPrinciples: JSON
-  resources: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceWhereUniqueInput): [Resource!]
+  resourcesCount(where: ResourceWhereInput! = {}): Int
   principleCategory(where: PrincipleCategoryWhereInput! = {}, orderBy: [PrincipleCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PrincipleCategoryWhereUniqueInput): [PrincipleCategory!]
   principleCategoryCount(where: PrincipleCategoryWhereInput! = {}): Int
   principleNumber: PrincipleNumber
@@ -1242,6 +1260,9 @@ input PrincipleWhereInput {
   subHeader: StringFilter
   quote: StringFilter
   quoteAuthor: StringFilter
+  resourcesTitle: StringFilter
+  resourcesPreamble: StringFilter
+  resources: ResourceManyRelationFilter
   principleCategory: PrincipleCategoryManyRelationFilter
   principleNumber: PrincipleNumberWhereInput
   status: StringFilter
@@ -1260,6 +1281,8 @@ input PrincipleOrderByInput {
   subHeader: OrderDirection
   quote: OrderDirection
   quoteAuthor: OrderDirection
+  resourcesTitle: OrderDirection
+  resourcesPreamble: OrderDirection
   status: OrderDirection
 }
 
@@ -1271,7 +1294,9 @@ input PrincipleUpdateInput {
   quoteAuthor: String
   image: JSON
   subPrinciples: JSON
-  resources: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources: ResourceRelateToManyForUpdateInput
   principleCategory: PrincipleCategoryRelateToManyForUpdateInput
   principleNumber: PrincipleNumberRelateToOneForUpdateInput
   status: String
@@ -1303,7 +1328,9 @@ input PrincipleCreateInput {
   quoteAuthor: String
   image: JSON
   subPrinciples: JSON
-  resources: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources: ResourceRelateToManyForCreateInput
   principleCategory: PrincipleCategoryRelateToManyForCreateInput
   principleNumber: PrincipleNumberRelateToOneForCreateInput
   status: String
@@ -1529,7 +1556,10 @@ type Case {
   quote: String
   caseLink: JSON
   principles: JSON
-  resources: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceWhereUniqueInput): [Resource!]
+  resourcesCount(where: ResourceWhereInput! = {}): Int
   status: String
   createdAt: DateTime
 }
@@ -1551,6 +1581,9 @@ input CaseWhereInput {
   title: StringFilter
   slug: StringFilter
   quote: StringFilter
+  resourcesTitle: StringFilter
+  resourcesPreamble: StringFilter
+  resources: ResourceManyRelationFilter
   status: StringFilter
   createdAt: DateTimeNullableFilter
 }
@@ -1560,6 +1593,8 @@ input CaseOrderByInput {
   title: OrderDirection
   slug: OrderDirection
   quote: OrderDirection
+  resourcesTitle: OrderDirection
+  resourcesPreamble: OrderDirection
   status: OrderDirection
   createdAt: OrderDirection
 }
@@ -1573,7 +1608,9 @@ input CaseUpdateInput {
   quote: String
   caseLink: JSON
   principles: JSON
-  resources: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources: ResourceRelateToManyForUpdateInput
   status: String
   createdAt: DateTime
 }
@@ -1592,7 +1629,9 @@ input CaseCreateInput {
   quote: String
   caseLink: JSON
   principles: JSON
-  resources: JSON
+  resourcesTitle: String
+  resourcesPreamble: String
+  resources: ResourceRelateToManyForCreateInput
   status: String
   createdAt: DateTime
 }

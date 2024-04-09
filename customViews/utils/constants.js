@@ -8,7 +8,7 @@ export const options = [
   { value: 'MEDIATEXT', label: 'Media + Text' },
   { value: 'NEWSTEASER', label: 'News Teaser' },
   { value: 'PRINCIPLES', label: 'Principles' },
-  { value: 'RESOURCES', label: 'Resources' },
+  // { value: 'RESOURCES', label: 'Resources' },
   { value: 'STEERINGGROUP', label: 'Steering Group' },
   { value: 'WYSIWYG', label: 'WYSIWYG' },
 ];

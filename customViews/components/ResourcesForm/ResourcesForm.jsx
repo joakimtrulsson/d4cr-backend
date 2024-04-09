@@ -21,10 +21,10 @@ function ResourcesForm({ autoFocus, onAddNewItem, onUpdateItem, editData }) {
   // När editData finns så sätts groupTitle och resourcesData
   useEffect(() => {
     if (editData) {
-      setGroupTitle(editData.groupTitle);
+      // setGroupTitle(editData.groupTitle);
       setResourcesData(editData.resources);
 
-      const newSelectedOptions = editData.resources.map((resource) => ({
+      const newSelectedOptions = editData.map((resource) => ({
         value: resource.id,
         label: resource.title,
       }));
@@ -34,18 +34,11 @@ function ResourcesForm({ autoFocus, onAddNewItem, onUpdateItem, editData }) {
 
   // När allResources finns så skapas options till MultiSelect
   useEffect(() => {
-    if (allResources.resourceCategories) {
-      const newOptions = allResources.resourceCategories.reduce(
-        (acc, resourceCategory) => {
-          const resources = resourceCategory.resources.map((resource) => ({
-            value: resource.id,
-            label: resource.title,
-          }));
-
-          return [...acc, ...resources];
-        },
-        []
-      );
+    if (allResources.resources) {
+      const newOptions = allResources.resources.map((resource) => ({
+        value: resource.id,
+        label: resource.title,
+      }));
 
       setOptions(newOptions);
     }
@@ -74,13 +67,10 @@ function ResourcesForm({ autoFocus, onAddNewItem, onUpdateItem, editData }) {
   const addValuesToNewData = (key, value) => {
     if (key === 'selectedOptions') {
       // Value innehåller resources id och titel
-
       const allResouceData = value.map((selectedOption) => {
-        const resource = allResources.resourceCategories
-          .map((resourceCategory) => resourceCategory.resources)
-          .flat()
-          .find((resource) => resource.id === selectedOption.value);
-
+        const resource = allResources.resources.find(
+          (resource) => resource.id === selectedOption.value
+        );
         return resource;
       });
 
@@ -93,23 +83,21 @@ function ResourcesForm({ autoFocus, onAddNewItem, onUpdateItem, editData }) {
   return (
     <>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>Group title</FieldLabel>
+        {/* <FieldLabel>Group title</FieldLabel>
         <FieldDescription>
           Assign a title to categorize this group of resources
-        </FieldDescription>
-        <div style={{ marginBottom: '1rem' }}>
+        </FieldDescription> */}
+        {/* <div style={{ marginBottom: '1rem' }}>
           <TextInput
             autoFocus={autoFocus}
             onChange={(event) => addValuesToNewData('groupTitle', event.target.value)}
             value={groupTitle}
           />
-        </div>
+        </div> */}
       </div>
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Resources</FieldLabel>
-        <FieldDescription>
-          Select resources associated with the group title
-        </FieldDescription>
+        <FieldDescription>Select resources</FieldDescription>
         <div style={{ marginBottom: '1rem' }}>
           <MultiSelect
             options={options}

@@ -121,8 +121,8 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Resources</FieldLabel>
-        <FieldDescription>Add groups with resources</FieldDescription>
-        <FieldLabel>Section Title</FieldLabel>
+        <FieldDescription>Add resources</FieldDescription>
+        <FieldLabel>Title</FieldLabel>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}
@@ -137,27 +137,36 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
       </div>
 
       <div>
-        {groups.map((group, index) => (
-          <div key={group.id} style={{ marginBottom: '1rem' }}>
-            <ResourcesForm
-              autoFocus={autoFocus}
-              onAddNewItem={handleAddGroupDataToNewItems}
-              onUpdateItem={handleUpdateItem}
-              value={group}
-              editData={newItems[index]}
-            />
-
-            {groups.length > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <RemoveEntryButton handleRemove={handleRemoveGroup} indexToRemove={index}>
-                  Remove group
-                </RemoveEntryButton>
-              </div>
-            )}
-          </div>
-        ))}
+        <ResourcesForm
+          autoFocus={autoFocus}
+          onAddNewItem={handleAddGroupDataToNewItems}
+          onUpdateItem={handleUpdateItem}
+          // value={group}
+          editData={newItems}
+        />
       </div>
-      <AddEntryButton handleAdd={handleAddGroup}>Add new group</AddEntryButton>
+      {/* <AddEntryButton handleAdd={handleAddGroup}>Add new group</AddEntryButton> */}
     </FieldContainer>
   );
 };
+
+// {groups.map((group, index) => (
+//   <div key={group.id} style={{ marginBottom: '1rem' }}>
+//     <ResourcesForm
+//       autoFocus={autoFocus}
+//       onAddNewItem={handleAddGroupDataToNewItems}
+//       onUpdateItem={handleUpdateItem}
+//       value={group}
+//       editData={newItems[index]}
+//     />
+//     (
+//     {/* {groups.length > 1 && (
+//       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+//         <RemoveEntryButton handleRemove={handleRemoveGroup} indexToRemove={index}>
+//           Remove group
+//         </RemoveEntryButton>
+//       </div>
+//     )} */}
+//     )
+//   </div>
+// ))}

@@ -17,20 +17,34 @@ const useFetchResources = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            // query: `
+            // query {
+            //   resourceCategories(orderBy: { createdAt: desc }) {
+            //     createdAt
+            //     title
+            //     resources(orderBy: { createdAt: desc }) {
+            //       id
+            //       createdAt
+            //       title
+            //       url
+            //       resourceType {
+            //         type
+            //         icon
+            //       }
+            //     }
+            //   }
+            // }
+
             query: `
-            query {
-              resourceCategories(orderBy: { createdAt: desc }) {
+            query Resources {
+              resources {
                 createdAt
+                id
                 title
-                resources(orderBy: { createdAt: desc }) {
-                  id
-                  createdAt
-                  title
-                  url
-                  resourceType {
-                    type
-                    icon
-                  }
+                image
+                url
+                resourceType {
+                  type
                 }
               }
             }
@@ -40,6 +54,7 @@ const useFetchResources = () => {
         });
 
         const { data } = await response.json();
+        console.log(data);
         setAllResources(data);
         setLoading(false);
       } catch (error) {

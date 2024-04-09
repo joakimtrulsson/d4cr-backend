@@ -1,6 +1,6 @@
 import { list } from '@keystone-6/core';
 import { text, timestamp, relationship, select, json } from '@keystone-6/core/fields';
-
+import { group } from '@keystone-6/core';
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
 
@@ -91,16 +91,6 @@ export const newsSchema = list({
       },
     }),
 
-    status: select({
-      options: [
-        { label: 'Published', value: 'published' },
-        { label: 'Draft', value: 'draft' },
-      ],
-      validation: { isRequired: true },
-      defaultValue: 'draft',
-      ui: { displayMode: 'segmented-control' },
-    }),
-
     sections: json({
       ui: {
         views: './customViews/AllSections.jsx',
@@ -110,9 +100,35 @@ export const newsSchema = list({
       },
     }),
 
+    ...group({
+      label: 'Resources',
+      description: 'Select resources to be displayed in the resources section.',
+      fields: {
+        resourcesTitle: text({}),
+        resourcesPreamble: text({}),
+        resources: relationship({
+          ref: 'Resource',
+          many: true,
+          // ui: {
+          //   description: 'Select resources to be displayed in the resources section.',
+          // },
+        }),
+      },
+    }),
+
     createdAt: timestamp({
       isRequired: true,
       defaultValue: { kind: 'now' },
+    }),
+
+    status: select({
+      options: [
+        { label: 'Published', value: 'published' },
+        { label: 'Draft', value: 'draft' },
+      ],
+      validation: { isRequired: true },
+      defaultValue: 'draft',
+      ui: { displayMode: 'segmented-control' },
     }),
   },
 });

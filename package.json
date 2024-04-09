@@ -7,7 +7,7 @@
     "start": "keystone start",
     "build": "keystone build",
     "postinstall": "keystone build --no-ui --frozen",
-    "test": "node --experimental-vm-modules __tests__/test.js"
+    "test": "node __tests__/test.js"
   },
   "dependencies": {
     "@emotion/css": "^11.11.2",
