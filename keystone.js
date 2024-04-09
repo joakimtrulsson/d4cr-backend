@@ -1,6 +1,6 @@
+import dotenv from 'dotenv';
 import { config } from '@keystone-6/core';
 import express from 'express';
-import dotenv from 'dotenv';
 
 import { lists } from './schema.js';
 import { storage } from './storage.js';

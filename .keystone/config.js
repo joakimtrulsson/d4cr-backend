@@ -32,9 +32,9 @@ __export(keystone_exports, {
   default: () => keystone_default
 });
 module.exports = __toCommonJS(keystone_exports);
+var import_dotenv = __toESM(require("dotenv"));
 var import_core29 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
-var import_dotenv = __toESM(require("dotenv"));
 
 // schemas/userSchema.js
 var import_core = require("@keystone-6/core");
@@ -1859,7 +1859,7 @@ var imageSchema = (0, import_core25.list)({
   fields: {
     title: (0, import_fields21.text)(),
     altText: (0, import_fields21.text)(),
-    file: (0, import_fields21.image)({ storage: "imageStorage" }),
+    file: (0, import_fields21.image)({ label: "Image", storage: "imageStorage" }),
     createdAt: (0, import_fields21.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
     size: (0, import_fields21.integer)({
       ui: {
@@ -1925,6 +1925,14 @@ var videoSchema = (0, import_core26.list)({
     }),
     createdAt: (0, import_fields22.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
     size: (0, import_fields22.integer)({
+      ui: {
+        createView: {
+          fieldMode: "hidden"
+        },
+        itemView: {
+          fieldMode: "read"
+        }
+      },
       hooks: {
         resolveInput: ({ operation, resolvedData, inputData }) => {
           if (operation === "create") {
@@ -1936,6 +1944,9 @@ var videoSchema = (0, import_core26.list)({
     thumbnailUrl: (0, import_fields22.text)({}),
     url: (0, import_fields22.text)({
       ui: {
+        createView: {
+          fieldMode: "hidden"
+        },
         itemView: {
           fieldMode: "read"
         }
@@ -2095,24 +2106,24 @@ var lists = {
 
 // storage/imageStorage.js
 var imageStorage = {
-  kind: "local",
+  kind: "s3",
   type: "image",
-  generateUrl: (path) => `/public/images/${path}`,
-  serverRoute: {
-    path: "public/images"
-  },
-  storagePath: "public/images"
+  bucketName: process.env.BUCKETEER_BUCKET_NAME,
+  region: process.env.BUCKETEER_AWS_REGION,
+  accessKeyId: process.env.BUCKETEER_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.BUCKETEER_AWS_SECRET_ACCESS_KEY,
+  pathPrefix: "public/images/"
 };
 
 // storage/videoStorage.js
 var videoStorage = {
-  kind: "local",
+  kind: "s3",
   type: "file",
-  generateUrl: (path) => `/public/media/${path}`,
-  serverRoute: {
-    path: "public/media"
-  },
-  storagePath: "public/media"
+  pathPrefix: "public/media/",
+  bucketName: process.env.BUCKETEER_BUCKET_NAME,
+  region: process.env.BUCKETEER_AWS_REGION,
+  accessKeyId: process.env.BUCKETEER_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.BUCKETEER_AWS_SECRET_ACCESS_KEY
 };
 
 // storage.js

@@ -23,7 +23,7 @@ export const imageSchema = list({
 
     altText: text(),
 
-    file: image({ storage: 'imageStorage' }),
+    file: image({ label: 'Image', storage: 'imageStorage' }),
 
     createdAt: timestamp({ isRequired: true, defaultValue: { kind: 'now' } }),
 

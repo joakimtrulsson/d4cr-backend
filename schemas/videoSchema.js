@@ -30,6 +30,14 @@ export const videoSchema = list({
     createdAt: timestamp({ isRequired: true, defaultValue: { kind: 'now' } }),
 
     size: integer({
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
       hooks: {
         resolveInput: ({ operation, resolvedData, inputData }) => {
           if (operation === 'create') {
@@ -43,6 +51,9 @@ export const videoSchema = list({
 
     url: text({
       ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
         itemView: {
           fieldMode: 'read',
         },
