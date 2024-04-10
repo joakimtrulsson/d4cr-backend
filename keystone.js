@@ -8,6 +8,7 @@ import { withAuth, session } from './auth/auth.js';
 
 import sendEmail from './routes/sendEmail.js';
 import validateRecaptcha from './routes/validateRecaptcha.js';
+import triggerRebuild from './utils/triggerRebuild.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ export default withAuth(
       extendExpressApp: (app, commonContext) => {
         app.use(express.json());
         app.post('/api/email', sendEmail);
+
         // Denna ska bort när vi gått över till S3-Bucket
         app.use('/public', express.static('public'));
 

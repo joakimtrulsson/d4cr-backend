@@ -4,6 +4,7 @@ import { document } from '@keystone-6/fields-document';
 
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
+import triggerRebuild from '../utils/triggerRebuild.js';
 
 import { buildSlug } from '../utils/buildSlug.js';
 
@@ -19,6 +20,18 @@ export const pageSchema = list({
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems,
+    },
+  },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === 'create' || operation === 'update' || operation === 'delete') {
+        const response = await triggerRebuild('Page');
+        if (!response.success) {
+          throw new Error('Failed to trigger rebuild');
+        } else {
+          console.log('NextJs Rebuild triggered successfully');
+        }
+      }
     },
   },
   ui: {
