@@ -1544,12 +1544,12 @@ input SteeringGroupMemberCreateInput {
 type Case {
   id: ID!
   title: String
-  slug: String
+  linkType: String
+  url: String
   preamble: Case_preamble_Document
-  sections: JSON
   caseImage: JSON
   quote: String
-  caseLink: JSON
+  sections: JSON
   principles: JSON
   resourcesTitle: String
   resourcesPreamble: String
@@ -1565,7 +1565,6 @@ type Case_preamble_Document {
 
 input CaseWhereUniqueInput {
   id: ID
-  slug: String
 }
 
 input CaseWhereInput {
@@ -1574,7 +1573,8 @@ input CaseWhereInput {
   NOT: [CaseWhereInput!]
   id: IDFilter
   title: StringFilter
-  slug: StringFilter
+  linkType: StringNullableFilter
+  url: StringFilter
   quote: StringFilter
   resourcesTitle: StringFilter
   resourcesPreamble: StringFilter
@@ -1586,7 +1586,8 @@ input CaseWhereInput {
 input CaseOrderByInput {
   id: OrderDirection
   title: OrderDirection
-  slug: OrderDirection
+  linkType: OrderDirection
+  url: OrderDirection
   quote: OrderDirection
   resourcesTitle: OrderDirection
   resourcesPreamble: OrderDirection
@@ -1596,12 +1597,12 @@ input CaseOrderByInput {
 
 input CaseUpdateInput {
   title: String
-  slug: String
+  linkType: String
+  url: String
   preamble: JSON
-  sections: JSON
   caseImage: JSON
   quote: String
-  caseLink: JSON
+  sections: JSON
   principles: JSON
   resourcesTitle: String
   resourcesPreamble: String
@@ -1617,12 +1618,12 @@ input CaseUpdateArgs {
 
 input CaseCreateInput {
   title: String
-  slug: String
+  linkType: String
+  url: String
   preamble: JSON
-  sections: JSON
   caseImage: JSON
   quote: String
-  caseLink: JSON
+  sections: JSON
   principles: JSON
   resourcesTitle: String
   resourcesPreamble: String

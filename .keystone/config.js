@@ -1745,24 +1745,46 @@ var caseSchema = (0, import_core22.list)({
   },
   fields: {
     title: (0, import_fields19.text)({ validation: { isRequired: true } }),
-    slug: (0, import_fields19.text)({
-      isIndexed: "unique",
+    linkType: (0, import_fields19.select)({
+      isRequired: true,
+      options: [
+        { label: "Internal", value: "internal" },
+        { label: "External", value: "external" },
+        { label: "None", value: "none" }
+      ],
+      defaultValue: "internal",
+      ui: {
+        displayMode: "segmented-control"
+      }
+    }),
+    url: (0, import_fields19.text)({
       ui: {
         itemView: {
-          fieldPosition: "sidebar"
+          fieldPosition: "form"
         },
-        description: "The path name for the case. Must be unique. If not supplied, it will be generated from the title."
+        description: "If Link type is external, this field must be filled with the URL of the external page. If Link type is internal, this field will be generated from the title."
       },
       hooks: {
-        resolveInput: ({ operation, resolvedData, inputData }) => {
-          if (operation === "create" && !inputData.slug) {
+        resolveInput: ({ operation, resolvedData, inputData, item }) => {
+          if (operation === "create" && resolvedData.linkType === "internal") {
             return buildSlug(inputData.title, "cases");
           }
-          if (operation === "create" && inputData.slug) {
-            return buildSlug(inputData.slug, "cases");
+          if (operation === "update" && resolvedData.linkType === "internal" && !inputData.url) {
+            return buildSlug(item.title, "cases");
+          } else if (operation === "update" && resolvedData.linkType === "internal" && inputData.url) {
+            return buildSlug(inputData.title, "cases");
           }
-          if (operation === "update" && inputData.slug) {
-            return buildSlug(inputData.slug, "cases");
+          if (operation === "create" && resolvedData.linkType === "none") {
+            return "";
+          }
+          if (operation === "update" && resolvedData.linkType === "none") {
+            return "";
+          }
+          if (operation === "create" && resolvedData.linkType === "external") {
+            return inputData.url;
+          }
+          if (operation === "update" && resolvedData.linkType === "external") {
+            return inputData.url;
           }
         }
       }
@@ -1779,14 +1801,6 @@ var caseSchema = (0, import_core22.list)({
         softBreaks: true
       }
     }),
-    sections: (0, import_fields19.json)({
-      ui: {
-        views: "./customViews/AllSections.jsx",
-        createView: { fieldMode: "edit" },
-        listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
-      }
-    }),
     caseImage: (0, import_fields19.json)({
       ui: {
         views: "./customViews/ImageLibrary.jsx",
@@ -1796,9 +1810,9 @@ var caseSchema = (0, import_core22.list)({
       }
     }),
     quote: (0, import_fields19.text)({}),
-    caseLink: (0, import_fields19.json)({
+    sections: (0, import_fields19.json)({
       ui: {
-        views: "./customViews/DynamicLinkSection.jsx",
+        views: "./customViews/AllSections.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1812,14 +1826,6 @@ var caseSchema = (0, import_core22.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    // resources: json({
-    //   ui: {
-    //     views: './customViews/Resources.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
     ...(0, import_core23.group)({
       label: "Resources",
       description: "Select resources to be displayed in the resources section.",
@@ -1829,9 +1835,6 @@ var caseSchema = (0, import_core22.list)({
         resources: (0, import_fields19.relationship)({
           ref: "Resource",
           many: true
-          // ui: {
-          //   description: 'Select resources to be displayed in the resources section.',
-          // },
         })
       }
     }),

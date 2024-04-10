@@ -38,33 +38,65 @@ export const caseSchema = list({
   fields: {
     title: text({ validation: { isRequired: true } }),
 
-    slug: text({
-      isIndexed: 'unique',
+    linkType: select({
+      isRequired: true,
+      options: [
+        { label: 'Internal', value: 'internal' },
+        { label: 'External', value: 'external' },
+        { label: 'None', value: 'none' },
+      ],
+      defaultValue: 'internal',
+      ui: {
+        displayMode: 'segmented-control',
+      },
+    }),
+
+    url: text({
       ui: {
         itemView: {
-          fieldPosition: 'sidebar',
+          fieldPosition: 'form',
         },
         description:
-          'The path name for the case. Must be unique. If not supplied, it will be generated from the title.',
+          'If Link type is external, this field must be filled with the URL of the external page. If Link type is internal, this field will be generated from the title.',
       },
-
       hooks: {
-        resolveInput: ({ operation, resolvedData, inputData }) => {
-          if (operation === 'create' && !inputData.slug) {
+        resolveInput: ({ operation, resolvedData, inputData, item }) => {
+          // Dessa bygger en slug baserat på titel om linkType är internal
+          if (operation === 'create' && resolvedData.linkType === 'internal') {
             return buildSlug(inputData.title, 'cases');
           }
 
-          if (operation === 'create' && inputData.slug) {
-            return buildSlug(inputData.slug, 'cases');
+          if (
+            operation === 'update' &&
+            resolvedData.linkType === 'internal' &&
+            !inputData.url
+          ) {
+            return buildSlug(item.title, 'cases');
+          } else if (
+            operation === 'update' &&
+            resolvedData.linkType === 'internal' &&
+            inputData.url
+          ) {
+            return buildSlug(inputData.title, 'cases');
           }
 
-          if (operation === 'update' && inputData.slug) {
-            return buildSlug(inputData.slug, 'cases');
+          // Dessa tömmer url om linkType är none
+          if (operation === 'create' && resolvedData.linkType === 'none') {
+            return '';
           }
 
-          // if (operation === 'update' && !inputData.slug && inputData.title) {
-          //   return buildSlug(inputData.title, 'chapters');
-          // }
+          if (operation === 'update' && resolvedData.linkType === 'none') {
+            return '';
+          }
+
+          // Om linkType är external så ska inputData.url vara url
+          if (operation === 'create' && resolvedData.linkType === 'external') {
+            return inputData.url;
+          }
+
+          if (operation === 'update' && resolvedData.linkType === 'external') {
+            return inputData.url;
+          }
         },
       },
     }),
@@ -82,15 +114,6 @@ export const caseSchema = list({
       },
     }),
 
-    sections: json({
-      ui: {
-        views: './customViews/AllSections.jsx',
-        createView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
-      },
-    }),
-
     caseImage: json({
       ui: {
         views: './customViews/ImageLibrary.jsx',
@@ -102,9 +125,9 @@ export const caseSchema = list({
 
     quote: text({}),
 
-    caseLink: json({
+    sections: json({
       ui: {
-        views: './customViews/DynamicLinkSection.jsx',
+        views: './customViews/AllSections.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -120,15 +143,6 @@ export const caseSchema = list({
       },
     }),
 
-    // resources: json({
-    //   ui: {
-    //     views: './customViews/Resources.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
-
     ...group({
       label: 'Resources',
       description: 'Select resources to be displayed in the resources section.',
@@ -138,9 +152,6 @@ export const caseSchema = list({
         resources: relationship({
           ref: 'Resource',
           many: true,
-          // ui: {
-          //   description: 'Select resources to be displayed in the resources section.',
-          // },
         }),
       },
     }),

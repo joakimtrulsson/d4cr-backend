@@ -247,12 +247,12 @@ model SteeringGroupMember {
 model Case {
   id                String     @id @default(uuid()) @postgresql.Uuid
   title             String     @default("")
-  slug              String     @unique @default("")
+  linkType          String?    @default("internal")
+  url               String     @default("")
   preamble          Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  sections          Json?
   caseImage         Json?
   quote             String     @default("")
-  caseLink          Json?
+  sections          Json?
   principles        Json?
   resourcesTitle    String     @default("")
   resourcesPreamble String     @default("")
