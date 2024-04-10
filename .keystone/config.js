@@ -473,7 +473,12 @@ var chapterSchema = (0, import_core3.list)({
       query: () => true
     },
     filter: {
-      query: () => true,
+      query: ({ session: session2 }) => {
+        if (session2) {
+          return true;
+        }
+        return { status: { equals: "published" } };
+      },
       update: rules.canManageItems,
       delete: rules.canManageItems
     }
@@ -511,6 +516,9 @@ var chapterSchema = (0, import_core3.list)({
     slug: (0, import_fields3.text)({
       isIndexed: "unique",
       ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
         description: "The path name for the chapter. Must be unique. If not supplied, it will be generated from the title."
       },
       hooks: {
@@ -574,7 +582,12 @@ var chapterSchema = (0, import_core3.list)({
       ],
       validation: { isRequired: true },
       defaultValue: "draft",
-      ui: { displayMode: "segmented-control" }
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        displayMode: "segmented-control"
+      }
     }),
     sections: (0, import_fields3.json)({
       ui: {
@@ -696,7 +709,12 @@ var pageSchema = (0, import_core5.list)({
       query: () => true
     },
     filter: {
-      query: () => true,
+      query: ({ session: session2 }) => {
+        if (session2) {
+          return true;
+        }
+        return { status: { equals: "published" } };
+      },
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems
@@ -730,6 +748,9 @@ var pageSchema = (0, import_core5.list)({
     slug: (0, import_fields4.text)({
       isIndexed: "unique",
       ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
         description: "The path name for the page. Must be unique. If not supplied, it will be generated from the title."
       },
       hooks: {
@@ -793,7 +814,12 @@ var pageSchema = (0, import_core5.list)({
       ],
       validation: { isRequired: true },
       defaultValue: "draft",
-      ui: { displayMode: "segmented-control" }
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        displayMode: "segmented-control"
+      }
     }),
     sections: (0, import_fields4.json)({
       ui: {
@@ -875,15 +901,6 @@ var frontPageSchema = (0, import_core6.list)({
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
-    }),
-    status: (0, import_fields5.select)({
-      options: [
-        { label: "Published", value: "published" },
-        { label: "Draft", value: "draft" }
-      ],
-      validation: { isRequired: true },
-      defaultValue: "draft",
-      ui: { displayMode: "segmented-control" }
     }),
     sections: (0, import_fields5.json)({
       ui: {
@@ -1161,7 +1178,12 @@ var newsSchema = (0, import_core12.list)({
       query: () => true
     },
     filter: {
-      query: () => true,
+      query: ({ session: session2 }) => {
+        if (session2) {
+          return true;
+        }
+        return { status: { equals: "published" } };
+      },
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems
@@ -1187,6 +1209,9 @@ var newsSchema = (0, import_core12.list)({
     slug: (0, import_fields11.text)({
       isIndexed: "unique",
       ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
         description: "The path name for the news. Must be unique. If not supplied, it will be generated from the title."
       },
       hooks: {
@@ -1260,7 +1285,12 @@ var newsSchema = (0, import_core12.list)({
       ],
       validation: { isRequired: true },
       defaultValue: "draft",
-      ui: { displayMode: "segmented-control" }
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        displayMode: "segmented-control"
+      }
     })
   }
 });
@@ -1462,7 +1492,12 @@ var principleSchema = (0, import_core18.list)({
       query: () => true
     },
     filter: {
-      query: () => true,
+      query: ({ session: session2 }) => {
+        if (session2) {
+          return true;
+        }
+        return { status: { equals: "published" } };
+      },
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems
@@ -1484,6 +1519,9 @@ var principleSchema = (0, import_core18.list)({
     slug: (0, import_fields16.text)({
       isIndexed: "unique",
       ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
         description: "The path name for the principle. Must be unique. If not supplied, it will be generated from the principle number."
       },
       hooks: {
@@ -1564,14 +1602,6 @@ var principleSchema = (0, import_core18.list)({
         })
       }
     }),
-    // resources: json({
-    //   ui: {
-    //     views: './customViews/Resources.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
     ...(0, import_core19.group)({
       label: "Principle Taxonomy",
       description: "Select the principle category and number for this principle.",
@@ -1600,7 +1630,12 @@ var principleSchema = (0, import_core18.list)({
       ],
       validation: { isRequired: true },
       defaultValue: "draft",
-      ui: { displayMode: "segmented-control" }
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        displayMode: "segmented-control"
+      }
     })
   }
 });
@@ -1689,7 +1724,12 @@ var caseSchema = (0, import_core22.list)({
       query: () => true
     },
     filter: {
-      query: () => true,
+      query: ({ session: session2 }) => {
+        if (session2) {
+          return true;
+        }
+        return { status: { equals: "published" } };
+      },
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems
@@ -1708,6 +1748,9 @@ var caseSchema = (0, import_core22.list)({
     slug: (0, import_fields19.text)({
       isIndexed: "unique",
       ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
         description: "The path name for the case. Must be unique. If not supplied, it will be generated from the title."
       },
       hooks: {
@@ -1799,11 +1842,21 @@ var caseSchema = (0, import_core22.list)({
       ],
       validation: { isRequired: true },
       defaultValue: "draft",
-      ui: { displayMode: "segmented-control" }
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        displayMode: "segmented-control"
+      }
     }),
     createdAt: (0, import_fields19.timestamp)({
       isRequired: true,
-      defaultValue: { kind: "now" }
+      defaultValue: { kind: "now" },
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        }
+      }
     })
   }
 });

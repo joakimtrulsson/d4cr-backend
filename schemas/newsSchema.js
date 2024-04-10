@@ -14,7 +14,13 @@ export const newsSchema = list({
       query: () => true,
     },
     filter: {
-      query: () => true,
+      query: ({ session }) => {
+        if (session) {
+          return true;
+        }
+
+        return { status: { equals: 'published' } };
+      },
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems,
@@ -41,6 +47,9 @@ export const newsSchema = list({
     slug: text({
       isIndexed: 'unique',
       ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
         description:
           'The path name for the news. Must be unique. If not supplied, it will be generated from the title.',
       },
@@ -128,7 +137,12 @@ export const newsSchema = list({
       ],
       validation: { isRequired: true },
       defaultValue: 'draft',
-      ui: { displayMode: 'segmented-control' },
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        displayMode: 'segmented-control',
+      },
     }),
   },
 });

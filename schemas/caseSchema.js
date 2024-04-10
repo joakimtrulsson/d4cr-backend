@@ -15,7 +15,13 @@ export const caseSchema = list({
       query: () => true,
     },
     filter: {
-      query: () => true,
+      query: ({ session }) => {
+        if (session) {
+          return true;
+        }
+
+        return { status: { equals: 'published' } };
+      },
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems,
@@ -35,9 +41,13 @@ export const caseSchema = list({
     slug: text({
       isIndexed: 'unique',
       ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
         description:
           'The path name for the case. Must be unique. If not supplied, it will be generated from the title.',
       },
+
       hooks: {
         resolveInput: ({ operation, resolvedData, inputData }) => {
           if (operation === 'create' && !inputData.slug) {
@@ -142,12 +152,22 @@ export const caseSchema = list({
       ],
       validation: { isRequired: true },
       defaultValue: 'draft',
-      ui: { displayMode: 'segmented-control' },
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        displayMode: 'segmented-control',
+      },
     }),
 
     createdAt: timestamp({
       isRequired: true,
       defaultValue: { kind: 'now' },
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+      },
     }),
   },
 });

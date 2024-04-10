@@ -435,7 +435,6 @@ type FrontPage {
   ctaOneUrl: JSON
   ctaTwoUrlAnchorText: String
   ctaTwoUrl: JSON
-  status: String
   sections: JSON
 }
 
@@ -455,7 +454,6 @@ input FrontPageWhereInput {
   heroTitle: StringFilter
   ctaOneAnchorText: StringFilter
   ctaTwoUrlAnchorText: StringFilter
-  status: StringFilter
 }
 
 input FrontPageOrderByInput {
@@ -463,7 +461,6 @@ input FrontPageOrderByInput {
   heroTitle: OrderDirection
   ctaOneAnchorText: OrderDirection
   ctaTwoUrlAnchorText: OrderDirection
-  status: OrderDirection
 }
 
 input FrontPageUpdateInput {
@@ -474,7 +471,6 @@ input FrontPageUpdateInput {
   ctaOneUrl: JSON
   ctaTwoUrlAnchorText: String
   ctaTwoUrl: JSON
-  status: String
   sections: JSON
 }
 
@@ -491,7 +487,6 @@ input FrontPageCreateInput {
   ctaOneUrl: JSON
   ctaTwoUrlAnchorText: String
   ctaTwoUrl: JSON
-  status: String
   sections: JSON
 }
 

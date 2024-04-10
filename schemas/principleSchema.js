@@ -14,7 +14,13 @@ export const principleSchema = list({
       query: () => true,
     },
     filter: {
-      query: () => true,
+      query: ({ session }) => {
+        if (session) {
+          return true;
+        }
+
+        return { status: { equals: 'published' } };
+      },
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems,
@@ -37,6 +43,9 @@ export const principleSchema = list({
     slug: text({
       isIndexed: 'unique',
       ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
         description:
           'The path name for the principle. Must be unique. If not supplied, it will be generated from the principle number.',
       },
@@ -131,15 +140,6 @@ export const principleSchema = list({
       },
     }),
 
-    // resources: json({
-    //   ui: {
-    //     views: './customViews/Resources.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
-
     ...group({
       label: 'Principle Taxonomy',
       description: 'Select the principle category and number for this principle.',
@@ -170,7 +170,12 @@ export const principleSchema = list({
       ],
       validation: { isRequired: true },
       defaultValue: 'draft',
-      ui: { displayMode: 'segmented-control' },
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        displayMode: 'segmented-control',
+      },
     }),
   },
 });

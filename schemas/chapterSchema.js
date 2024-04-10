@@ -16,7 +16,13 @@ export const chapterSchema = list({
       query: () => true,
     },
     filter: {
-      query: () => true,
+      query: ({ session }) => {
+        if (session) {
+          return true;
+        }
+
+        return { status: { equals: 'published' } };
+      },
       update: rules.canManageItems,
       delete: rules.canManageItems,
     },
@@ -55,6 +61,9 @@ export const chapterSchema = list({
     slug: text({
       isIndexed: 'unique',
       ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
         description:
           'The path name for the chapter. Must be unique. If not supplied, it will be generated from the title.',
       },
@@ -130,7 +139,12 @@ export const chapterSchema = list({
       ],
       validation: { isRequired: true },
       defaultValue: 'draft',
-      ui: { displayMode: 'segmented-control' },
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        displayMode: 'segmented-control',
+      },
     }),
 
     sections: json({
@@ -180,6 +194,7 @@ export const chapterSchema = list({
         },
       },
     }),
+
     contentOwner: relationship({
       ref: 'User.chapters',
       many: true,

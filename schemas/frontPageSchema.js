@@ -77,16 +77,6 @@ export const frontPageSchema = list({
       },
     }),
 
-    status: select({
-      options: [
-        { label: 'Published', value: 'published' },
-        { label: 'Draft', value: 'draft' },
-      ],
-      validation: { isRequired: true },
-      defaultValue: 'draft',
-      ui: { displayMode: 'segmented-control' },
-    }),
-
     sections: json({
       ui: {
         views: './customViews/AllSections.jsx',

@@ -76,7 +76,6 @@ model FrontPage {
   ctaOneUrl           Json?
   ctaTwoUrlAnchorText String @default("")
   ctaTwoUrl           Json?
-  status              String @default("draft")
   sections            Json?
 }
 
