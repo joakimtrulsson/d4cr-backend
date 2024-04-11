@@ -2112,47 +2112,47 @@ var testSchema = (0, import_core27.list)({
             views: "./customViews/AllSections.jsx",
             createView: { fieldMode: "edit" },
             listView: { fieldMode: "hidden" },
-            itemView: { fieldMode: "edit", fieldPosition: "sidebar" }
+            itemView: { fieldMode: "edit", fieldPosition: "form" }
           }
         })
         /* ... */
       }
-    }),
-    content: (0, import_fields_document6.document)({
-      layouts: [
-        [1, 1],
-        [1, 1, 1]
-      ],
-      formatting: {
-        inlineMarks: {
-          bold: true,
-          italic: true,
-          underline: true,
-          strikethrough: true,
-          code: true,
-          superscript: true,
-          subscript: true,
-          keyboard: true
-        },
-        listTypes: {
-          ordered: true,
-          unordered: true
-        },
-        alignment: {
-          center: true,
-          end: true
-        },
-        headingLevels: [1, 2, 3, 4, 5, 6],
-        blockTypes: {
-          blockquote: true,
-          code: true
-        },
-        softBreaks: true
-      }
     })
-    // image: json({
+    // content: document({
+    //   layouts: [
+    //     [1, 1],
+    //     [1, 1, 1],
+    //   ],
+    //   formatting: {
+    //     inlineMarks: {
+    //       bold: true,
+    //       italic: true,
+    //       underline: true,
+    //       strikethrough: true,
+    //       code: true,
+    //       superscript: true,
+    //       subscript: true,
+    //       keyboard: true,
+    //     },
+    //     listTypes: {
+    //       ordered: true,
+    //       unordered: true,
+    //     },
+    //     alignment: {
+    //       center: true,
+    //       end: true,
+    //     },
+    //     headingLevels: [1, 2, 3, 4, 5, 6],
+    //     blockTypes: {
+    //       blockquote: true,
+    //       code: true,
+    //     },
+    //     softBreaks: true,
+    //   },
+    // }),
+    // testwysiwyg: json({
     //   ui: {
-    //     views: './customViews/ImageLibrary.jsx',
+    //     views: './customViews/TestWysiwyg.jsx',
     //     createView: { fieldMode: 'edit' },
     //     listView: { fieldMode: 'hidden' },
     //     itemView: { fieldMode: 'edit' },

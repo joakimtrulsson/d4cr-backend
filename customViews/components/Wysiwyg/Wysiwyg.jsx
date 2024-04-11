@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import React, { useCallback, useMemo, useState } from 'react';
 import { createEditor } from 'slate';
 import { withHistory } from 'slate-history';
@@ -43,6 +44,7 @@ const Wysiwyg = ({ onSetPreamble, editData, extended, height }) => {
   );
 
   const handleEditorChange = (newValue) => {
+    console.log('newValue', newValue);
     const modifiedValue = newValue.map((element) => {
       const modifiedElement = Object.assign({}, element);
 
@@ -66,19 +68,42 @@ const Wysiwyg = ({ onSetPreamble, editData, extended, height }) => {
           modifiedElement.type = 'unordered-list';
           break;
         case 'alignCenter':
-          modifiedElement.textAlign = 'center';
-          modifiedElement.type = 'paragraph';
-          modifiedElement.children = [
-            { text: modifiedElement.children[0].children[0].text },
-          ];
-          break;
+          const childCenter = { ...modifiedElement.children[0], textAlign: 'center' };
+          childCenter.type = 'heading';
+          switch (modifiedElement.children[0].type) {
+            case 'headingTwo':
+              childCenter.level = 2;
+              break;
+            case 'headingThree':
+              childCenter.level = 3;
+              break;
+            case 'headingFour':
+              childCenter.level = 4;
+              break;
+            // Lägg till fler här...
+            default:
+              break;
+          }
+          return childCenter;
         case 'alignRight':
-          modifiedElement.textAlign = 'end';
-          modifiedElement.type = 'paragraph';
-          modifiedElement.children = [
-            { text: modifiedElement.children[0].children[0].text },
-          ];
-          break;
+          const childRight = { ...modifiedElement.children[0], textAlign: 'end' };
+          childRight.type = 'heading';
+          switch (modifiedElement.children[0].type) {
+            case 'headingTwo':
+              childRight.level = 2;
+              break;
+            case 'headingThree':
+              childRight.level = 3;
+              break;
+            case 'headingFour':
+              childRight.level = 4;
+              break;
+            // Lägg till fler här...
+            default:
+              break;
+          }
+          return childRight;
+
         case 'table':
           if (modifiedElement.columns === 2) {
             const newElement = {
@@ -103,18 +128,79 @@ const Wysiwyg = ({ onSetPreamble, editData, extended, height }) => {
             };
             return newElement;
           }
+          break;
+
+        case 'spotify':
+          if (modifiedElement.type === 'spotify') {
+            const url = modifiedElement.url;
+            const newElement = {
+              type: 'component-block',
+              component: 'spotifyPlayer',
+              props: {
+                url: url,
+                altText: 'Spotify player',
+              },
+              children: [
+                {
+                  type: 'component-inline-prop',
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                },
+              ],
+            };
+            return newElement;
+          }
 
           break;
+        case 'video': {
+          if (modifiedElement.type === 'video') {
+            const url = modifiedElement.url;
+
+            const newElement = {
+              type: 'component-block',
+              component: 'youtubePlayer',
+              props: {
+                url: url,
+                altText: 'Youtube player',
+              },
+              children: [
+                {
+                  type: 'component-inline-prop',
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                },
+              ],
+            };
+            return newElement;
+          }
+          break;
+        }
         default:
           break;
       }
 
       return modifiedElement;
     });
-
+    console.log('modifiedElement', modifiedValue);
     setValue(modifiedValue);
     onSetPreamble(modifiedValue);
   };
+
+  // Om man lägger till textAlign center eller right på en heading så blir det så här:
+  // [{
+  //   type: 'headingTwo', textAlign: center, children: [{text: 'Heading'}]
+  // }]
+  // Det ska bli så här:
+  // [{
+  //   type: 'heading', level: 2, textAlign: center, children: [{text: 'Heading'}]
+
+  // [{type 'alignCenter', children: [{type: 'headingTwo', children: [{text: 'Heading'}]}]
 
   const renderElement = useCallback((props) => <Element {...props} />, []);
 

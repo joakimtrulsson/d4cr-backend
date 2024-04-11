@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields';
 
-import Wysiwyg from '../components/Wysiwyg/Wysiwyg.jsx';
+import Editor from '../components/Editor/Editor.jsx';
 import PrinciplesForm from '../components/PrinciplesForm/PrinciplesForm.jsx';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton.jsx';
@@ -180,7 +180,7 @@ function Principles({
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
 
-        <Wysiwyg
+        <Editor
           onSetPreamble={setPreamble}
           editData={editData?.preamble}
           extended={false}

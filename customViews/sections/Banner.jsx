@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FieldContainer, FieldLabel, FieldLegend, TextInput } from '@keystone-ui/fields';
+import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields';
 
 import IconPicker from '../components/IconPicker/IconPicker.jsx';
 import Wysiwyg from '../components/Wysiwyg/Wysiwyg.jsx';
+import Editor from '../components/Editor/Editor.jsx';
 import CallToActionForm from '../components/CallToActionForm/CallToActionForm.jsx';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
@@ -126,10 +127,15 @@ function Banner({
 
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
-        <Wysiwyg
+        {/* <Wysiwyg
           onSetPreamble={setPreamble}
           editData={editData?.preamble}
           extended={false}
+        /> */}
+        <Editor
+          onSetPreamble={setPreamble}
+          extended={false}
+          editData={editData?.preamble}
         />
       </div>
       <div>

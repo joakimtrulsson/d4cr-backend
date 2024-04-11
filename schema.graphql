@@ -1637,11 +1637,6 @@ type Test {
   someFieldName: String
   anotherFieldName: String
   sections: JSON
-  content: Test_content_Document
-}
-
-type Test_content_Document {
-  document(hydrateRelationships: Boolean! = false): JSON!
 }
 
 input TestWhereUniqueInput {
@@ -1667,7 +1662,6 @@ input TestUpdateInput {
   someFieldName: String
   anotherFieldName: String
   sections: JSON
-  content: JSON
 }
 
 input TestUpdateArgs {
@@ -1679,7 +1673,6 @@ input TestCreateInput {
   someFieldName: String
   anotherFieldName: String
   sections: JSON
-  content: JSON
 }
 
 """

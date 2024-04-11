@@ -266,5 +266,4 @@ model Test {
   someFieldName    String @default("")
   anotherFieldName String @default("")
   sections         Json?
-  content          Json   @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
 }

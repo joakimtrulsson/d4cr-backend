@@ -3,7 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { FieldContainer, FieldLabel, TextInput, Select } from '@keystone-ui/fields';
 
-import Wysiwyg from '../components/Wysiwyg/Wysiwyg';
+// import Wysiwyg from '../components/Wysiwyg/Wysiwyg';
+import Editor from '../components/Editor/Editor';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton';
 import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton';
 import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
@@ -145,10 +146,10 @@ function BulletList({
           <div key={index} style={{ marginBottom: '1rem', marginTop: '1rem' }}>
             <FieldLabel>{`Body Text ${index + 1}`}</FieldLabel>
 
-            <Wysiwyg
+            <Editor
               onSetPreamble={(preamble) => handleFieldChange(index, 'bodyText', preamble)}
-              editData={field.bodyText}
-              extended={false}
+              extended={true}
+              editData={field?.bodyText}
             />
             {value.bullets.length > 1 && (
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>

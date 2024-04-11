@@ -10,7 +10,7 @@ import {
   FieldDescription,
 } from '@keystone-ui/fields';
 
-import Wysiwyg from '../components/Wysiwyg/Wysiwyg.jsx';
+import Editor from '../components/Editor/Editor.jsx';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
@@ -157,7 +157,7 @@ function NewsTeaser({
 
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Subheading</FieldLabel>
-        <Wysiwyg
+        <Editor
           onSetPreamble={setPreamble}
           editData={editData?.subHeading}
           extended={false}

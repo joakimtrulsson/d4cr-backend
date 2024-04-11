@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { FieldContainer, FieldLabel, TextInput, Select } from '@keystone-ui/fields';
 
-import Wysiwyg from '../components/Wysiwyg/Wysiwyg';
+import Editor from '../components/Editor/Editor';
 import CallToActionForm from '../components/CallToActionForm/CallToActionForm.jsx';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
@@ -224,7 +224,7 @@ function MediaText({
         }}
       >
         <FieldLabel>Preamble</FieldLabel>
-        <Wysiwyg
+        <Editor
           onSetPreamble={setPreamble}
           editData={editData?.preamble}
           extended={false}

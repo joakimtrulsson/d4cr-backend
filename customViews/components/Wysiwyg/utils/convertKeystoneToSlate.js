@@ -1,26 +1,46 @@
+/* eslint-disable no-case-declarations */
+const numberToWord = (num) => {
+  switch (num) {
+    case 2:
+      return 'Two';
+    case 3:
+      return 'Three';
+    case 4:
+      return 'Four';
+    // Add more cases if there are more numbers
+    default:
+      return '';
+  }
+};
+
 export const convertKeystoneToSlate = (data) => {
   return data.map((element) => {
-    const originalElement = Object.assign({}, element);
+    let originalElement = { ...element };
+    // let originalElement = Object.assign({}, element);
 
     switch (originalElement.type) {
+      // case 'heading':
+      //   if (originalElement.level === 2) {
+      //     originalElement.type = 'headingTwo';
+      //   }
+      //   if (originalElement.level === 3) {
+      //     originalElement.type = 'headingThree';
+      //   }
+      //   if (originalElement.level === 4) {
+      //     originalElement.type = 'headingFour';
+      //   }
+      //   // originalElement.type = `heading${originalElement.level}`;
+      //   delete originalElement.level;
+      //   break;
       case 'heading':
-        if (originalElement.level === 2) {
-          originalElement.type = 'headingTwo';
-        }
-        if (originalElement.level === 3) {
-          originalElement.type = 'headingThree';
-        }
-        if (originalElement.level === 4) {
-          originalElement.type = 'headingFour';
-        }
-        // originalElement.type = `heading${originalElement.level}`;
+        const textAlign = originalElement.textAlign;
+        delete originalElement.textAlign;
+        originalElement.type = `heading${numberToWord(originalElement.level)}`;
         delete originalElement.level;
-        break;
-      case 'ordered-list':
-        originalElement.type = 'orderedList';
-        break;
-      case 'unordered-list':
-        originalElement.type = 'unorderedList';
+        originalElement = {
+          type: `align${textAlign === 'center' ? 'Center' : 'Right'}`,
+          children: [originalElement],
+        };
         break;
       case 'paragraph':
         if (
@@ -48,6 +68,37 @@ export const convertKeystoneToSlate = (data) => {
             })),
           },
         ];
+        break;
+
+      case 'component-block':
+        switch (originalElement.component) {
+          case 'spotifyPlayer': {
+            originalElement.type = 'spotify';
+            originalElement.url = originalElement.props.url;
+            originalElement.children = [
+              {
+                text: originalElement.props.url,
+              },
+            ];
+            delete originalElement.component;
+            delete originalElement.props;
+            break;
+          }
+          case 'youtubePlayer': {
+            originalElement.type = 'video';
+            originalElement.url = originalElement.props.url;
+            originalElement.children = [
+              {
+                text: originalElement.props.url,
+              },
+            ];
+            delete originalElement.component;
+            delete originalElement.props;
+            break;
+          }
+          default:
+            break;
+        }
         break;
       default:
         break;
