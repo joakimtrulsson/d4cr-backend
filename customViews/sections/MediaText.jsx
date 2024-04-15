@@ -42,6 +42,7 @@ function MediaText({
     { value: 'TOPBOTTOM', label: 'Top & Bottom' },
     { value: 'TOP', label: 'Top Only' },
     { value: 'BOTTOM', label: 'Bottom Only' },
+    { value: 'NONE', label: 'None' },
   ]);
 
   useEffect(() => {
