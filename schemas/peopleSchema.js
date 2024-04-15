@@ -4,7 +4,7 @@ import { text, timestamp, json } from '@keystone-6/core/fields';
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
 
-export const steeringGroupMemberSchema = list({
+export const peopleSchema = list({
   access: {
     operation: {
       ...allOperations(isSignedIn),
@@ -19,6 +19,9 @@ export const steeringGroupMemberSchema = list({
     },
   },
   labelField: 'fullName',
+  graphql: {
+    plural: 'PeopleList',
+  },
   ui: {
     isHidden: (args) => {
       return !permissions?.canManageAllItems(args);

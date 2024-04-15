@@ -8,4 +8,4 @@ export { default as NewsTeaser } from './NewsTeaser';
 export { default as WysiwygSection } from './WysiwygSection';
 export { default as Resources } from './Resources';
 export { default as Principles } from './Principles';
-export { default as SteeringGroup } from './SteeringGroup';
+export { default as People } from './People';

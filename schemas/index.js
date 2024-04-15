@@ -31,7 +31,7 @@ export { principleCategorySchema as PrincipleCategory } from './principleCategor
 export { caseSchema as Case } from './caseSchema.js';
 
 // Steering Group Members
-export { steeringGroupMemberSchema as SteeringGroupMember } from './steeringGroupMemberSchema.js';
+export { peopleSchema as People } from './peopleSchema.js';
 
 // Files
 export { imageSchema as Image } from './imageSchema.js';

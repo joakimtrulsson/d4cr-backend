@@ -15,9 +15,8 @@ const {
   Banner,
   NewsTeaser,
   WysiwygSection,
-  // Resources,
   Principles,
-  SteeringGroup,
+  People,
 } = SectionComponents;
 
 const SECTIONS = {
@@ -29,9 +28,8 @@ const SECTIONS = {
   BANNER: Banner,
   NEWSTEASER: NewsTeaser,
   WYSIWYG: WysiwygSection,
-  // RESOURCES: Resources,
   PRINCIPLES: Principles,
-  STEERINGGROUP: SteeringGroup,
+  PEOPLE: People,
 };
 
 import SelectSections from './components/SelectSections/SelectSections';
@@ -52,10 +50,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
     const sectionIndex = sectionsData.findIndex((section) => section.id === sectionId);
 
     // Om sectionType är "CHAPTERTEASER" eller "STEERINGGROUP", gör ingenting
-    if (
-      sectionToEditData.sectionType === 'CHAPTERTEASER' ||
-      sectionToEditData.sectionType === 'STEERINGGROUP'
-    ) {
+    if (sectionToEditData.sectionType === 'CHAPTERTEASER') {
       return;
     }
 

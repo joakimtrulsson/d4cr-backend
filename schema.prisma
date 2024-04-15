@@ -230,7 +230,7 @@ model PrincipleCategory {
   principles Principle[] @relation("Principle_principleCategory")
 }
 
-model SteeringGroupMember {
+model People {
   id               String    @id @default(uuid()) @postgresql.Uuid
   fullName         String    @default("")
   role             String    @default("")

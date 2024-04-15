@@ -9,12 +9,13 @@ export const options = [
   { value: 'NEWSTEASER', label: 'News Teaser' },
   { value: 'PRINCIPLES', label: 'Principles' },
   // { value: 'RESOURCES', label: 'Resources' },
-  { value: 'STEERINGGROUP', label: 'Steering Group' },
+  { value: 'PEOPLE', label: 'People' },
   { value: 'WYSIWYG', label: 'WYSIWYG' },
 ];
 
 export const staticPages = [
-  { value: '/share-story', label: 'Share a story (Modal)' },
+  { value: 'share', label: 'Share a story (Modal)' },
+  { value: 'slack', label: 'Join Slack (Modal)' },
   { value: '/contact-us', label: '/contact-us (Predefined Page)' },
   { value: '/resources', label: '/resources (Predefined Page)' },
   { value: '/cases', label: '/cases (Predefined Page)' },

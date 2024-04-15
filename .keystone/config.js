@@ -1864,11 +1864,11 @@ var caseSchema = (0, import_core22.list)({
   }
 });
 
-// schemas/steeringGroupMemberSchema.js
+// schemas/peopleSchema.js
 var import_core24 = require("@keystone-6/core");
 var import_fields20 = require("@keystone-6/core/fields");
 var import_access39 = require("@keystone-6/core/access");
-var steeringGroupMemberSchema = (0, import_core24.list)({
+var peopleSchema = (0, import_core24.list)({
   access: {
     operation: {
       ...(0, import_access39.allOperations)(isSignedIn),
@@ -1883,6 +1883,9 @@ var steeringGroupMemberSchema = (0, import_core24.list)({
     }
   },
   labelField: "fullName",
+  graphql: {
+    plural: "PeopleList"
+  },
   ui: {
     isHidden: (args) => {
       return !permissions?.canManageAllItems(args);
@@ -2207,7 +2210,7 @@ var lists = {
   Principle: principleSchema,
   PrincipleNumber: principleNumberSchema,
   PrincipleCategory: principleCategorySchema,
-  SteeringGroupMember: steeringGroupMemberSchema,
+  People: peopleSchema,
   Case: caseSchema,
   Test: testSchema
 };

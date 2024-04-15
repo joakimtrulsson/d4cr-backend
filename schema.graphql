@@ -1467,7 +1467,7 @@ input PrincipleRelateToManyForCreateInput {
   connect: [PrincipleWhereUniqueInput!]
 }
 
-type SteeringGroupMember {
+type People {
   id: ID!
   fullName: String
   role: String
@@ -1481,14 +1481,14 @@ type SteeringGroupMember {
   createdAt: DateTime
 }
 
-input SteeringGroupMemberWhereUniqueInput {
+input PeopleWhereUniqueInput {
   id: ID
 }
 
-input SteeringGroupMemberWhereInput {
-  AND: [SteeringGroupMemberWhereInput!]
-  OR: [SteeringGroupMemberWhereInput!]
-  NOT: [SteeringGroupMemberWhereInput!]
+input PeopleWhereInput {
+  AND: [PeopleWhereInput!]
+  OR: [PeopleWhereInput!]
+  NOT: [PeopleWhereInput!]
   id: IDFilter
   fullName: StringFilter
   role: StringFilter
@@ -1499,7 +1499,7 @@ input SteeringGroupMemberWhereInput {
   createdAt: DateTimeNullableFilter
 }
 
-input SteeringGroupMemberOrderByInput {
+input PeopleOrderByInput {
   id: OrderDirection
   fullName: OrderDirection
   role: OrderDirection
@@ -1510,7 +1510,7 @@ input SteeringGroupMemberOrderByInput {
   createdAt: OrderDirection
 }
 
-input SteeringGroupMemberUpdateInput {
+input PeopleUpdateInput {
   fullName: String
   role: String
   city: String
@@ -1523,12 +1523,12 @@ input SteeringGroupMemberUpdateInput {
   createdAt: DateTime
 }
 
-input SteeringGroupMemberUpdateArgs {
-  where: SteeringGroupMemberWhereUniqueInput!
-  data: SteeringGroupMemberUpdateInput!
+input PeopleUpdateArgs {
+  where: PeopleWhereUniqueInput!
+  data: PeopleUpdateInput!
 }
 
-input SteeringGroupMemberCreateInput {
+input PeopleCreateInput {
   fullName: String
   role: String
   city: String
@@ -1801,12 +1801,12 @@ type Mutation {
   updatePrincipleCategories(data: [PrincipleCategoryUpdateArgs!]!): [PrincipleCategory]
   deletePrincipleCategory(where: PrincipleCategoryWhereUniqueInput!): PrincipleCategory
   deletePrincipleCategories(where: [PrincipleCategoryWhereUniqueInput!]!): [PrincipleCategory]
-  createSteeringGroupMember(data: SteeringGroupMemberCreateInput!): SteeringGroupMember
-  createSteeringGroupMembers(data: [SteeringGroupMemberCreateInput!]!): [SteeringGroupMember]
-  updateSteeringGroupMember(where: SteeringGroupMemberWhereUniqueInput!, data: SteeringGroupMemberUpdateInput!): SteeringGroupMember
-  updateSteeringGroupMembers(data: [SteeringGroupMemberUpdateArgs!]!): [SteeringGroupMember]
-  deleteSteeringGroupMember(where: SteeringGroupMemberWhereUniqueInput!): SteeringGroupMember
-  deleteSteeringGroupMembers(where: [SteeringGroupMemberWhereUniqueInput!]!): [SteeringGroupMember]
+  createPeople(data: PeopleCreateInput!): People
+  createPeopleList(data: [PeopleCreateInput!]!): [People]
+  updatePeople(where: PeopleWhereUniqueInput!, data: PeopleUpdateInput!): People
+  updatePeopleList(data: [PeopleUpdateArgs!]!): [People]
+  deletePeople(where: PeopleWhereUniqueInput!): People
+  deletePeopleList(where: [PeopleWhereUniqueInput!]!): [People]
   createCase(data: CaseCreateInput!): Case
   createCases(data: [CaseCreateInput!]!): [Case]
   updateCase(where: CaseWhereUniqueInput!, data: CaseUpdateInput!): Case
@@ -1922,9 +1922,9 @@ type Query {
   principleCategories(where: PrincipleCategoryWhereInput! = {}, orderBy: [PrincipleCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PrincipleCategoryWhereUniqueInput): [PrincipleCategory!]
   principleCategory(where: PrincipleCategoryWhereUniqueInput!): PrincipleCategory
   principleCategoriesCount(where: PrincipleCategoryWhereInput! = {}): Int
-  steeringGroupMembers(where: SteeringGroupMemberWhereInput! = {}, orderBy: [SteeringGroupMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SteeringGroupMemberWhereUniqueInput): [SteeringGroupMember!]
-  steeringGroupMember(where: SteeringGroupMemberWhereUniqueInput!): SteeringGroupMember
-  steeringGroupMembersCount(where: SteeringGroupMemberWhereInput! = {}): Int
+  peopleList(where: PeopleWhereInput! = {}, orderBy: [PeopleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PeopleWhereUniqueInput): [People!]
+  people(where: PeopleWhereUniqueInput!): People
+  peopleListCount(where: PeopleWhereInput! = {}): Int
   cases(where: CaseWhereInput! = {}, orderBy: [CaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CaseWhereUniqueInput): [Case!]
   case(where: CaseWhereUniqueInput!): Case
   casesCount(where: CaseWhereInput! = {}): Int

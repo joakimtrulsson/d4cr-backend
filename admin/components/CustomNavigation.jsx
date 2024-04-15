@@ -19,7 +19,7 @@ export function CustomNavigation({ authenticatedItem, lists }) {
     'Principle',
     'Case',
     'News',
-    'SteeringGroupMember',
+    'People',
     'Test',
   ];
   const underTaxonomyLists = [
