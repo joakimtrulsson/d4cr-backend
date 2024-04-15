@@ -45,8 +45,8 @@ const useFetchLinkOptions = () => {
         }));
 
         const principlesOptions = data.principles.map((principle) => ({
-          label: `${principle.slug}`,
-          value: `${principle.slug}`,
+          label: `/principles${principle.slug}`,
+          value: `/principles${principle.slug}`,
         }));
 
         const options = [...staticPages].concat(

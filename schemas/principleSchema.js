@@ -83,19 +83,19 @@ export const principleSchema = list({
           }
 
           if (operation === 'create' && !inputData.slug) {
-            return buildSlug(`principle-${principleNumber.toString()}`, 'principles');
+            return buildSlug(`principle-${principleNumber.toString()}`);
           }
 
           if (operation === 'create' && inputData.slug) {
-            return buildSlug(inputData.slug, 'principles');
+            return buildSlug(inputData.slug);
           }
 
           if (operation === 'update' && inputData.slug) {
-            return buildSlug(inputData.slug, 'principles');
+            return buildSlug(inputData.slug);
           }
 
           if (operation === 'update' && !inputData.slug) {
-            return buildSlug(`principle-${principleNumber.toString()}`, 'principles');
+            return buildSlug(`principle-${principleNumber.toString()}`);
           }
         },
       },
