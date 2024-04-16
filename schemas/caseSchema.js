@@ -134,15 +134,6 @@ export const caseSchema = list({
       },
     }),
 
-    principles: json({
-      ui: {
-        views: './customViews/Principles.jsx',
-        createView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
-      },
-    }),
-
     ...group({
       label: 'Resources',
       description: 'Select resources to be displayed in the resources section.',
