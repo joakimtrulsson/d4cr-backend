@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { FieldContainer, FieldLabel, TextInput, MultiSelect } from '@keystone-ui/fields';
+import {
+  FieldContainer,
+  FieldLabel,
+  TextInput,
+  MultiSelect,
+  FieldDescription,
+} from '@keystone-ui/fields';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
@@ -15,6 +21,7 @@ function People({
   editData,
   sectionIndex,
   setSectionsData,
+  autoFocus,
 }) {
   const [value, setValue] = useState('');
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -64,6 +71,7 @@ function People({
       const newItem = {
         sectionType: 'PEOPLE',
         id: uuidv4(),
+        sectionTitle: value.sectionTitle,
         title: value.title,
         preamble: value.preamble,
         people: value.people,
@@ -114,7 +122,22 @@ function People({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <FieldDescription>
+          Unique identifier for this section, used in the sections list.
+        </FieldDescription>
+        <TextInput
+          autoFocus={autoFocus}
+          onChange={(event) => handleChange('sectionTitle', event.target.value)}
+          value={value.sectionTitle}
+          style={{ marginBottom: '2rem' }}
+        />
+
         <FieldLabel>Title</FieldLabel>
+        <FieldDescription>
+          This required field specifies the title text for the People section, such as
+          &quot;Steering Group&quot;.
+        </FieldDescription>
         <TextInput
           label='Title'
           autoFocus
@@ -124,6 +147,9 @@ function People({
       </div>
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
+        <FieldDescription>
+          This reqiured field specifies the preamble text of the People section.
+        </FieldDescription>
         <Editor
           onSetPreamble={setPreamble}
           editData={editData?.preamble}
@@ -133,6 +159,10 @@ function People({
 
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>People</FieldLabel>
+        <FieldDescription>
+          This required field specifies the list of people to be displayed in the People
+          section.
+        </FieldDescription>
         {Array.isArray(peopleList) && (
           <MultiSelect
             onChange={setSelectedOptions}

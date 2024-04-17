@@ -147,7 +147,21 @@ function NewsTeaser({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <FieldDescription>
+          Unique identifier for this section, used in the sections list.
+        </FieldDescription>
+        <TextInput
+          autoFocus={autoFocus}
+          onChange={(event) => handleChange('sectionTitle', event.target.value)}
+          value={value.sectionTitle}
+          style={{ marginBottom: '2rem' }}
+        />
+
         <FieldLabel>Title</FieldLabel>
+        <FieldDescription>
+          This reqiured field specifies the title text on the News section.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}
@@ -156,7 +170,10 @@ function NewsTeaser({
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>Subheading</FieldLabel>
+        <FieldLabel>Preamble</FieldLabel>
+        <FieldDescription>
+          This reqiured field specifies the preamble text of the News section.
+        </FieldDescription>
         <Editor
           onSetPreamble={setPreamble}
           editData={editData?.subHeading}
@@ -166,7 +183,9 @@ function NewsTeaser({
 
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>News</FieldLabel>
-        <FieldDescription>Select news to display</FieldDescription>
+        <FieldDescription>
+          Choose news to display; only the three latest will be shown.
+        </FieldDescription>
         <div style={{ marginBottom: '1rem' }}>
           <FieldLegend>Chapters</FieldLegend>
           <Select
@@ -189,7 +208,7 @@ function NewsTeaser({
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid #e1e5e9' }}>
+      <div style={{ paddingTop: '1rem', borderTop: '1px solid #e1e5e9' }}>
         {editData ? (
           <UpdateSectionButton handleUpdate={handleSaveUpdate}>
             Update

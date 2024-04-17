@@ -19,7 +19,11 @@ export const principleCategorySchema = list({
     },
   },
   fields: {
-    title: text({ isIndexed: 'unique', validation: { isRequired: true } }),
+    title: text({
+      isIndexed: 'unique',
+      validation: { isRequired: true },
+      ui: { description: 'The categories available to be selected for the principles.' },
+    }),
 
     createdAt: timestamp({
       isRequired: true,

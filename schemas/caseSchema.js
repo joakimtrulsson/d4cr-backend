@@ -36,7 +36,13 @@ export const caseSchema = list({
     },
   },
   fields: {
-    title: text({ validation: { isRequired: true } }),
+    title: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is used to specify the title of the case, which appears at the top of the page, represents the name of the case and will also appear in the browser tab.',
+      },
+    }),
 
     linkType: select({
       isRequired: true,
@@ -47,6 +53,8 @@ export const caseSchema = list({
       ],
       defaultValue: 'internal',
       ui: {
+        description:
+          'If "Internal" is selected, a separate page will be generated for the case. If "External" is selected, the case will only be rendered on the predefined "/cases" page with an external link. If "None" is selected, the case will also only be rendered on the predefined "/cases" page but without a link.',
         displayMode: 'segmented-control',
       },
     }),
@@ -102,6 +110,10 @@ export const caseSchema = list({
     }),
 
     preamble: document({
+      ui: {
+        description:
+          'This is not required component of the case layout. A brief introductory text that complements the title.',
+      },
       links: true,
       formatting: {
         inlineMarks: {
@@ -116,6 +128,8 @@ export const caseSchema = list({
 
     caseImage: json({
       ui: {
+        description:
+          'This required image will only be displayed on the predefined page "/cases". It is used to illustrate the case in a case card ',
         views: './customViews/ImageLibrary.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -123,7 +137,13 @@ export const caseSchema = list({
       },
     }),
 
-    quote: text({}),
+    quote: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required quote will only be rendered on the predefined page "/cases" and will serve as the descriptive text for the case.',
+      },
+    }),
 
     sections: json({
       ui: {
@@ -136,13 +156,26 @@ export const caseSchema = list({
 
     ...group({
       label: 'Resources',
-      description: 'Select resources to be displayed in the resources section.',
+      description:
+        'Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.',
       fields: {
-        resourcesTitle: text({}),
-        resourcesPreamble: text({}),
+        resourcesTitle: text({
+          ui: {
+            description: 'This field specifies the title of the resources section.',
+          },
+        }),
+        resourcesPreamble: text({
+          ui: {
+            description: 'This field specifies the preamble of the resources section.',
+          },
+        }),
         resources: relationship({
           ref: 'Resource',
           many: true,
+          ui: {
+            description:
+              'Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen.',
+          },
         }),
       },
     }),
@@ -155,6 +188,8 @@ export const caseSchema = list({
       validation: { isRequired: true },
       defaultValue: 'draft',
       ui: {
+        description:
+          'This field determines the current status of the case. If set to "Draft," the case will not be available in the frontend application.',
         itemView: {
           fieldPosition: 'sidebar',
         },

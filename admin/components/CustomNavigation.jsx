@@ -24,7 +24,7 @@ export function CustomNavigation({ authenticatedItem, lists }) {
   ];
   const underTaxonomyLists = [
     'ResourceType',
-    'ResourceCategory',
+    // 'ResourceCategory',
     'PrincipleCategory',
     'PrincipleNumber',
     'NewsCategory',

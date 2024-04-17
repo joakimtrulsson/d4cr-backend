@@ -142,28 +142,18 @@ model NewsCategory {
 }
 
 model Resource {
-  id                       String            @id @default(uuid()) @postgresql.Uuid
-  title                    String            @unique @default("")
-  url                      String            @default("")
+  id                       String        @id @default(uuid()) @postgresql.Uuid
+  title                    String        @unique @default("")
+  url                      String        @default("")
   image                    Json?
-  category                 ResourceCategory? @relation("Resource_category", fields: [categoryId], references: [id])
-  categoryId               String?           @map("category") @postgresql.Uuid
-  resourceType             ResourceType?     @relation("Resource_resourceType", fields: [resourceTypeId], references: [id])
-  resourceTypeId           String?           @map("resourceType") @postgresql.Uuid
-  createdAt                DateTime?         @default(now())
-  from_News_resources      News[]            @relation("News_resources")
-  from_Principle_resources Principle[]       @relation("Principle_resources")
-  from_Case_resources      Case[]            @relation("Case_resources")
+  resourceType             ResourceType? @relation("Resource_resourceType", fields: [resourceTypeId], references: [id])
+  resourceTypeId           String?       @map("resourceType") @postgresql.Uuid
+  createdAt                DateTime?     @default(now())
+  from_News_resources      News[]        @relation("News_resources")
+  from_Principle_resources Principle[]   @relation("Principle_resources")
+  from_Case_resources      Case[]        @relation("Case_resources")
 
-  @@index([categoryId])
   @@index([resourceTypeId])
-}
-
-model ResourceCategory {
-  id        String     @id @default(uuid()) @postgresql.Uuid
-  title     String     @unique @default("")
-  createdAt DateTime?  @default(now())
-  resources Resource[] @relation("Resource_category")
 }
 
 model ResourceType {
@@ -200,21 +190,24 @@ model Video {
 }
 
 model Principle {
-  id                String              @id @default(uuid()) @postgresql.Uuid
-  title             String              @default("")
-  slug              String              @unique @default("")
-  subHeader         String              @default("")
-  quote             String              @default("")
-  quoteAuthor       String              @default("")
-  image             Json?
-  subPrinciples     Json?
-  resourcesTitle    String              @default("")
-  resourcesPreamble String              @default("")
-  resources         Resource[]          @relation("Principle_resources")
-  principleCategory PrincipleCategory[] @relation("Principle_principleCategory")
-  principleNumber   PrincipleNumber?    @relation("Principle_principleNumber", fields: [principleNumberId], references: [id])
-  principleNumberId String?             @unique @map("principleNumber") @postgresql.Uuid
-  status            String              @default("draft")
+  id                  String             @id @default(uuid()) @postgresql.Uuid
+  title               String             @default("")
+  slug                String             @unique @default("")
+  subHeader           String             @default("")
+  quote               String             @default("")
+  quoteAuthor         String             @default("")
+  image               Json?
+  subPrinciples       Json?
+  resourcesTitle      String             @default("")
+  resourcesPreamble   String             @default("")
+  resources           Resource[]         @relation("Principle_resources")
+  principleCategory   PrincipleCategory? @relation("Principle_principleCategory", fields: [principleCategoryId], references: [id])
+  principleCategoryId String?            @map("principleCategory") @postgresql.Uuid
+  principleNumber     PrincipleNumber?   @relation("Principle_principleNumber", fields: [principleNumberId], references: [id])
+  principleNumberId   String?            @unique @map("principleNumber") @postgresql.Uuid
+  status              String             @default("draft")
+
+  @@index([principleCategoryId])
 }
 
 model PrincipleNumber {
@@ -253,7 +246,6 @@ model Case {
   caseImage         Json?
   quote             String     @default("")
   sections          Json?
-  principles        Json?
   resourcesTitle    String     @default("")
   resourcesPreamble String     @default("")
   resources         Resource[] @relation("Case_resources")

@@ -893,7 +893,6 @@ type Resource {
   title: String
   url: String
   image: JSON
-  category: ResourceCategory
   resourceType: ResourceType
   createdAt: DateTime
 }
@@ -910,7 +909,6 @@ input ResourceWhereInput {
   id: IDFilter
   title: StringFilter
   url: StringFilter
-  category: ResourceCategoryWhereInput
   resourceType: ResourceTypeWhereInput
   createdAt: DateTimeNullableFilter
 }
@@ -926,15 +924,8 @@ input ResourceUpdateInput {
   title: String
   url: String
   image: JSON
-  category: ResourceCategoryRelateToOneForUpdateInput
   resourceType: ResourceTypeRelateToOneForUpdateInput
   createdAt: DateTime
-}
-
-input ResourceCategoryRelateToOneForUpdateInput {
-  create: ResourceCategoryCreateInput
-  connect: ResourceCategoryWhereUniqueInput
-  disconnect: Boolean
 }
 
 input ResourceTypeRelateToOneForUpdateInput {
@@ -952,65 +943,13 @@ input ResourceCreateInput {
   title: String
   url: String
   image: JSON
-  category: ResourceCategoryRelateToOneForCreateInput
   resourceType: ResourceTypeRelateToOneForCreateInput
   createdAt: DateTime
-}
-
-input ResourceCategoryRelateToOneForCreateInput {
-  create: ResourceCategoryCreateInput
-  connect: ResourceCategoryWhereUniqueInput
 }
 
 input ResourceTypeRelateToOneForCreateInput {
   create: ResourceTypeCreateInput
   connect: ResourceTypeWhereUniqueInput
-}
-
-type ResourceCategory {
-  id: ID!
-  title: String
-  createdAt: DateTime
-  resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceWhereUniqueInput): [Resource!]
-  resourcesCount(where: ResourceWhereInput! = {}): Int
-}
-
-input ResourceCategoryWhereUniqueInput {
-  id: ID
-  title: String
-}
-
-input ResourceCategoryWhereInput {
-  AND: [ResourceCategoryWhereInput!]
-  OR: [ResourceCategoryWhereInput!]
-  NOT: [ResourceCategoryWhereInput!]
-  id: IDFilter
-  title: StringFilter
-  createdAt: DateTimeNullableFilter
-  resources: ResourceManyRelationFilter
-}
-
-input ResourceCategoryOrderByInput {
-  id: OrderDirection
-  title: OrderDirection
-  createdAt: OrderDirection
-}
-
-input ResourceCategoryUpdateInput {
-  title: String
-  createdAt: DateTime
-  resources: ResourceRelateToManyForUpdateInput
-}
-
-input ResourceCategoryUpdateArgs {
-  where: ResourceCategoryWhereUniqueInput!
-  data: ResourceCategoryUpdateInput!
-}
-
-input ResourceCategoryCreateInput {
-  title: String
-  createdAt: DateTime
-  resources: ResourceRelateToManyForCreateInput
 }
 
 type ResourceType {
@@ -1234,8 +1173,7 @@ type Principle {
   resourcesPreamble: String
   resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceWhereUniqueInput): [Resource!]
   resourcesCount(where: ResourceWhereInput! = {}): Int
-  principleCategory(where: PrincipleCategoryWhereInput! = {}, orderBy: [PrincipleCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PrincipleCategoryWhereUniqueInput): [PrincipleCategory!]
-  principleCategoryCount(where: PrincipleCategoryWhereInput! = {}): Int
+  principleCategory: PrincipleCategory
   principleNumber: PrincipleNumber
   status: String
 }
@@ -1258,15 +1196,9 @@ input PrincipleWhereInput {
   resourcesTitle: StringFilter
   resourcesPreamble: StringFilter
   resources: ResourceManyRelationFilter
-  principleCategory: PrincipleCategoryManyRelationFilter
+  principleCategory: PrincipleCategoryWhereInput
   principleNumber: PrincipleNumberWhereInput
   status: StringFilter
-}
-
-input PrincipleCategoryManyRelationFilter {
-  every: PrincipleCategoryWhereInput
-  some: PrincipleCategoryWhereInput
-  none: PrincipleCategoryWhereInput
 }
 
 input PrincipleOrderByInput {
@@ -1292,16 +1224,15 @@ input PrincipleUpdateInput {
   resourcesTitle: String
   resourcesPreamble: String
   resources: ResourceRelateToManyForUpdateInput
-  principleCategory: PrincipleCategoryRelateToManyForUpdateInput
+  principleCategory: PrincipleCategoryRelateToOneForUpdateInput
   principleNumber: PrincipleNumberRelateToOneForUpdateInput
   status: String
 }
 
-input PrincipleCategoryRelateToManyForUpdateInput {
-  disconnect: [PrincipleCategoryWhereUniqueInput!]
-  set: [PrincipleCategoryWhereUniqueInput!]
-  create: [PrincipleCategoryCreateInput!]
-  connect: [PrincipleCategoryWhereUniqueInput!]
+input PrincipleCategoryRelateToOneForUpdateInput {
+  create: PrincipleCategoryCreateInput
+  connect: PrincipleCategoryWhereUniqueInput
+  disconnect: Boolean
 }
 
 input PrincipleNumberRelateToOneForUpdateInput {
@@ -1326,14 +1257,14 @@ input PrincipleCreateInput {
   resourcesTitle: String
   resourcesPreamble: String
   resources: ResourceRelateToManyForCreateInput
-  principleCategory: PrincipleCategoryRelateToManyForCreateInput
+  principleCategory: PrincipleCategoryRelateToOneForCreateInput
   principleNumber: PrincipleNumberRelateToOneForCreateInput
   status: String
 }
 
-input PrincipleCategoryRelateToManyForCreateInput {
-  create: [PrincipleCategoryCreateInput!]
-  connect: [PrincipleCategoryWhereUniqueInput!]
+input PrincipleCategoryRelateToOneForCreateInput {
+  create: PrincipleCategoryCreateInput
+  connect: PrincipleCategoryWhereUniqueInput
 }
 
 input PrincipleNumberRelateToOneForCreateInput {
@@ -1550,7 +1481,6 @@ type Case {
   caseImage: JSON
   quote: String
   sections: JSON
-  principles: JSON
   resourcesTitle: String
   resourcesPreamble: String
   resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceWhereUniqueInput): [Resource!]
@@ -1603,7 +1533,6 @@ input CaseUpdateInput {
   caseImage: JSON
   quote: String
   sections: JSON
-  principles: JSON
   resourcesTitle: String
   resourcesPreamble: String
   resources: ResourceRelateToManyForUpdateInput
@@ -1624,7 +1553,6 @@ input CaseCreateInput {
   caseImage: JSON
   quote: String
   sections: JSON
-  principles: JSON
   resourcesTitle: String
   resourcesPreamble: String
   resources: ResourceRelateToManyForCreateInput
@@ -1759,12 +1687,6 @@ type Mutation {
   updateResources(data: [ResourceUpdateArgs!]!): [Resource]
   deleteResource(where: ResourceWhereUniqueInput!): Resource
   deleteResources(where: [ResourceWhereUniqueInput!]!): [Resource]
-  createResourceCategory(data: ResourceCategoryCreateInput!): ResourceCategory
-  createResourceCategories(data: [ResourceCategoryCreateInput!]!): [ResourceCategory]
-  updateResourceCategory(where: ResourceCategoryWhereUniqueInput!, data: ResourceCategoryUpdateInput!): ResourceCategory
-  updateResourceCategories(data: [ResourceCategoryUpdateArgs!]!): [ResourceCategory]
-  deleteResourceCategory(where: ResourceCategoryWhereUniqueInput!): ResourceCategory
-  deleteResourceCategories(where: [ResourceCategoryWhereUniqueInput!]!): [ResourceCategory]
   createResourceType(data: ResourceTypeCreateInput!): ResourceType
   createResourceTypes(data: [ResourceTypeCreateInput!]!): [ResourceType]
   updateResourceType(where: ResourceTypeWhereUniqueInput!, data: ResourceTypeUpdateInput!): ResourceType
@@ -1901,9 +1823,6 @@ type Query {
   resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceWhereUniqueInput): [Resource!]
   resource(where: ResourceWhereUniqueInput!): Resource
   resourcesCount(where: ResourceWhereInput! = {}): Int
-  resourceCategories(where: ResourceCategoryWhereInput! = {}, orderBy: [ResourceCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceCategoryWhereUniqueInput): [ResourceCategory!]
-  resourceCategory(where: ResourceCategoryWhereUniqueInput!): ResourceCategory
-  resourceCategoriesCount(where: ResourceCategoryWhereInput! = {}): Int
   resourceTypes(where: ResourceTypeWhereInput! = {}, orderBy: [ResourceTypeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceTypeWhereUniqueInput): [ResourceType!]
   resourceType(where: ResourceTypeWhereUniqueInput!): ResourceType
   resourceTypesCount(where: ResourceTypeWhereInput! = {}): Int

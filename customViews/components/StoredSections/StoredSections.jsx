@@ -49,11 +49,14 @@ function StoredSections({
                   >
                     <div className={styles.list.data}>
                       <div>
+                        {index + 1}.
                         {section.sectionType === 'CHAPTERTEASER'
                           ? 'Chapter Teaser'
                           : section.sectionType === 'STEERINGGROUP'
                           ? 'Steering Group'
-                          : ` ${section.sectionType} - ${section.title}${
+                          : ` ${section.sectionType} - ${
+                              section.sectionTitle && section.sectionTitle
+                            }${
                               section.sectionType === 'MEDIATEXT'
                                 ? ` Border: ${section.border}`
                                 : ''

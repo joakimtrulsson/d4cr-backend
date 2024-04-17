@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FieldContainer, FieldLabel, TextInput, Select } from '@keystone-ui/fields';
+import {
+  FieldContainer,
+  FieldLabel,
+  TextInput,
+  Select,
+  FieldDescription,
+} from '@keystone-ui/fields';
 
 import Editor from '../components/Editor/Editor';
 import CallToActionForm from '../components/CallToActionForm/CallToActionForm.jsx';
@@ -153,7 +159,21 @@ function MediaText({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <FieldDescription>
+          Unique identifier for this section, used in the sections list.
+        </FieldDescription>
+        <TextInput
+          autoFocus={autoFocus}
+          onChange={(event) => handleChange('sectionTitle', event.target.value)}
+          value={value.sectionTitle}
+          style={{ marginBottom: '2rem' }}
+        />
+
         <FieldLabel>Title</FieldLabel>
+        <FieldDescription>
+          This reqiured field specifies the title text on the Media Text section.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}
@@ -162,6 +182,10 @@ function MediaText({
       </div>
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Subheading</FieldLabel>
+        <FieldDescription>
+          This required field specifies the subheader text, which is rendered above the
+          title.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('subHeading', event.target.value)}
@@ -182,6 +206,14 @@ function MediaText({
 
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Border</FieldLabel>
+        <FieldDescription>
+          This required field specifies the border style for the section. Options include
+          &quot;None&quot; for no border, &quot;Top Only&quot; for border only at the top,
+          &quot;Bottom Only&quot; for border only at the bottom, and &quot;Top &amp;
+          Bottom&quot; for borders at both the top and bottom. When placing multiple Media
+          Text sections together, it is important to pay attention to the border choice
+          for each section to create a cohesive and visually appealing layout.
+        </FieldDescription>
         <Select
           value={borderOptions.find((option) => option.value === value.border)}
           options={borderOptions}
@@ -233,6 +265,11 @@ function MediaText({
       </div>
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Call to action 1</FieldLabel>
+        <FieldDescription>
+          This field represents the anchor text for the primary call-to-action button,
+          displayed with an orange background.
+        </FieldDescription>
+
         <CallToActionForm
           autoFocus={autoFocus}
           anchorText={value.cta1?.anchorText}
@@ -245,6 +282,10 @@ function MediaText({
       </div>
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Call to action 2</FieldLabel>
+        <FieldDescription>
+          This field represents the anchor text for the secondary call-to-action button,
+          displayed with an transparent background.
+        </FieldDescription>
         <CallToActionForm
           autoFocus={autoFocus}
           anchorText={value.cta2?.anchorText}

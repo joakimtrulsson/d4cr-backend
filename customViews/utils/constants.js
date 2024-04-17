@@ -7,9 +7,9 @@ export const options = [
   { value: 'BULLETLIST', label: 'Large Bullet List' },
   { value: 'MEDIATEXT', label: 'Media + Text' },
   { value: 'NEWSTEASER', label: 'News Teaser' },
+  { value: 'PEOPLE', label: 'People' },
   { value: 'PRINCIPLES', label: 'Principles' },
   // { value: 'RESOURCES', label: 'Resources' },
-  { value: 'PEOPLE', label: 'People' },
   { value: 'WYSIWYG', label: 'WYSIWYG' },
 ];
 

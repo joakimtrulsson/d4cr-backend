@@ -52,7 +52,13 @@ export const pageSchema = list({
     },
   },
   fields: {
-    title: text({ validation: { isRequired: true } }),
+    title: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is used to specify the title of the page, which appears at the top of the page, represents the name of the page and will also appear in the browser tab.',
+      },
+    }),
 
     slug: text({
       isIndexed: 'unique',
@@ -85,6 +91,10 @@ export const pageSchema = list({
     }),
 
     heroPreamble: document({
+      ui: {
+        description:
+          'This is not required component of the page layout. A brief introductory text that complements the title.',
+      },
       links: true,
       formatting: {
         inlineMarks: {
@@ -100,7 +110,8 @@ export const pageSchema = list({
     ctaOneAnchorText: text({
       label: 'Call to action 1',
       ui: {
-        description: 'Anchor text for the call to action button.',
+        description:
+          'This field is not required and represents the anchor text for the primary call-to-action button, displayed with an orange background.',
       },
     }),
 
@@ -116,7 +127,8 @@ export const pageSchema = list({
     ctaTwoUrlAnchorText: text({
       label: 'Call to action 2',
       ui: {
-        description: 'Anchor text for the call to action button.',
+        description:
+          'This field is not required and represents the anchor text for the secondary call-to-action button, displayed with an white background.',
       },
     }),
 
@@ -137,6 +149,8 @@ export const pageSchema = list({
       validation: { isRequired: true },
       defaultValue: 'draft',
       ui: {
+        description:
+          'This field determines the current status of the page. If set to "Draft," the page will not be available in the frontend application.',
         itemView: {
           fieldPosition: 'sidebar',
         },

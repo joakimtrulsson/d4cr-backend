@@ -3,6 +3,7 @@ import { text, image, timestamp, integer } from '@keystone-6/core/fields';
 
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
+import { validate } from 'uuid';
 
 export const imageSchema = list({
   access: {
@@ -19,9 +20,36 @@ export const imageSchema = list({
     },
   },
   fields: {
-    title: text(),
+    title: text({
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === 'create' && !inputData.title) {
+            return resolvedData.file.id;
+          }
 
-    altText: text(),
+          if (operation === 'update' && !resolvedData.title) {
+            return resolvedData.file.id;
+          }
+
+          return resolvedData.title;
+        },
+      },
+      ui: {
+        description:
+          'This field specifies the title of the image, which is automatically generated from the uploaded image URL.',
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
+
+    altText: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field specifies the alternative text for the image. Alt text provides a textual description of the image, which is essential for accessibility and SEO purpose.',
+      },
+    }),
 
     file: image({ label: 'Image', storage: 'imageStorage' }),
 

@@ -198,6 +198,11 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
+      <FieldDescription style={{ marginBottom: '1rem' }}>
+        The heroVideo field is a required component that enables the display of a video on
+        the hero section. In the hero section, a thumbnail is showcased. Upon clicking the
+        play button, the video opens in a modal window.
+      </FieldDescription>
 
       <Button
         style={{ marginBottom: '1rem' }}

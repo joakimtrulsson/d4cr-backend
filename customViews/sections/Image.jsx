@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields';
+import {
+  FieldContainer,
+  FieldLabel,
+  TextInput,
+  FieldDescription,
+} from '@keystone-ui/fields';
 
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
@@ -71,10 +76,13 @@ function Image({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>Title</FieldLabel>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <FieldDescription>
+          Unique identifier for this section, used in the sections list.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
-          onChange={(event) => handleChange('title', event.target.value)}
+          onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={title}
         />
       </div>

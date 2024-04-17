@@ -24,6 +24,10 @@ export const formEmailSchema = list({
   fields: {
     contactEmail: text({
       validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is utilized on the predefined page "/contact-us" to specify the email address to which the form submissions on that page should be sent.',
+      },
       hooks: {
         validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
           const email = resolvedData[fieldKey];
@@ -40,6 +44,10 @@ export const formEmailSchema = list({
 
     shareStoryEmail: text({
       validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is used to define the email address that will receive submitted stories through the "Share Story" Modal form.',
+      },
       hooks: {
         validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
           const email = resolvedData[fieldKey];
@@ -56,6 +64,10 @@ export const formEmailSchema = list({
 
     joinSlackEmail: text({
       validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is used to define the email address that will receive submitted stories through the "Join our Slack" Modal form.',
+      },
       hooks: {
         validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
           const email = resolvedData[fieldKey];

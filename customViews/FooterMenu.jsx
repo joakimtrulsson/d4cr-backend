@@ -64,6 +64,8 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
 
   return (
     <FieldContainer style={{ display: 'flex', flexDirection: 'column' }}>
+      <FieldLabel>Footer Menu</FieldLabel>
+      <FieldDescription>{field.description}</FieldDescription>
       {data.map((link, linkIndex) => (
         <div
           key={link.id}

@@ -42,7 +42,14 @@ export const newsSchema = list({
     },
   },
   fields: {
-    title: text({ isIndexed: 'unique', validation: { isRequired: true } }),
+    title: text({
+      isIndexed: 'unique',
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is used to specify the title of the news, which appears at the top of the page, represents the name of the news and will also appear in the browser tab. Must be unique.',
+      },
+    }),
 
     slug: text({
       isIndexed: 'unique',
@@ -79,7 +86,8 @@ export const newsSchema = list({
       ref: 'NewsCategory.relatedNews',
       many: false,
       ui: {
-        description: 'Reference to a news category.',
+        description:
+          'This required field specifies the category assigned to the news. The news categories will be utilized in news sections, rendererd above the title on the news page and on the predefined page "/news" the user will be able to sort based on this category.',
       },
     }),
 
@@ -87,12 +95,15 @@ export const newsSchema = list({
       ref: 'Chapter',
       many: true,
       ui: {
-        description: 'Reference to chapters.',
+        description:
+          'This field allows the editor to associate a news article with a specific chapter. By selecting related chapters, the news article becomes linked to the corresponding chapter.',
       },
     }),
 
     image: json({
       ui: {
+        description:
+          'This required field specifies the image for the news article. It will be rendered at the top of the news page and also in the news card on the predefined page "/news". ',
         views: './customViews/ImageLibrary.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -111,16 +122,26 @@ export const newsSchema = list({
 
     ...group({
       label: 'Resources',
-      description: 'Select resources to be displayed in the resources section.',
+      description:
+        'Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.',
       fields: {
-        resourcesTitle: text({}),
-        resourcesPreamble: text({}),
+        resourcesTitle: text({
+          ui: {
+            description: 'This field specifies the title of the resources section.',
+          },
+        }),
+        resourcesPreamble: text({
+          ui: {
+            description: 'This field specifies the preamble of the resources section.',
+          },
+        }),
         resources: relationship({
           ref: 'Resource',
           many: true,
-          // ui: {
-          //   description: 'Select resources to be displayed in the resources section.',
-          // },
+          ui: {
+            description:
+              'Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen.',
+          },
         }),
       },
     }),
@@ -138,6 +159,8 @@ export const newsSchema = list({
       validation: { isRequired: true },
       defaultValue: 'draft',
       ui: {
+        description:
+          'This field determines the current status of the news. If set to "Draft," the news will not be available in the frontend application.',
         itemView: {
           fieldPosition: 'sidebar',
         },

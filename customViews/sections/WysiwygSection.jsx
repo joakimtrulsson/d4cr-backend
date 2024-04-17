@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields';
+import {
+  FieldContainer,
+  FieldLabel,
+  TextInput,
+  FieldDescription,
+} from '@keystone-ui/fields';
 
 import Editor from '../components/Editor/Editor.jsx';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
@@ -16,7 +21,7 @@ function WysiwygSection({
   sectionIndex,
   setSectionsData,
 }) {
-  const [value, setValue] = useState({ title: '' });
+  const [value, setValue] = useState({ sectionTitle: '' });
 
   useEffect(() => {
     if (!editData) {
@@ -85,12 +90,22 @@ function WysiwygSection({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>Title</FieldLabel>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <FieldDescription>
+          Unique identifier for this section, used in the sections list.
+        </FieldDescription>
+        <TextInput
+          autoFocus={autoFocus}
+          onChange={(event) => handleChange('sectionTitle', event.target.value)}
+          value={value.sectionTitle}
+          style={{ marginBottom: '2rem' }}
+        />
+        {/* <FieldLabel>Title</FieldLabel>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
-        />
+        /> */}
       </div>
 
       <div>

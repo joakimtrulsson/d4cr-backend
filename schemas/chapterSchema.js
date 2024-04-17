@@ -56,7 +56,13 @@ export const chapterSchema = list({
     },
   },
   fields: {
-    title: text({ validation: { isRequired: true } }),
+    title: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field specifies the title of the chapter, which is prominently displayed below the image and "D4CR PRESENTS" on the chapter page. Additionally, the word "Chapter" will be rendered along with the title on the chapters page and will also appear in the browser tab.',
+      },
+    }),
 
     slug: text({
       isIndexed: 'unique',
@@ -89,6 +95,11 @@ export const chapterSchema = list({
     }),
 
     preamble: document({
+      ui: {
+        description:
+          'This field is required and is used to specify a short introductory text of the chapter. This text appears below the title and before the main content.',
+      },
+      validation: { isRequired: true },
       links: true,
       formatting: {
         inlineMarks: {
@@ -103,6 +114,8 @@ export const chapterSchema = list({
 
     heroImage: json({
       ui: {
+        description:
+          'This required field specifies the hero image for the chapter, which will be prominently displayed above the title and the text "D4CR PRESENTS". The hero image serves as a visual centerpiece.',
         views: './customViews/ImageLibrary.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -119,6 +132,10 @@ export const chapterSchema = list({
     }),
 
     chapterLanguage: select({
+      ui: {
+        description:
+          'This required field specifies the language in which all text within the chapter is written. The selected language will be used not only for the content visible to users but also in the HTML for search engine optimization (SEO) and accessibility purposes.',
+      },
       type: 'string',
       defaultValue: 'EN-GB',
       options: languageCodesData,
@@ -128,7 +145,8 @@ export const chapterSchema = list({
       ref: 'Chapter',
       many: true,
       ui: {
-        description: 'Reference to the translated versions of this chapter.',
+        description:
+          'This required field allows for referencing the same chapter in another language. It enables the rendering of a button at the top of the chapters page, providing users with the option to navigate to the translated text.',
       },
     }),
 
@@ -140,6 +158,8 @@ export const chapterSchema = list({
       validation: { isRequired: true },
       defaultValue: 'draft',
       ui: {
+        description:
+          'This field determines the current status of the chapter. If set to "Draft," the chapter will not be available in the frontend application.',
         itemView: {
           fieldPosition: 'sidebar',
         },
@@ -199,6 +219,8 @@ export const chapterSchema = list({
       ref: 'User.chapters',
       many: true,
       ui: {
+        description:
+          'This field specifies the users who is the content owners of the chapter. The content owner is responsible for creating and maintaining the chapter content.',
         createView: {
           fieldMode: (args) => (permissions.canManageAllItems(args) ? 'edit' : 'hidden'),
         },

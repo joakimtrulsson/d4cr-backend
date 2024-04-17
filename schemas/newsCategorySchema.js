@@ -27,7 +27,14 @@ export const newsCategorySchema = list({
     },
   },
   fields: {
-    categoryTitle: text({ isIndexed: 'unique', validation: { isRequired: true } }),
+    categoryTitle: text({
+      isIndexed: 'unique',
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required and unique field specifies the title of the news category. It will be used to categorize news articles and allow users to filter news based on categories.',
+      },
+    }),
 
     createdAt: timestamp({
       isRequired: true,

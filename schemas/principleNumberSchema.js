@@ -25,13 +25,17 @@ export const principleNumberSchema = list({
     labelField: 'number',
   },
   fields: {
-    number: integer({ isIndexed: 'unique', validation: { isRequired: true } }),
+    number: integer({
+      isIndexed: 'unique',
+      validation: { isRequired: true },
+      ui: { description: 'The numbers available to be selected for the principles.' },
+    }),
 
     principles: relationship({
       ref: 'Principle.principleNumber',
       many: false,
       ui: {
-        description: 'Principle belonging to this number.',
+        description: 'Principles belonging to this number.',
       },
     }),
   },

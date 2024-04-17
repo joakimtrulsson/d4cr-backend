@@ -36,7 +36,13 @@ export const peopleSchema = list({
   fields: {
     fullName: text({ validation: { isRequired: true } }),
 
-    role: text({ validation: { isRequired: true } }),
+    role: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field specifies the role or position of the person, which will be rendered beneath the name on the Person Card. ',
+      },
+    }),
 
     city: text({ validation: { isRequired: true } }),
 
@@ -44,6 +50,7 @@ export const peopleSchema = list({
 
     image: json({
       ui: {
+        description: 'This field specifies the image of the person.',
         views: './customViews/ImageLibrary.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -61,6 +68,7 @@ export const peopleSchema = list({
     socialMediaIcon1: json({
       label: 'Socialmedia icon 1',
       ui: {
+        description: 'This field specifies the icon for the first social media link.',
         views: './customViews/IconPickerSection.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -78,6 +86,7 @@ export const peopleSchema = list({
     socialMediaIcon2: json({
       label: 'Socialmedia icon 2',
       ui: {
+        description: 'This field specifies the icon for the second social media link.',
         views: './customViews/IconPickerSection.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },

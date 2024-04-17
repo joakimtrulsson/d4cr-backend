@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields';
+import {
+  FieldContainer,
+  FieldLabel,
+  TextInput,
+  FieldDescription,
+} from '@keystone-ui/fields';
 
 import Editor from '../components/Editor/Editor.jsx';
 import PrinciplesForm from '../components/PrinciplesForm/PrinciplesForm.jsx';
@@ -169,7 +174,21 @@ function Principles({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <FieldDescription>
+          Unique identifier for this section, used in the sections list.
+        </FieldDescription>
+
+        <TextInput
+          autoFocus={autoFocus}
+          onChange={(event) => handleChange('sectionTitle', event.target.value)}
+          value={value.sectionTitle}
+          style={{ marginBottom: '2rem' }}
+        />
         <FieldLabel>Title</FieldLabel>
+        <FieldDescription>
+          This required field specifies the title text for the Principle section.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}
@@ -179,7 +198,9 @@ function Principles({
 
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
-
+        <FieldDescription>
+          This reqiured field specifies the preamble text of the Principle section.
+        </FieldDescription>
         <Editor
           onSetPreamble={setPreamble}
           editData={editData?.preamble}
