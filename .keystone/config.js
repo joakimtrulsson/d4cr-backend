@@ -1818,14 +1818,6 @@ var caseSchema = (0, import_core22.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    principles: (0, import_fields19.json)({
-      ui: {
-        views: "./customViews/Principles.jsx",
-        createView: { fieldMode: "edit" },
-        listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
-      }
-    }),
     ...(0, import_core23.group)({
       label: "Resources",
       description: "Select resources to be displayed in the resources section.",
