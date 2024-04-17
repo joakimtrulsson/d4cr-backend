@@ -130,6 +130,13 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
           key={group.id}
         >
           <FieldLabel>Group title</FieldLabel>
+          <FieldDescription style={{ marginBottom: '1rem' }}>
+            This field serves as the title for a dropdown group in the main navigation
+            menu. When the editor creates a group with multiple links, this title appears
+            as the heading of the dropdown menu. However, if there is only one link in the
+            group, the dropdown functionality is disabled, and the link is displayed
+            directly without a dropdown.
+          </FieldDescription>
           <FieldDescription>Group {index + 1}</FieldDescription>
           <TextInput
             style={{ marginBottom: '1.5rem' }}
@@ -143,7 +150,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
               <FieldLabel style={{ marginBottom: '0.2rem' }}>
                 Enter anchor text
               </FieldLabel>
-              <FieldDescription>Link {linkIndex + 1}</FieldDescription>
+              <FieldDescription>Anchor text {linkIndex + 1}</FieldDescription>
               <TextInput
                 style={{ marginBottom: '1rem' }}
                 placeholder='Anchor text'

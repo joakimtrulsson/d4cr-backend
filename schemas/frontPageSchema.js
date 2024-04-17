@@ -21,9 +21,20 @@ export const frontPageSchema = list({
   },
   isSingleton: true,
   fields: {
-    heroTitle: text({ validation: { isRequired: true } }),
+    heroTitle: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This is required and serves as the main title or headline displayed on the hero section of the front page.',
+      },
+    }),
 
     heroPreamble: document({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This is a required component of the frontpage layout. A brief introductory text that complements the heroTitle.',
+      },
       links: true,
       formatting: {
         inlineMarks: {
@@ -48,7 +59,8 @@ export const frontPageSchema = list({
     ctaOneAnchorText: text({
       label: 'Call to action 1',
       ui: {
-        description: 'Anchor text for the call to action button.',
+        description:
+          'This field represents the anchor text for the primary call-to-action button, displayed with an orange background.',
       },
     }),
 
@@ -64,7 +76,8 @@ export const frontPageSchema = list({
     ctaTwoUrlAnchorText: text({
       label: 'Call to action 2',
       ui: {
-        description: 'Anchor text for the call to action button.',
+        description:
+          'This field represents the anchor text for the secondary call-to-action button, displayed with an white background.',
       },
     }),
 

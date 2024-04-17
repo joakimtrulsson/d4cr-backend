@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FieldContainer, FieldLabel, TextInput, Select } from '@keystone-ui/fields';
+import {
+  FieldContainer,
+  FieldLabel,
+  TextInput,
+  Select,
+  FieldDescription,
+} from '@keystone-ui/fields';
 
 // import Wysiwyg from '../components/Wysiwyg/Wysiwyg';
 import Editor from '../components/Editor/Editor';
@@ -109,7 +115,22 @@ function BulletList({
           marginBottom: '1rem',
         }}
       >
-        <FieldLabel>Section title</FieldLabel>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <FieldDescription>
+          Unique identifier for this section, used in the sections list.
+        </FieldDescription>
+
+        <TextInput
+          autoFocus={autoFocus}
+          onChange={(event) => handleChange('sectionTitle', event.target.value)}
+          value={value.sectionTitle}
+          style={{ marginBottom: '2rem' }}
+        />
+
+        <FieldLabel>Title</FieldLabel>
+        <FieldDescription>
+          This reqiured field specifies the title text on the Large Bullet List section.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}
@@ -122,7 +143,11 @@ function BulletList({
           marginBottom: '1rem',
         }}
       >
-        <FieldLabel>Subheader</FieldLabel>
+        <FieldLabel>Preamble</FieldLabel>
+        <FieldDescription>
+          This required field specifies a brief description of the list, which will be
+          rendered below the title.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('subHeader', event.target.value)}
@@ -134,6 +159,11 @@ function BulletList({
         <FieldLabel style={{ paddingTop: '0.5rem', borderTop: '1px solid #e1e5e9' }}>
           List type
         </FieldLabel>
+        <FieldDescription>
+          This required field specifies the type of list. If Numbered List is selected, it
+          will be a numbered list. If Bulleted List is chosen, it will be a bulleted list
+          with arrow icons.
+        </FieldDescription>
         <Select
           value={listOptions.find((option) => option.value === value.listType)}
           options={listOptions}
@@ -145,6 +175,11 @@ function BulletList({
         return (
           <div key={index} style={{ marginBottom: '1rem', marginTop: '1rem' }}>
             <FieldLabel>{`Body Text ${index + 1}`}</FieldLabel>
+            <FieldDescription>
+              This required field represents the main body text content of the list item.
+              It allows for the addition of detailed information or description related to
+              the list item.
+            </FieldDescription>
 
             <Editor
               onSetPreamble={(preamble) => handleFieldChange(index, 'bodyText', preamble)}

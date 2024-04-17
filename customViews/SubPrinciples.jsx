@@ -41,7 +41,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   return (
     <FieldContainer>
       <FieldLabel>Subprinciples</FieldLabel>
-      <FieldDescription>Add subprinciples</FieldDescription>
+      {field.description && <FieldDescription>{field.description}</FieldDescription>}
 
       {values.map((subprinciple, index) => {
         return (

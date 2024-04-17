@@ -108,8 +108,10 @@ function Accordion({
           marginBottom: '2rem',
         }}
       >
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section title</FieldLabel>
-        <FieldDescription>Unique identifier for this section</FieldDescription>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <FieldDescription>
+          Unique identifier for this section, used in the sections list.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
@@ -117,6 +119,9 @@ function Accordion({
         />
 
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Accordion title</FieldLabel>
+        <FieldDescription>
+          This required field specifies the title of the accordion.
+        </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}
@@ -129,10 +134,11 @@ function Accordion({
           <FieldLabel
             style={{
               paddingTop: '1rem',
-
-              // borderTop: '1px solid #e1e5e9',
             }}
-          >{`Heading ${index + 1}`}</FieldLabel>
+          >{`Content title ${index + 1}`}</FieldLabel>
+          <FieldDescription>
+            This field specifies the contentTitle of the accordion.
+          </FieldDescription>
           <TextInput
             style={{ marginBottom: '1rem' }}
             autoFocus={autoFocus}
@@ -140,7 +146,9 @@ function Accordion({
             value={field.heading}
           />
           <FieldLabel>{`Body Text ${index + 1}`}</FieldLabel>
-
+          <FieldDescription>
+            This field specifies the text to the content title.
+          </FieldDescription>
           <Wysiwyg
             onSetPreamble={(preamble) => handleFieldChange(index, 'bodyText', preamble)}
             editData={field.bodyText}

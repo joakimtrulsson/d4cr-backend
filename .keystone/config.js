@@ -33,7 +33,7 @@ __export(keystone_exports, {
 });
 module.exports = __toCommonJS(keystone_exports);
 var import_dotenv = __toESM(require("dotenv"));
-var import_core29 = require("@keystone-6/core");
+var import_core28 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
 
 // schemas/userSchema.js
@@ -512,7 +512,12 @@ var chapterSchema = (0, import_core3.list)({
     }
   },
   fields: {
-    title: (0, import_fields3.text)({ validation: { isRequired: true } }),
+    title: (0, import_fields3.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: 'This required field specifies the title of the chapter, which is prominently displayed below the image and "D4CR PRESENTS" on the chapter page. Additionally, the word "Chapter" will be rendered along with the title on the chapters page and will also appear in the browser tab.'
+      }
+    }),
     slug: (0, import_fields3.text)({
       isIndexed: "unique",
       ui: {
@@ -536,6 +541,10 @@ var chapterSchema = (0, import_core3.list)({
       }
     }),
     preamble: (0, import_fields_document.document)({
+      ui: {
+        description: "This field is required and is used to specify a short introductory text of the chapter. This text appears below the title and before the main content."
+      },
+      validation: { isRequired: true },
       links: true,
       formatting: {
         inlineMarks: {
@@ -549,6 +558,7 @@ var chapterSchema = (0, import_core3.list)({
     }),
     heroImage: (0, import_fields3.json)({
       ui: {
+        description: 'This required field specifies the hero image for the chapter, which will be prominently displayed above the title and the text "D4CR PRESENTS". The hero image serves as a visual centerpiece.',
         views: "./customViews/ImageLibrary.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
@@ -564,6 +574,9 @@ var chapterSchema = (0, import_core3.list)({
       }
     }),
     chapterLanguage: (0, import_fields3.select)({
+      ui: {
+        description: "This required field specifies the language in which all text within the chapter is written. The selected language will be used not only for the content visible to users but also in the HTML for search engine optimization (SEO) and accessibility purposes."
+      },
       type: "string",
       defaultValue: "EN-GB",
       options: languageCodesData
@@ -572,7 +585,7 @@ var chapterSchema = (0, import_core3.list)({
       ref: "Chapter",
       many: true,
       ui: {
-        description: "Reference to the translated versions of this chapter."
+        description: "This required field allows for referencing the same chapter in another language. It enables the rendering of a button at the top of the chapters page, providing users with the option to navigate to the translated text."
       }
     }),
     status: (0, import_fields3.select)({
@@ -583,6 +596,7 @@ var chapterSchema = (0, import_core3.list)({
       validation: { isRequired: true },
       defaultValue: "draft",
       ui: {
+        description: 'This field determines the current status of the chapter. If set to "Draft," the chapter will not be available in the frontend application.',
         itemView: {
           fieldPosition: "sidebar"
         },
@@ -636,6 +650,7 @@ var chapterSchema = (0, import_core3.list)({
       ref: "User.chapters",
       many: true,
       ui: {
+        description: "This field specifies the users who is the content owners of the chapter. The content owner is responsible for creating and maintaining the chapter content.",
         createView: {
           fieldMode: (args) => permissions.canManageAllItems(args) ? "edit" : "hidden"
         },
@@ -744,7 +759,12 @@ var pageSchema = (0, import_core5.list)({
     }
   },
   fields: {
-    title: (0, import_fields4.text)({ validation: { isRequired: true } }),
+    title: (0, import_fields4.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field is used to specify the title of the page, which appears at the top of the page, represents the name of the page and will also appear in the browser tab."
+      }
+    }),
     slug: (0, import_fields4.text)({
       isIndexed: "unique",
       ui: {
@@ -768,6 +788,9 @@ var pageSchema = (0, import_core5.list)({
       }
     }),
     heroPreamble: (0, import_fields_document2.document)({
+      ui: {
+        description: "This is not required component of the page layout. A brief introductory text that complements the title."
+      },
       links: true,
       formatting: {
         inlineMarks: {
@@ -782,7 +805,7 @@ var pageSchema = (0, import_core5.list)({
     ctaOneAnchorText: (0, import_fields4.text)({
       label: "Call to action 1",
       ui: {
-        description: "Anchor text for the call to action button."
+        description: "This field is not required and represents the anchor text for the primary call-to-action button, displayed with an orange background."
       }
     }),
     ctaOneUrl: (0, import_fields4.json)({
@@ -796,7 +819,7 @@ var pageSchema = (0, import_core5.list)({
     ctaTwoUrlAnchorText: (0, import_fields4.text)({
       label: "Call to action 2",
       ui: {
-        description: "Anchor text for the call to action button."
+        description: "This field is not required and represents the anchor text for the secondary call-to-action button, displayed with an white background."
       }
     }),
     ctaTwoUrl: (0, import_fields4.json)({
@@ -815,6 +838,7 @@ var pageSchema = (0, import_core5.list)({
       validation: { isRequired: true },
       defaultValue: "draft",
       ui: {
+        description: 'This field determines the current status of the page. If set to "Draft," the page will not be available in the frontend application.',
         itemView: {
           fieldPosition: "sidebar"
         },
@@ -853,8 +877,17 @@ var frontPageSchema = (0, import_core6.list)({
   },
   isSingleton: true,
   fields: {
-    heroTitle: (0, import_fields5.text)({ validation: { isRequired: true } }),
+    heroTitle: (0, import_fields5.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This is required and serves as the main title or headline displayed on the hero section of the front page."
+      }
+    }),
     heroPreamble: (0, import_fields_document3.document)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This is a required component of the frontpage layout. A brief introductory text that complements the heroTitle."
+      },
       links: true,
       formatting: {
         inlineMarks: {
@@ -877,7 +910,7 @@ var frontPageSchema = (0, import_core6.list)({
     ctaOneAnchorText: (0, import_fields5.text)({
       label: "Call to action 1",
       ui: {
-        description: "Anchor text for the call to action button."
+        description: "This field represents the anchor text for the primary call-to-action button, displayed with an orange background."
       }
     }),
     ctaOneUrl: (0, import_fields5.json)({
@@ -891,7 +924,7 @@ var frontPageSchema = (0, import_core6.list)({
     ctaTwoUrlAnchorText: (0, import_fields5.text)({
       label: "Call to action 2",
       ui: {
-        description: "Anchor text for the call to action button."
+        description: "This field represents the anchor text for the secondary call-to-action button, displayed with an white background."
       }
     }),
     ctaTwoUrl: (0, import_fields5.json)({
@@ -934,9 +967,17 @@ var footerBannerSchema = (0, import_core7.list)({
   },
   isSingleton: true,
   fields: {
-    title: (0, import_fields6.text)({ validation: { isRequired: true } }),
+    title: (0, import_fields6.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field is used to specify the title of the footer banner, which appears at the just above of the footer."
+      }
+    }),
     preamble: (0, import_fields_document4.document)({
       validation: { isRequired: true },
+      ui: {
+        description: "This required field is used to specify the preamble of the footer banner."
+      },
       formatting: {
         inlineMarks: {
           bold: true,
@@ -980,6 +1021,9 @@ var formEmailSchema = (0, import_core8.list)({
   fields: {
     contactEmail: (0, import_fields7.text)({
       validation: { isRequired: true },
+      ui: {
+        description: 'This required field is utilized on the predefined page "/contact-us" to specify the email address to which the form submissions on that page should be sent.'
+      },
       hooks: {
         validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
           const email = resolvedData[fieldKey];
@@ -994,6 +1038,9 @@ var formEmailSchema = (0, import_core8.list)({
     }),
     shareStoryEmail: (0, import_fields7.text)({
       validation: { isRequired: true },
+      ui: {
+        description: 'This required field is used to define the email address that will receive submitted stories through the "Share Story" Modal form.'
+      },
       hooks: {
         validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
           const email = resolvedData[fieldKey];
@@ -1008,6 +1055,9 @@ var formEmailSchema = (0, import_core8.list)({
     }),
     joinSlackEmail: (0, import_fields7.text)({
       validation: { isRequired: true },
+      ui: {
+        description: 'This required field is used to define the email address that will receive submitted stories through the "Join our Slack" Modal form.'
+      },
       hooks: {
         validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
           const email = resolvedData[fieldKey];
@@ -1045,41 +1095,63 @@ var footerJoinUsSchema = (0, import_core9.list)({
   fields: {
     url1: (0, import_fields8.text)({
       validation: { isRequired: true },
-      label: "Social Media URL 1"
+      label: "Social Media URL 1",
+      ui: {
+        description: "This field is used to specify the URL of the social media 1."
+      }
     }),
     icon1: (0, import_fields8.json)({
       label: "Social Media Icon 1",
       ui: {
+        description: "This field specifies the icon that represents the button to the social media link 1.",
         views: "./customViews/IconPickerSection.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    url2: (0, import_fields8.text)({ validation: { isRequired: true }, label: "Social Media URL 2" }),
+    url2: (0, import_fields8.text)({
+      label: "Social Media URL 2",
+      ui: {
+        description: "This field is used to specify the URL of the social media 2."
+      }
+    }),
     icon2: (0, import_fields8.json)({
       label: "Social Media Icon 2",
       ui: {
+        description: "This field specifies the icon that represents the button to the social media link 2.",
         views: "./customViews/IconPickerSection.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    url3: (0, import_fields8.text)({ validation: { isRequired: true }, label: "Social Media URL 3" }),
+    url3: (0, import_fields8.text)({
+      label: "Social Media URL 3",
+      ui: {
+        description: "This field is used to specify the URL of the social media 3."
+      }
+    }),
     icon3: (0, import_fields8.json)({
       label: "Social Media Icon 3",
       ui: {
+        description: "This field specifies the icon that represents the button to the social media link 3.",
         views: "./customViews/IconPickerSection.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    url4: (0, import_fields8.text)({ validation: { isRequired: true }, label: "Social Media URL 4" }),
+    url4: (0, import_fields8.text)({
+      label: "Social Media URL 4",
+      ui: {
+        description: "This field is used to specify the URL of the social media 4."
+      }
+    }),
     icon4: (0, import_fields8.json)({
       label: "Social Media Icon 4",
       ui: {
+        description: "This field specifies the icon that represents the button to the social media link 4.",
         views: "./customViews/IconPickerSection.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
@@ -1119,8 +1191,9 @@ var mainMenuSchema = (0, import_core10.list)({
     }),
     ctaAnchorText: (0, import_fields9.text)({
       label: "Call to action",
+      validation: { isRequired: true },
       ui: {
-        description: "Anchor text for the call to action button."
+        description: "This required field represents the anchor text for the call-to-action button used in the top navigation bar."
       }
     }),
     ctaUrl: (0, import_fields9.json)({
@@ -1156,6 +1229,7 @@ var footerMenuSchema = (0, import_core11.list)({
   fields: {
     navigation: (0, import_fields10.json)({
       ui: {
+        description: "Add and remove, items in the footer menu, which is placed beneth the social media links.",
         views: "./customViews/FooterMenu.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
@@ -1205,7 +1279,13 @@ var newsSchema = (0, import_core12.list)({
     }
   },
   fields: {
-    title: (0, import_fields11.text)({ isIndexed: "unique", validation: { isRequired: true } }),
+    title: (0, import_fields11.text)({
+      isIndexed: "unique",
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field is used to specify the title of the news, which appears at the top of the page, represents the name of the news and will also appear in the browser tab. Must be unique."
+      }
+    }),
     slug: (0, import_fields11.text)({
       isIndexed: "unique",
       ui: {
@@ -1233,18 +1313,19 @@ var newsSchema = (0, import_core12.list)({
       ref: "NewsCategory.relatedNews",
       many: false,
       ui: {
-        description: "Reference to a news category."
+        description: 'This required field specifies the category assigned to the news. The news categories will be utilized in news sections, rendererd above the title on the news page and on the predefined page "/news" the user will be able to sort based on this category.'
       }
     }),
     relatedChapters: (0, import_fields11.relationship)({
       ref: "Chapter",
       many: true,
       ui: {
-        description: "Reference to chapters."
+        description: "This field allows the editor to associate a news article with a specific chapter. By selecting related chapters, the news article becomes linked to the corresponding chapter."
       }
     }),
     image: (0, import_fields11.json)({
       ui: {
+        description: 'This required field specifies the image for the news article. It will be rendered at the top of the news page and also in the news card on the predefined page "/news". ',
         views: "./customViews/ImageLibrary.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
@@ -1261,16 +1342,24 @@ var newsSchema = (0, import_core12.list)({
     }),
     ...(0, import_core13.group)({
       label: "Resources",
-      description: "Select resources to be displayed in the resources section.",
+      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.",
       fields: {
-        resourcesTitle: (0, import_fields11.text)({}),
-        resourcesPreamble: (0, import_fields11.text)({}),
+        resourcesTitle: (0, import_fields11.text)({
+          ui: {
+            description: "This field specifies the title of the resources section."
+          }
+        }),
+        resourcesPreamble: (0, import_fields11.text)({
+          ui: {
+            description: "This field specifies the preamble of the resources section."
+          }
+        }),
         resources: (0, import_fields11.relationship)({
           ref: "Resource",
-          many: true
-          // ui: {
-          //   description: 'Select resources to be displayed in the resources section.',
-          // },
+          many: true,
+          ui: {
+            description: "Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen."
+          }
         })
       }
     }),
@@ -1286,6 +1375,7 @@ var newsSchema = (0, import_core12.list)({
       validation: { isRequired: true },
       defaultValue: "draft",
       ui: {
+        description: 'This field determines the current status of the news. If set to "Draft," the news will not be available in the frontend application.',
         itemView: {
           fieldPosition: "sidebar"
         },
@@ -1322,7 +1412,13 @@ var newsCategorySchema = (0, import_core14.list)({
     }
   },
   fields: {
-    categoryTitle: (0, import_fields12.text)({ isIndexed: "unique", validation: { isRequired: true } }),
+    categoryTitle: (0, import_fields12.text)({
+      isIndexed: "unique",
+      validation: { isRequired: true },
+      ui: {
+        description: "This required and unique field specifies the title of the news category. It will be used to categorize news articles and allow users to filter news based on categories."
+      }
+    }),
     createdAt: (0, import_fields12.timestamp)({
       isRequired: true,
       defaultValue: { kind: "now" }
@@ -1364,22 +1460,26 @@ var resourceSchema = (0, import_core15.list)({
     }
   },
   fields: {
-    title: (0, import_fields13.text)({ isIndexed: "unique", validation: { isRequired: true } }),
-    url: (0, import_fields13.text)({ validation: { isRequired: true } }),
+    title: (0, import_fields13.text)({
+      isIndexed: "unique",
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field represents the title of the resource. It must be unique and serves as the primary identifier for the resource."
+      }
+    }),
+    url: (0, import_fields13.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: 'This required field specifies the URL for the resource. It will be displayed as a link on the predefined page "/resources".'
+      }
+    }),
     image: (0, import_fields13.json)({
       ui: {
+        description: 'This required field specifies the image for the resource. It will be rendered in the resource card on the predefined page "/resources". The image serves as a visual representation of the resource.',
         views: "./customViews/ImageLibrary.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
-      }
-    }),
-    category: (0, import_fields13.relationship)({
-      validation: { isRequired: true },
-      ref: "ResourceCategory.resources",
-      many: false,
-      ui: {
-        description: "Reference to a category."
       }
     }),
     resourceType: (0, import_fields13.relationship)({
@@ -1387,7 +1487,7 @@ var resourceSchema = (0, import_core15.list)({
       ref: "ResourceType.resources",
       many: false,
       ui: {
-        description: "Reference to a type."
+        description: 'This required field specifies the type of the resource. It will be rendered in the resource card on the predefined page "/resources" and allows visitors to filter resources based on their type. '
       }
     }),
     createdAt: (0, import_fields13.timestamp)({
@@ -1397,11 +1497,11 @@ var resourceSchema = (0, import_core15.list)({
   }
 });
 
-// schemas/resourceCategorySchema.js
+// schemas/resourceTypeSchema.js
 var import_core16 = require("@keystone-6/core");
 var import_fields14 = require("@keystone-6/core/fields");
 var import_access27 = require("@keystone-6/core/access");
-var resourceCategorySchema = (0, import_core16.list)({
+var resourceTypeSchema = (0, import_core16.list)({
   access: {
     operation: {
       ...(0, import_access27.allOperations)(isSignedIn),
@@ -1415,41 +1515,8 @@ var resourceCategorySchema = (0, import_core16.list)({
       delete: rules.canManageItems
     }
   },
-  fields: {
-    title: (0, import_fields14.text)({ isIndexed: "unique", validation: { isRequired: true } }),
-    createdAt: (0, import_fields14.timestamp)({
-      isRequired: true,
-      defaultValue: { kind: "now" }
-    }),
-    resources: (0, import_fields14.relationship)({
-      ref: "Resource.category",
-      many: true,
-      ui: {
-        description: "Resources belonging to this category."
-      }
-    })
-  }
-});
-
-// schemas/resourceTypeSchema.js
-var import_core17 = require("@keystone-6/core");
-var import_fields15 = require("@keystone-6/core/fields");
-var import_access29 = require("@keystone-6/core/access");
-var resourceTypeSchema = (0, import_core17.list)({
-  access: {
-    operation: {
-      ...(0, import_access29.allOperations)(isSignedIn),
-      create: permissions.canCreateItems,
-      query: () => true
-    },
-    filter: {
-      query: () => true,
-      // query: rules.canReadItems,
-      update: rules.canManageItems,
-      delete: rules.canManageItems
-    }
-  },
   ui: {
+    description: "This list is used to categorize resources based on their types.",
     labelField: "type",
     listView: {
       initialColumns: ["type", "icon"],
@@ -1458,18 +1525,24 @@ var resourceTypeSchema = (0, import_core17.list)({
     }
   },
   fields: {
-    type: (0, import_fields15.text)({ validation: { isRequired: true } }),
-    icon: (0, import_fields15.json)({
+    type: (0, import_fields14.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field specifies the type of resource. It will be used to categorize resources and allow users to filter resources based on types."
+      }
+    }),
+    icon: (0, import_fields14.json)({
       label: "Icon",
       validation: { isRequired: true },
       ui: {
+        description: "This required field specifies the icon that represents the type of resource.",
         views: "./customViews/IconPickerSection.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    resources: (0, import_fields15.relationship)({
+    resources: (0, import_fields14.relationship)({
       ref: "Resource.resourceType",
       many: true,
       ui: {
@@ -1480,14 +1553,14 @@ var resourceTypeSchema = (0, import_core17.list)({
 });
 
 // schemas/principleSchema.js
+var import_core17 = require("@keystone-6/core");
+var import_fields15 = require("@keystone-6/core/fields");
 var import_core18 = require("@keystone-6/core");
-var import_fields16 = require("@keystone-6/core/fields");
-var import_core19 = require("@keystone-6/core");
-var import_access31 = require("@keystone-6/core/access");
-var principleSchema = (0, import_core18.list)({
+var import_access29 = require("@keystone-6/core/access");
+var principleSchema = (0, import_core17.list)({
   access: {
     operation: {
-      ...(0, import_access31.allOperations)(isSignedIn),
+      ...(0, import_access29.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1515,8 +1588,13 @@ var principleSchema = (0, import_core18.list)({
     }
   },
   fields: {
-    title: (0, import_fields16.text)({ validation: { isRequired: true } }),
-    slug: (0, import_fields16.text)({
+    title: (0, import_fields15.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field is used to specify the title of the principle, which appears at the top of the principle page, represents the name of the principle and will also appear in the browser tab."
+      }
+    }),
+    slug: (0, import_fields15.text)({
       isIndexed: "unique",
       ui: {
         itemView: {
@@ -1568,62 +1646,88 @@ var principleSchema = (0, import_core18.list)({
         }
       }
     }),
-    subHeader: (0, import_fields16.text)({}),
-    quote: (0, import_fields16.text)({}),
-    quoteAuthor: (0, import_fields16.text)({}),
-    image: (0, import_fields16.json)({
+    subHeader: (0, import_fields15.text)({
+      validation: {
+        isRequired: true
+      },
       ui: {
+        description: "This required field is used to provide additional text that will be displayed beneath the title on the principle page as well as on principle sections."
+      }
+    }),
+    quote: (0, import_fields15.text)({
+      ui: {
+        description: "This field is utilized to display a quote that complements the title and subHeader at the top of the page."
+      }
+    }),
+    quoteAuthor: (0, import_fields15.text)({
+      ui: {
+        description: "This field specifies the source or author of the quote displayed alongside the title, subHeader, and quote on the principle page."
+      }
+    }),
+    image: (0, import_fields15.json)({
+      ui: {
+        description: "This field specifies the image that will be displayed beneath the quote on the page, as well as in Principle Sections. For optimal user experience, the image is recommended to have a transparent background.",
         views: "./customViews/ImageLibrary.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    subPrinciples: (0, import_fields16.json)({
+    subPrinciples: (0, import_fields15.json)({
       ui: {
+        description: "This required field specifies the sub-principles associated with the main principle. These sub-principles will be displayed beneath the fields mentioned above, rendered as a list where each sub-principle is accompanied by a arrow icon pointing to the text.",
         views: "./customViews/SubPrinciples.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    ...(0, import_core19.group)({
+    ...(0, import_core18.group)({
       label: "Resources",
-      description: "Select resources to be displayed in the resources section.",
+      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.",
       fields: {
-        resourcesTitle: (0, import_fields16.text)({}),
-        resourcesPreamble: (0, import_fields16.text)({}),
-        resources: (0, import_fields16.relationship)({
+        resourcesTitle: (0, import_fields15.text)({
+          ui: {
+            description: "This field specifies the title of the resources section."
+          }
+        }),
+        resourcesPreamble: (0, import_fields15.text)({
+          ui: {
+            description: "This field specifies the preamble of the resources section."
+          }
+        }),
+        resources: (0, import_fields15.relationship)({
           ref: "Resource",
-          many: true
-          // ui: {
-          //   description: 'Select resources to be displayed in the resources section.',
-          // },
+          many: true,
+          ui: {
+            description: "Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen."
+          }
         })
       }
     }),
-    ...(0, import_core19.group)({
+    ...(0, import_core18.group)({
       label: "Principle Taxonomy",
       description: "Select the principle category and number for this principle.",
       fields: {
-        principleCategory: (0, import_fields16.relationship)({
+        principleCategory: (0, import_fields15.relationship)({
           ref: "PrincipleCategory.principles",
-          many: true,
+          many: false,
+          validation: { isRequired: true },
           ui: {
-            description: "Reference to principle category."
+            description: "This required field specifies the category assigned to the principle. The principle categories will be utilized in principle sections to organize and list all principles accordingly. Principles will be sorted based on this category."
           }
         }),
-        principleNumber: (0, import_fields16.relationship)({
+        principleNumber: (0, import_fields15.relationship)({
           validation: { isRequired: true },
           ref: "PrincipleNumber.principles",
           many: false,
           ui: {
-            description: "Reference to principle number."
+            description: "This required field assigns a unique number to each principle. It will be utilized in generating the principles slug and will be displayed alongside the title on the page and in principle sections. This number ensures each principle is distinctly identified and facilitates organized navigation and referencing throughout the site."
           }
         })
       }
     }),
-    status: (0, import_fields16.select)({
+    status: (0, import_fields15.select)({
       options: [
         { label: "Published", value: "published" },
         { label: "Draft", value: "draft" }
@@ -1631,6 +1735,7 @@ var principleSchema = (0, import_core18.list)({
       validation: { isRequired: true },
       defaultValue: "draft",
       ui: {
+        description: 'This field determines the current status of the principle. If set to "Draft," the principle will not be available in the frontend application.',
         itemView: {
           fieldPosition: "sidebar"
         },
@@ -1641,13 +1746,13 @@ var principleSchema = (0, import_core18.list)({
 });
 
 // schemas/principleNumberSchema.js
-var import_core20 = require("@keystone-6/core");
-var import_fields17 = require("@keystone-6/core/fields");
-var import_access33 = require("@keystone-6/core/access");
-var principleNumberSchema = (0, import_core20.list)({
+var import_core19 = require("@keystone-6/core");
+var import_fields16 = require("@keystone-6/core/fields");
+var import_access31 = require("@keystone-6/core/access");
+var principleNumberSchema = (0, import_core19.list)({
   access: {
     operation: {
-      ...(0, import_access33.allOperations)(isSignedIn),
+      ...(0, import_access31.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1665,25 +1770,29 @@ var principleNumberSchema = (0, import_core20.list)({
     labelField: "number"
   },
   fields: {
-    number: (0, import_fields17.integer)({ isIndexed: "unique", validation: { isRequired: true } }),
-    principles: (0, import_fields17.relationship)({
+    number: (0, import_fields16.integer)({
+      isIndexed: "unique",
+      validation: { isRequired: true },
+      ui: { description: "The numbers available to be selected for the principles." }
+    }),
+    principles: (0, import_fields16.relationship)({
       ref: "Principle.principleNumber",
       many: false,
       ui: {
-        description: "Principle belonging to this number."
+        description: "Principles belonging to this number."
       }
     })
   }
 });
 
 // schemas/principleCategorySchema.js
-var import_core21 = require("@keystone-6/core");
-var import_fields18 = require("@keystone-6/core/fields");
-var import_access35 = require("@keystone-6/core/access");
-var principleCategorySchema = (0, import_core21.list)({
+var import_core20 = require("@keystone-6/core");
+var import_fields17 = require("@keystone-6/core/fields");
+var import_access33 = require("@keystone-6/core/access");
+var principleCategorySchema = (0, import_core20.list)({
   access: {
     operation: {
-      ...(0, import_access35.allOperations)(isSignedIn),
+      ...(0, import_access33.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1695,12 +1804,16 @@ var principleCategorySchema = (0, import_core21.list)({
     }
   },
   fields: {
-    title: (0, import_fields18.text)({ isIndexed: "unique", validation: { isRequired: true } }),
-    createdAt: (0, import_fields18.timestamp)({
+    title: (0, import_fields17.text)({
+      isIndexed: "unique",
+      validation: { isRequired: true },
+      ui: { description: "The categories available to be selected for the principles." }
+    }),
+    createdAt: (0, import_fields17.timestamp)({
       isRequired: true,
       defaultValue: { kind: "now" }
     }),
-    principles: (0, import_fields18.relationship)({
+    principles: (0, import_fields17.relationship)({
       ref: "Principle.principleCategory",
       many: true,
       ui: {
@@ -1711,15 +1824,15 @@ var principleCategorySchema = (0, import_core21.list)({
 });
 
 // schemas/caseSchema.js
+var import_core21 = require("@keystone-6/core");
+var import_fields18 = require("@keystone-6/core/fields");
 var import_core22 = require("@keystone-6/core");
-var import_fields19 = require("@keystone-6/core/fields");
-var import_core23 = require("@keystone-6/core");
 var import_fields_document5 = require("@keystone-6/fields-document");
-var import_access37 = require("@keystone-6/core/access");
-var caseSchema = (0, import_core22.list)({
+var import_access35 = require("@keystone-6/core/access");
+var caseSchema = (0, import_core21.list)({
   access: {
     operation: {
-      ...(0, import_access37.allOperations)(isSignedIn),
+      ...(0, import_access35.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1744,8 +1857,13 @@ var caseSchema = (0, import_core22.list)({
     }
   },
   fields: {
-    title: (0, import_fields19.text)({ validation: { isRequired: true } }),
-    linkType: (0, import_fields19.select)({
+    title: (0, import_fields18.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field is used to specify the title of the case, which appears at the top of the page, represents the name of the case and will also appear in the browser tab."
+      }
+    }),
+    linkType: (0, import_fields18.select)({
       isRequired: true,
       options: [
         { label: "Internal", value: "internal" },
@@ -1754,10 +1872,11 @@ var caseSchema = (0, import_core22.list)({
       ],
       defaultValue: "internal",
       ui: {
+        description: 'If "Internal" is selected, a separate page will be generated for the case. If "External" is selected, the case will only be rendered on the predefined "/cases" page with an external link. If "None" is selected, the case will also only be rendered on the predefined "/cases" page but without a link.',
         displayMode: "segmented-control"
       }
     }),
-    url: (0, import_fields19.text)({
+    url: (0, import_fields18.text)({
       ui: {
         itemView: {
           fieldPosition: "form"
@@ -1790,6 +1909,9 @@ var caseSchema = (0, import_core22.list)({
       }
     }),
     preamble: (0, import_fields_document5.document)({
+      ui: {
+        description: "This is not required component of the case layout. A brief introductory text that complements the title."
+      },
       links: true,
       formatting: {
         inlineMarks: {
@@ -1801,16 +1923,22 @@ var caseSchema = (0, import_core22.list)({
         softBreaks: true
       }
     }),
-    caseImage: (0, import_fields19.json)({
+    caseImage: (0, import_fields18.json)({
       ui: {
+        description: 'This required image will only be displayed on the predefined page "/cases". It is used to illustrate the case in a case card ',
         views: "./customViews/ImageLibrary.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    quote: (0, import_fields19.text)({}),
-    sections: (0, import_fields19.json)({
+    quote: (0, import_fields18.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: 'This required quote will only be rendered on the predefined page "/cases" and will serve as the descriptive text for the case.'
+      }
+    }),
+    sections: (0, import_fields18.json)({
       ui: {
         views: "./customViews/AllSections.jsx",
         createView: { fieldMode: "edit" },
@@ -1818,27 +1946,30 @@ var caseSchema = (0, import_core22.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    principles: (0, import_fields19.json)({
-      ui: {
-        views: "./customViews/Principles.jsx",
-        createView: { fieldMode: "edit" },
-        listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
-      }
-    }),
-    ...(0, import_core23.group)({
+    ...(0, import_core22.group)({
       label: "Resources",
-      description: "Select resources to be displayed in the resources section.",
+      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.",
       fields: {
-        resourcesTitle: (0, import_fields19.text)({}),
-        resourcesPreamble: (0, import_fields19.text)({}),
-        resources: (0, import_fields19.relationship)({
+        resourcesTitle: (0, import_fields18.text)({
+          ui: {
+            description: "This field specifies the title of the resources section."
+          }
+        }),
+        resourcesPreamble: (0, import_fields18.text)({
+          ui: {
+            description: "This field specifies the preamble of the resources section."
+          }
+        }),
+        resources: (0, import_fields18.relationship)({
           ref: "Resource",
-          many: true
+          many: true,
+          ui: {
+            description: "Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen."
+          }
         })
       }
     }),
-    status: (0, import_fields19.select)({
+    status: (0, import_fields18.select)({
       options: [
         { label: "Published", value: "published" },
         { label: "Draft", value: "draft" }
@@ -1846,13 +1977,14 @@ var caseSchema = (0, import_core22.list)({
       validation: { isRequired: true },
       defaultValue: "draft",
       ui: {
+        description: 'This field determines the current status of the case. If set to "Draft," the case will not be available in the frontend application.',
         itemView: {
           fieldPosition: "sidebar"
         },
         displayMode: "segmented-control"
       }
     }),
-    createdAt: (0, import_fields19.timestamp)({
+    createdAt: (0, import_fields18.timestamp)({
       isRequired: true,
       defaultValue: { kind: "now" },
       ui: {
@@ -1865,13 +1997,13 @@ var caseSchema = (0, import_core22.list)({
 });
 
 // schemas/peopleSchema.js
-var import_core24 = require("@keystone-6/core");
-var import_fields20 = require("@keystone-6/core/fields");
-var import_access39 = require("@keystone-6/core/access");
-var peopleSchema = (0, import_core24.list)({
+var import_core23 = require("@keystone-6/core");
+var import_fields19 = require("@keystone-6/core/fields");
+var import_access37 = require("@keystone-6/core/access");
+var peopleSchema = (0, import_core23.list)({
   access: {
     operation: {
-      ...(0, import_access39.allOperations)(isSignedIn),
+      ...(0, import_access37.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1897,49 +2029,57 @@ var peopleSchema = (0, import_core24.list)({
     }
   },
   fields: {
-    fullName: (0, import_fields20.text)({ validation: { isRequired: true } }),
-    role: (0, import_fields20.text)({ validation: { isRequired: true } }),
-    city: (0, import_fields20.text)({ validation: { isRequired: true } }),
-    country: (0, import_fields20.text)({ validation: { isRequired: true } }),
-    image: (0, import_fields20.json)({
+    fullName: (0, import_fields19.text)({ validation: { isRequired: true } }),
+    role: (0, import_fields19.text)({
+      validation: { isRequired: true },
       ui: {
+        description: "This required field specifies the role or position of the person, which will be rendered beneath the name on the Person Card. "
+      }
+    }),
+    city: (0, import_fields19.text)({ validation: { isRequired: true } }),
+    country: (0, import_fields19.text)({ validation: { isRequired: true } }),
+    image: (0, import_fields19.json)({
+      ui: {
+        description: "This field specifies the image of the person.",
         views: "./customViews/ImageLibrary.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    socialMediaUrl1: (0, import_fields20.text)({
+    socialMediaUrl1: (0, import_fields19.text)({
       label: "Socialmedia Link 1",
       ui: {
         description: "Url"
       }
     }),
-    socialMediaIcon1: (0, import_fields20.json)({
+    socialMediaIcon1: (0, import_fields19.json)({
       label: "Socialmedia icon 1",
       ui: {
+        description: "This field specifies the icon for the first social media link.",
         views: "./customViews/IconPickerSection.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    socialMediaUrl2: (0, import_fields20.text)({
+    socialMediaUrl2: (0, import_fields19.text)({
       label: "Socialmedia Link 2",
       ui: {
         description: "Url"
       }
     }),
-    socialMediaIcon2: (0, import_fields20.json)({
+    socialMediaIcon2: (0, import_fields19.json)({
       label: "Socialmedia icon 2",
       ui: {
+        description: "This field specifies the icon for the second social media link.",
         views: "./customViews/IconPickerSection.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
       }
     }),
-    createdAt: (0, import_fields20.timestamp)({
+    createdAt: (0, import_fields19.timestamp)({
       ui: {
         itemView: { fieldMode: "hidden" }
       },
@@ -1950,13 +2090,14 @@ var peopleSchema = (0, import_core24.list)({
 });
 
 // schemas/imageSchema.js
-var import_core25 = require("@keystone-6/core");
-var import_fields21 = require("@keystone-6/core/fields");
-var import_access41 = require("@keystone-6/core/access");
-var imageSchema = (0, import_core25.list)({
+var import_core24 = require("@keystone-6/core");
+var import_fields20 = require("@keystone-6/core/fields");
+var import_access39 = require("@keystone-6/core/access");
+var import_uuid = require("uuid");
+var imageSchema = (0, import_core24.list)({
   access: {
     operation: {
-      ...(0, import_access41.allOperations)(isSignedIn),
+      ...(0, import_access39.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1968,11 +2109,34 @@ var imageSchema = (0, import_core25.list)({
     }
   },
   fields: {
-    title: (0, import_fields21.text)(),
-    altText: (0, import_fields21.text)(),
-    file: (0, import_fields21.image)({ label: "Image", storage: "imageStorage" }),
-    createdAt: (0, import_fields21.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
-    size: (0, import_fields21.integer)({
+    title: (0, import_fields20.text)({
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === "create" && !inputData.title) {
+            return resolvedData.file.id;
+          }
+          if (operation === "update" && !resolvedData.title) {
+            return resolvedData.file.id;
+          }
+          return resolvedData.title;
+        }
+      },
+      ui: {
+        description: "This field specifies the title of the image, which is automatically generated from the uploaded image URL.",
+        itemView: {
+          fieldMode: "read"
+        }
+      }
+    }),
+    altText: (0, import_fields20.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field specifies the alternative text for the image. Alt text provides a textual description of the image, which is essential for accessibility and SEO purpose."
+      }
+    }),
+    file: (0, import_fields20.image)({ label: "Image", storage: "imageStorage" }),
+    createdAt: (0, import_fields20.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
+    size: (0, import_fields20.integer)({
       ui: {
         createView: {
           fieldMode: "hidden"
@@ -1989,7 +2153,7 @@ var imageSchema = (0, import_core25.list)({
         }
       }
     }),
-    url: (0, import_fields21.text)({
+    url: (0, import_fields20.text)({
       ui: {
         createView: {
           fieldMode: "hidden"
@@ -2011,13 +2175,13 @@ var imageSchema = (0, import_core25.list)({
 });
 
 // schemas/videoSchema.js
-var import_core26 = require("@keystone-6/core");
-var import_fields22 = require("@keystone-6/core/fields");
-var import_access43 = require("@keystone-6/core/access");
-var videoSchema = (0, import_core26.list)({
+var import_core25 = require("@keystone-6/core");
+var import_fields21 = require("@keystone-6/core/fields");
+var import_access41 = require("@keystone-6/core/access");
+var videoSchema = (0, import_core25.list)({
   access: {
     operation: {
-      ...(0, import_access43.allOperations)(isSignedIn),
+      ...(0, import_access41.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -2029,13 +2193,37 @@ var videoSchema = (0, import_core26.list)({
     }
   },
   fields: {
-    title: (0, import_fields22.text)(),
-    altText: (0, import_fields22.text)(),
-    file: (0, import_fields22.file)({
+    title: (0, import_fields21.text)({
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          console.log("resolvedData", resolvedData);
+          if (operation === "create" && !inputData.title) {
+            return resolvedData.file.filename;
+          }
+          if (operation === "update" && !resolvedData.title) {
+            return resolvedData.file.filename;
+          }
+          return resolvedData.title;
+        }
+      },
+      ui: {
+        description: "This field specifies the title of the video, which is automatically generated from the uploaded video URL.",
+        itemView: {
+          fieldMode: "read"
+        }
+      }
+    }),
+    altText: (0, import_fields21.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: "This required field specifies the alternative text for the video. Alt text provides a textual description of the video, which is essential for accessibility and SEO purpose."
+      }
+    }),
+    file: (0, import_fields21.file)({
       storage: "videoStorage"
     }),
-    createdAt: (0, import_fields22.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
-    size: (0, import_fields22.integer)({
+    createdAt: (0, import_fields21.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
+    size: (0, import_fields21.integer)({
       ui: {
         createView: {
           fieldMode: "hidden"
@@ -2052,8 +2240,8 @@ var videoSchema = (0, import_core26.list)({
         }
       }
     }),
-    thumbnailUrl: (0, import_fields22.text)({}),
-    url: (0, import_fields22.text)({
+    thumbnailUrl: (0, import_fields21.text)({}),
+    url: (0, import_fields21.text)({
       ui: {
         createView: {
           fieldMode: "hidden"
@@ -2075,15 +2263,15 @@ var videoSchema = (0, import_core26.list)({
 });
 
 // schemas/testSchema.js
+var import_core26 = require("@keystone-6/core");
+var import_fields22 = require("@keystone-6/core/fields");
 var import_core27 = require("@keystone-6/core");
-var import_fields23 = require("@keystone-6/core/fields");
-var import_core28 = require("@keystone-6/core");
-var import_access45 = require("@keystone-6/core/access");
+var import_access43 = require("@keystone-6/core/access");
 var import_fields_document6 = require("@keystone-6/fields-document");
-var testSchema = (0, import_core27.list)({
+var testSchema = (0, import_core26.list)({
   access: {
     operation: {
-      ...(0, import_access45.allOperations)(isSignedIn),
+      ...(0, import_access43.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -2095,22 +2283,22 @@ var testSchema = (0, import_core27.list)({
     }
   },
   fields: {
-    ...(0, import_core28.group)({
+    ...(0, import_core27.group)({
       label: "Group label",
       description: "Group description",
       fields: {
-        someFieldName: (0, import_fields23.text)({
+        someFieldName: (0, import_fields22.text)({
           /* ... */
         }),
-        anotherFieldName: (0, import_fields23.text)({})
+        anotherFieldName: (0, import_fields22.text)({})
         /* ... */
       }
     }),
-    ...(0, import_core28.group)({
+    ...(0, import_core27.group)({
       label: "Sections",
       description: "Sections description",
       fields: {
-        sections: (0, import_fields23.json)({
+        sections: (0, import_fields22.json)({
           ui: {
             views: "./customViews/AllSections.jsx",
             createView: { fieldMode: "edit" },
@@ -2203,7 +2391,7 @@ var lists = {
   News: newsSchema,
   NewsCategory: newsCategorySchema,
   Resource: resourceSchema,
-  ResourceCategory: resourceCategorySchema,
+  // ResourceCategory,
   ResourceType: resourceTypeSchema,
   Image: imageSchema,
   Video: videoSchema,
@@ -2491,7 +2679,7 @@ import_dotenv.default.config();
 var { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
 var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",");
 var keystone_default = withAuth(
-  (0, import_core29.config)({
+  (0, import_core28.config)({
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,

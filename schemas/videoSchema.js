@@ -19,9 +19,37 @@ export const videoSchema = list({
     },
   },
   fields: {
-    title: text(),
+    title: text({
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          console.log('resolvedData', resolvedData);
+          if (operation === 'create' && !inputData.title) {
+            return resolvedData.file.filename;
+          }
 
-    altText: text(),
+          if (operation === 'update' && !resolvedData.title) {
+            return resolvedData.file.filename;
+          }
+
+          return resolvedData.title;
+        },
+      },
+      ui: {
+        description:
+          'This field specifies the title of the video, which is automatically generated from the uploaded video URL.',
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
+
+    altText: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field specifies the alternative text for the video. Alt text provides a textual description of the video, which is essential for accessibility and SEO purpose.',
+      },
+    }),
 
     file: file({
       storage: 'videoStorage',

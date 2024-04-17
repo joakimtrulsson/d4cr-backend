@@ -1,6 +1,6 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
+import { FieldContainer, FieldDescription, FieldLabel } from '@keystone-ui/fields';
 import useFetchChapters from '../hooks/useFetchChapters.jsx';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 
@@ -21,9 +21,16 @@ function ChapterTeaser({ onCloseSection, onChange, sectionsData, setSectionsData
   }
 
   return (
-    <AddSectionButton handleSaveSection={handleSave}>
-      Add Chapter Teaser section
-    </AddSectionButton>
+    <FieldContainer>
+      <FieldLabel>Chapter Teaser</FieldLabel>
+      <FieldDescription style={{ marginBottom: '1rem' }}>
+        This will add a Chapter teaser section, featuring the chapters that exist at the
+        time of creation.
+      </FieldDescription>
+      <AddSectionButton handleSaveSection={handleSave}>
+        Add Chapter Teaser section
+      </AddSectionButton>
+    </FieldContainer>
   );
 }
 

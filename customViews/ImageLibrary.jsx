@@ -203,6 +203,11 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
+      {field.description && (
+        <FieldDescription style={{ marginBottom: '1rem' }}>
+          {field.description}
+        </FieldDescription>
+      )}
 
       <AddEntryButton style={{ marginBottom: '1rem' }} handleAdd={handleOpenMediaLibrary}>
         Open Image Library

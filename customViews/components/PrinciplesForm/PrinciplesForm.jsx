@@ -116,10 +116,10 @@ function PrinciplesForm({
     const allPrinciplesData = allPrinciples.principles;
 
     const categories = allPrinciplesData.reduce((acc, principle) => {
-      if (!acc[principle.principleCategory[0].title]) {
-        acc[principle.principleCategory[0].title] = [];
+      if (!acc[principle.principleCategory.title]) {
+        acc[principle.principleCategory.title] = [];
       }
-      acc[principle.principleCategory[0].title].push(principle);
+      acc[principle.principleCategory.title].push(principle);
       return acc;
     }, {});
 
@@ -179,9 +179,16 @@ function PrinciplesForm({
             value={selectedOptions || []}
           />
           {isAddAndResetVisible && groups.length === 1 ? (
-            <AddEntryButton style={{ marginTop: '1rem' }} handleAdd={addAllPriciples}>
-              Add all principles sorted by category
-            </AddEntryButton>
+            <>
+              <FieldDescription style={{ marginTop: '1rem' }}>
+                This button will add all principles to the selection, organizing and
+                rendering them according to their respective categories, with the group
+                title becoming the category.
+              </FieldDescription>
+              <AddEntryButton handleAdd={addAllPriciples}>
+                Add all principles sorted by category
+              </AddEntryButton>
+            </>
           ) : (
             groups.length === 1 && (
               <div

@@ -19,12 +19,23 @@ export const footerBannerSchema = list({
       delete: rules.canManageItems,
     },
   },
+
   isSingleton: true,
   fields: {
-    title: text({ validation: { isRequired: true } }),
+    title: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is used to specify the title of the footer banner, which appears at the just above of the footer.',
+      },
+    }),
 
     preamble: document({
       validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is used to specify the preamble of the footer banner.',
+      },
       formatting: {
         inlineMarks: {
           bold: true,

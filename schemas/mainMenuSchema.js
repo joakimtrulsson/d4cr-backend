@@ -31,8 +31,10 @@ export const mainMenuSchema = list({
 
     ctaAnchorText: text({
       label: 'Call to action',
+      validation: { isRequired: true },
       ui: {
-        description: 'Anchor text for the call to action button.',
+        description:
+          'This required field represents the anchor text for the call-to-action button used in the top navigation bar.',
       },
     }),
 

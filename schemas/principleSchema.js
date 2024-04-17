@@ -38,7 +38,13 @@ export const principleSchema = list({
     },
   },
   fields: {
-    title: text({ validation: { isRequired: true } }),
+    title: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field is used to specify the title of the principle, which appears at the top of the principle page, represents the name of the principle and will also appear in the browser tab.',
+      },
+    }),
 
     slug: text({
       isIndexed: 'unique',
@@ -100,14 +106,34 @@ export const principleSchema = list({
         },
       },
     }),
-    subHeader: text({}),
+    subHeader: text({
+      validation: {
+        isRequired: true,
+      },
+      ui: {
+        description:
+          'This required field is used to provide additional text that will be displayed beneath the title on the principle page as well as on principle sections.',
+      },
+    }),
 
-    quote: text({}),
+    quote: text({
+      ui: {
+        description:
+          'This field is utilized to display a quote that complements the title and subHeader at the top of the page.',
+      },
+    }),
 
-    quoteAuthor: text({}),
+    quoteAuthor: text({
+      ui: {
+        description:
+          'This field specifies the source or author of the quote displayed alongside the title, subHeader, and quote on the principle page.',
+      },
+    }),
 
     image: json({
       ui: {
+        description:
+          'This field specifies the image that will be displayed beneath the quote on the page, as well as in Principle Sections. For optimal user experience, the image is recommended to have a transparent background.',
         views: './customViews/ImageLibrary.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -117,6 +143,8 @@ export const principleSchema = list({
 
     subPrinciples: json({
       ui: {
+        description:
+          'This required field specifies the sub-principles associated with the main principle. These sub-principles will be displayed beneath the fields mentioned above, rendered as a list where each sub-principle is accompanied by a arrow icon pointing to the text.',
         views: './customViews/SubPrinciples.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -126,16 +154,26 @@ export const principleSchema = list({
 
     ...group({
       label: 'Resources',
-      description: 'Select resources to be displayed in the resources section.',
+      description:
+        'Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.',
       fields: {
-        resourcesTitle: text({}),
-        resourcesPreamble: text({}),
+        resourcesTitle: text({
+          ui: {
+            description: 'This field specifies the title of the resources section.',
+          },
+        }),
+        resourcesPreamble: text({
+          ui: {
+            description: 'This field specifies the preamble of the resources section.',
+          },
+        }),
         resources: relationship({
           ref: 'Resource',
           many: true,
-          // ui: {
-          //   description: 'Select resources to be displayed in the resources section.',
-          // },
+          ui: {
+            description:
+              'Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen.',
+          },
         }),
       },
     }),
@@ -146,9 +184,11 @@ export const principleSchema = list({
       fields: {
         principleCategory: relationship({
           ref: 'PrincipleCategory.principles',
-          many: true,
+          many: false,
+          validation: { isRequired: true },
           ui: {
-            description: 'Reference to principle category.',
+            description:
+              'This required field specifies the category assigned to the principle. The principle categories will be utilized in principle sections to organize and list all principles accordingly. Principles will be sorted based on this category.',
           },
         }),
 
@@ -157,7 +197,8 @@ export const principleSchema = list({
           ref: 'PrincipleNumber.principles',
           many: false,
           ui: {
-            description: 'Reference to principle number.',
+            description:
+              'This required field assigns a unique number to each principle. It will be utilized in generating the principles slug and will be displayed alongside the title on the page and in principle sections. This number ensures each principle is distinctly identified and facilitates organized navigation and referencing throughout the site.',
           },
         }),
       },
@@ -171,6 +212,8 @@ export const principleSchema = list({
       validation: { isRequired: true },
       defaultValue: 'draft',
       ui: {
+        description:
+          'This field determines the current status of the principle. If set to "Draft," the principle will not be available in the frontend application.',
         itemView: {
           fieldPosition: 'sidebar',
         },

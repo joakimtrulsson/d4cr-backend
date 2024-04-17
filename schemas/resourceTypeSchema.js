@@ -19,6 +19,7 @@ export const resourceTypeSchema = list({
     },
   },
   ui: {
+    description: 'This list is used to categorize resources based on their types.',
     labelField: 'type',
     listView: {
       initialColumns: ['type', 'icon'],
@@ -27,12 +28,20 @@ export const resourceTypeSchema = list({
     },
   },
   fields: {
-    type: text({ validation: { isRequired: true } }),
+    type: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field specifies the type of resource. It will be used to categorize resources and allow users to filter resources based on types.',
+      },
+    }),
 
     icon: json({
       label: 'Icon',
       validation: { isRequired: true },
       ui: {
+        description:
+          'This required field specifies the icon that represents the type of resource.',
         views: './customViews/IconPickerSection.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
