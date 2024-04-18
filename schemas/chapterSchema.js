@@ -194,7 +194,7 @@ export const chapterSchema = list({
               where: { relatedChapters: { some: { slug: { equals: item.slug } } } },
               orderBy: [{ createdAt: 'desc' }],
               query:
-                'id status createdAt newsCategory {categoryTitle} title slug image sections',
+                'id status createdAt newsCategory { categoryTitle } title slug image sections',
             });
 
             newsData.forEach((newsItem) => {

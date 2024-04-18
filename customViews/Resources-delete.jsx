@@ -9,7 +9,7 @@ import {
 } from '@keystone-ui/fields';
 
 import Wysiwyg from './components/Wysiwyg/Wysiwyg.jsx';
-import ResourcesForm from './components/ResourcesForm/ResourcesForm.jsx';
+import ResourcesForm from './components/ResourcesForm-delete/ResourcesForm.jsx';
 
 import RemoveEntryButton from './components/RemoveEntryButton/RemoveEntryButton.jsx';
 import AddEntryButton from './components/AddEntryButton/AddEntryButton.jsx';

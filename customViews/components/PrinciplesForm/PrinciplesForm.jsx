@@ -22,13 +22,13 @@ function PrinciplesForm({
 }) {
   const [options, setOptions] = useState([]);
   const { allPrinciples, loading, error } = useFetchPrinciples();
-  const [resourcesData, setResourcesData] = useState([]);
+  const [principlesData, setPrinciplesData] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [groupTitle, setGroupTitle] = useState('');
 
   const newId = uuidv4();
 
-  // När editData finns så sätts groupTitle och resourcesData
+  // När editData finns så sätts groupTitle och principlesData
   useEffect(() => {
     if (editData && editData.groupTitle === 'AllPrinciples') {
       setIsAddAndResetVisible(false);
@@ -44,7 +44,7 @@ function PrinciplesForm({
       );
     } else if (editData) {
       setGroupTitle(editData.groupTitle);
-      setResourcesData(editData.principles);
+      setPrinciplesData(editData.principles);
 
       const newSelectedOptions = editData.principles.map((resource) => ({
         value: resource.id,
@@ -76,22 +76,22 @@ function PrinciplesForm({
   // När grouptitle och resources finns så skickas det tillbaka till Resources.jsx
   useEffect(() => {
     // Här måste vi kontrollera om editData finns, då ska inte id uppdateras, dvs den ska bli samma som editData.id
-    if (editData && groupTitle && resourcesData.length > 0) {
+    if (editData && groupTitle && principlesData.length > 0) {
       const updatedItem = {
         id: editData.id,
         groupTitle: groupTitle,
-        principles: resourcesData,
+        principles: principlesData,
       };
       onUpdateItem(updatedItem);
-    } else if (!editData && groupTitle && resourcesData.length > 0) {
+    } else if (!editData && groupTitle && principlesData.length > 0) {
       const newItem = {
         id: newId,
         groupTitle: groupTitle,
-        principles: resourcesData,
+        principles: principlesData,
       };
       onAddNewItem(newItem);
     }
-  }, [groupTitle, resourcesData]);
+  }, [groupTitle, principlesData]);
 
   const addValuesToNewData = (key, value) => {
     if (key === 'selectedOptions') {
@@ -106,7 +106,7 @@ function PrinciplesForm({
         return principle;
       });
 
-      setResourcesData(allPrinciplesData);
+      setPrinciplesData(allPrinciplesData);
     } else if (key === 'groupTitle') {
       setGroupTitle(value);
     }
@@ -128,7 +128,7 @@ function PrinciplesForm({
       principles: categories[category],
     }));
 
-    setResourcesData(newPrinciplesData);
+    setPrinciplesData(newPrinciplesData);
     setSelectedOptions(
       allPrinciplesData.map((resource) => ({
         value: resource.id,
@@ -142,7 +142,7 @@ function PrinciplesForm({
   };
 
   const resetForm = () => {
-    setResourcesData([]);
+    setPrinciplesData([]);
     setSelectedOptions([]);
     setGroupTitle('');
     setIsAddAndResetVisible(true);

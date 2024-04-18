@@ -4,8 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { FieldContainer, FieldLabel, FieldDescription } from '@keystone-ui/fields';
 
-import Wysiwyg from './components/Wysiwyg/Wysiwyg';
-
+import Editor from './components/Editor/Editor';
 import AddEntryButton from './components/AddEntryButton/AddEntryButton';
 import RemoveEntryButton from './components/RemoveEntryButton/RemoveEntryButton';
 
@@ -47,7 +46,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
         return (
           <div key={subprinciple.id} style={{ marginBottom: '1rem', marginTop: '1rem' }}>
             <FieldLabel>{`Subprinciple ${index + 1}`}</FieldLabel>
-            <Wysiwyg
+            <Editor
               onSetPreamble={(value) => handleInputChange(index, value)}
               editData={values[index].text}
               extended={false}

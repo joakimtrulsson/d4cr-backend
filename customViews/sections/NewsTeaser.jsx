@@ -15,7 +15,9 @@ import AddSectionButton from '../components/AddSectionButton/AddSectionButton.js
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import useFetchChapters from '../hooks/useFetchChapters.jsx';
+import ValidationError from '../components/ValidationError/ValidationError';
 import useFetchCategories from '../hooks/useFetchCategories.jsx';
+import { useValidation } from '../hooks/useValidation';
 
 function NewsTeaser({
   onCloseSection,
@@ -45,6 +47,11 @@ function NewsTeaser({
   const { categories } = useFetchCategories();
   const [chaptersOptions, setChaptersOptions] = useState([]);
   const [categoriesOptions, setCategoriesOptions] = useState([]);
+  const { validateFields, errors, setErrors } = useValidation([
+    'sectionTitle',
+    'title',
+    'preamble',
+  ]);
 
   useEffect(() => {
     if (chapters) {
@@ -78,6 +85,10 @@ function NewsTeaser({
   }, [editData]);
 
   async function handleSave() {
+    if (!validateFields(value)) {
+      return;
+    }
+
     if (onChange) {
       const newId = uuidv4();
 
@@ -93,8 +104,10 @@ function NewsTeaser({
     }
   }
 
-  async function handleSaveUpdate(event) {
-    event.preventDefault();
+  async function handleSaveUpdate() {
+    if (!validateFields(value)) {
+      return;
+    }
 
     if (onChange) {
       const updatedSection = {
@@ -111,6 +124,9 @@ function NewsTeaser({
   }
 
   const handleChange = (key, inputValue) => {
+    // Rensa fältets felstatus
+    setErrors((prev) => prev.filter((error) => error !== key));
+
     setValue((prev) => ({
       ...prev,
       [key]: inputValue,
@@ -118,9 +134,10 @@ function NewsTeaser({
   };
 
   function setPreamble(preamble) {
+    setErrors((prev) => prev.filter((error) => error !== 'preamble'));
     setValue((prev) => ({
       ...prev,
-      subHeading: preamble,
+      preamble,
     }));
   }
 
@@ -155,8 +172,10 @@ function NewsTeaser({
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={value.sectionTitle}
-          style={{ marginBottom: '2rem' }}
         />
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
 
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
@@ -167,6 +186,7 @@ function NewsTeaser({
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
         />
+        {errors.includes('title') && <ValidationError field='Title' />}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -176,9 +196,10 @@ function NewsTeaser({
         </FieldDescription>
         <Editor
           onSetPreamble={setPreamble}
-          editData={editData?.subHeading}
+          editData={editData?.preamble}
           extended={false}
         />
+        {errors.includes('preamble') && <ValidationError field='Preamble text' />}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>

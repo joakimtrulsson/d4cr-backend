@@ -627,7 +627,7 @@ var chapterSchema = (0, import_core3.list)({
           const newsData = await context.query.News.findMany({
             where: { relatedChapters: { some: { slug: { equals: item.slug } } } },
             orderBy: [{ createdAt: "desc" }],
-            query: "id status createdAt newsCategory {categoryTitle} title slug image sections"
+            query: "id status createdAt newsCategory { categoryTitle } title slug image sections"
           });
           newsData.forEach((newsItem) => {
             if (typeof newsItem.createdAt === "string") {
@@ -1102,6 +1102,7 @@ var footerJoinUsSchema = (0, import_core9.list)({
     }),
     icon1: (0, import_fields8.json)({
       label: "Social Media Icon 1",
+      validation: { isRequired: true },
       ui: {
         description: "This field specifies the icon that represents the button to the social media link 1.",
         views: "./customViews/IconPickerSection.jsx",

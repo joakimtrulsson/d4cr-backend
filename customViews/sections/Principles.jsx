@@ -15,6 +15,8 @@ import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton
 import AddEntryButton from '../components/AddEntryButton/AddEntryButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
+import { useValidation } from '../hooks/useValidation';
+import ValidationError from '../components/ValidationError/ValidationError';
 
 function Principles({
   onCloseSection,
@@ -51,8 +53,17 @@ function Principles({
   });
   const [newItems, setNewItems] = useState([]);
   const [isAddAndResetVisible, setIsAddAndResetVisible] = useState(true);
+  const { validateFields, errors, setErrors } = useValidation([
+    'sectionTitle',
+    'title',
+    'preamble',
+  ]);
 
   async function handleSave() {
+    if (!validateFields({ ...value, groups })) {
+      return;
+    }
+
     if (onChange) {
       const newId = uuidv4();
 
@@ -88,6 +99,9 @@ function Principles({
   }
 
   const handleChange = (key, inputValue) => {
+    // Rensa fältets felstatus
+    setErrors((prev) => prev.filter((error) => error !== key));
+
     setValue((prev) => ({
       ...prev,
       [key]: inputValue,
@@ -95,6 +109,7 @@ function Principles({
   };
 
   function setPreamble(preamble) {
+    setErrors((prev) => prev.filter((error) => error !== 'preamble'));
     setValue((prev) => ({
       ...prev,
       preamble: preamble,
@@ -183,8 +198,11 @@ function Principles({
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={value.sectionTitle}
-          style={{ marginBottom: '2rem' }}
         />
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
+
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
           This required field specifies the title text for the Principle section.
@@ -194,6 +212,7 @@ function Principles({
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
         />
+        {errors.includes('title') && <ValidationError field='Title' />}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -206,6 +225,7 @@ function Principles({
           editData={editData?.preamble}
           extended={false}
         />
+        {errors.includes('preamble') && <ValidationError field='Preamble' />}
       </div>
 
       <div>

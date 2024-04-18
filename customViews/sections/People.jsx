@@ -11,7 +11,8 @@ import AddSectionButton from '../components/AddSectionButton/AddSectionButton.js
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import Editor from '../components/Editor/Editor';
-
+import ValidationError from '../components/ValidationError/ValidationError';
+import { useValidation } from '../hooks/useValidation';
 import useFetchPeopleList from '../hooks/useFetchPeopleList.jsx';
 
 function People({
@@ -26,6 +27,12 @@ function People({
   const [value, setValue] = useState('');
   const [selectedOptions, setSelectedOptions] = useState([]);
   const { peopleList } = useFetchPeopleList();
+  const { validateFields, errors, setErrors } = useValidation([
+    'sectionTitle',
+    'title',
+    'preamble',
+    'people',
+  ]);
 
   useEffect(() => {
     if (!editData) {
@@ -67,6 +74,10 @@ function People({
   }, [selectedOptions]);
 
   function handleSave() {
+    if (!validateFields(value)) {
+      return;
+    }
+
     if (onChange) {
       const newItem = {
         sectionType: 'PEOPLE',
@@ -82,8 +93,10 @@ function People({
     }
   }
 
-  async function handleSaveUpdate(event) {
-    event.preventDefault();
+  async function handleSaveUpdate() {
+    if (!validateFields(value)) {
+      return;
+    }
 
     if (onChange) {
       const updatedSection = {
@@ -100,6 +113,7 @@ function People({
   }
 
   function setPreamble(preamble) {
+    setErrors((prev) => prev.filter((error) => error !== 'preamble'));
     setValue((prev) => ({
       ...prev,
       preamble,
@@ -107,6 +121,8 @@ function People({
   }
 
   const handleChange = (key, inputValue) => {
+    // Rensa fältets felstatus
+    setErrors((prev) => prev.filter((error) => error !== key));
     setValue((prev) => ({
       ...prev,
       [key]: inputValue,
@@ -130,8 +146,10 @@ function People({
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={value.sectionTitle}
-          style={{ marginBottom: '2rem' }}
         />
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
 
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
@@ -144,6 +162,7 @@ function People({
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
         />
+        {errors.includes('title') && <ValidationError field='Title' />}
       </div>
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
@@ -155,6 +174,7 @@ function People({
           editData={editData?.preamble}
           extended={false}
         />
+        {errors.includes('preamble') && <ValidationError field='Preamble' />}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -173,6 +193,7 @@ function People({
             value={selectedOptions}
           />
         )}
+        {errors.includes('people') && <ValidationError field='People' />}
       </div>
 
       <div style={{ borderTop: '1px solid #e1e5e9', paddingTop: '1rem' }}>

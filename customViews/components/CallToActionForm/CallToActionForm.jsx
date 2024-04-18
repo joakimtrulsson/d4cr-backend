@@ -30,7 +30,7 @@ const CallToActionForm = ({
       />
       <FieldDescription style={{ marginTop: '1rem' }}>Or External Url:</FieldDescription>
       <TextInput
-        style={{ marginBottom: '1rem' }}
+        // style={{ marginBottom: '1rem' }}
         autoFocus={autoFocus}
         onChange={(event) => onChange('url', event.target.value, ctaIdentifier)}
         value={url}
