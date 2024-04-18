@@ -18,6 +18,7 @@ import ImageLibrary from '../components/ImageLibrary/ImageLibrary.jsx';
 import ValidationError from '../components/ValidationError/ValidationError';
 import { useValidation } from '../hooks/useValidation';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
 
 function MediaText({
   onCloseSection,
@@ -193,6 +194,9 @@ function MediaText({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>
+          Media with Text - <ImageTooltip type='MEDIATEXT' />
+        </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.

@@ -10,7 +10,7 @@ function SelectSections({ activeSection, onChangeActiveSections, options }) {
         borderBottom: '1px solid #e1e5e9',
       }}
     >
-      <FieldDescription>Select section to add</FieldDescription>
+      <FieldDescription>Select section to add this page</FieldDescription>
       <Select
         onChange={onChangeActiveSections}
         value={options.find((option) => option.value === activeSection)}

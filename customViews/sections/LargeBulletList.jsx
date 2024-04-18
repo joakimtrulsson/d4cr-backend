@@ -17,6 +17,7 @@ import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSection
 import CancelButton from '../components/CancelButton/CancelButton';
 import { useValidation } from '../hooks/useValidation';
 import ValidationError from '../components/ValidationError/ValidationError';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip';
 
 const listOptions = [
   { value: 'ORDERED', label: 'Numbered List' },
@@ -130,6 +131,9 @@ function BulletList({
           marginBottom: '1rem',
         }}
       >
+        <FieldLabel>
+          Large bullet list - <ImageTooltip type='LARGEBULLETLIST' />
+        </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.

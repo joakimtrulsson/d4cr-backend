@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-
+import { Tooltip } from '@keystone-ui/tooltip';
 import { Button } from '@keystone-ui/button';
 import { MinusCircleIcon, EditIcon, MoveIcon } from '@keystone-ui/icons';
 
@@ -13,6 +13,7 @@ function StoredSections({
   onDelete,
   onChange,
   setSectionsData,
+  activeSection,
 }) {
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -51,7 +52,7 @@ function StoredSections({
                       <div>
                         {index + 1}.
                         {section.sectionType === 'CHAPTERTEASER'
-                          ? 'Chapter Teaser'
+                          ? ' Chapter Teaser'
                           : section.sectionType === 'STEERINGGROUP'
                           ? 'Steering Group'
                           : ` ${section.sectionType} - ${
@@ -87,21 +88,47 @@ function StoredSections({
                             }}
                           />
                         </div>
-
-                        <Button
-                          size='small'
-                          className={styles.list.optionButton}
-                          onClick={() => onEditSection(section.id)}
-                        >
-                          <EditIcon size='small' color='blue' />
-                        </Button>
-                        <Button
+                        <Tooltip content='Edit section' weight='subtle' placement='top'>
+                          {(tooltipProps) => (
+                            <div {...tooltipProps}>
+                              <Button
+                                size='small'
+                                className={styles.list.optionButton}
+                                onClick={() => onEditSection(section.id)}
+                              >
+                                <EditIcon size='small' color='blue' />
+                              </Button>
+                            </div>
+                          )}
+                        </Tooltip>
+                        {/* <Button
                           onClick={() => onDelete(section.id)}
                           size='small'
                           className={styles.list.optionButton}
+                          disabled={activeSection !== 'Select'}
+                          tone='negative'
                         >
                           <MinusCircleIcon size='small' color='red' />
-                        </Button>
+                        </Button> */}
+                        <Tooltip
+                          content='Delete is disabled when a section is open'
+                          weight='subtle'
+                          placement='top'
+                        >
+                          {(tooltipProps) => (
+                            <div {...tooltipProps}>
+                              <Button
+                                onClick={() => onDelete(section.id, section.sectionTitle)}
+                                size='small'
+                                className={styles.list.optionButton}
+                                disabled={activeSection !== 'Select'}
+                                tone='negative'
+                              >
+                                <MinusCircleIcon size='small' color='red' />
+                              </Button>
+                            </div>
+                          )}
+                        </Tooltip>
                       </div>
                     )}
                   </li>

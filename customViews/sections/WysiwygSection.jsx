@@ -13,6 +13,7 @@ import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSection
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import ValidationError from '../components/ValidationError/ValidationError';
 import { useValidation } from '../hooks/useValidation';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
 
 function WysiwygSection({
   onCloseSection,
@@ -97,6 +98,9 @@ function WysiwygSection({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>
+          WYSIWYG - <ImageTooltip type='WYSIWYG' />
+        </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.

@@ -57,6 +57,7 @@ public/*
 !public/images/
 public/images/*
 !public/images/logo/
+!public/images/sections/
 todo.md
 policy.json
 

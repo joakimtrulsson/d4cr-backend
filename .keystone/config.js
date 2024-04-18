@@ -2297,7 +2297,7 @@ var testSchema = (0, import_core26.list)({
     }),
     ...(0, import_core27.group)({
       label: "Sections",
-      description: "Sections description",
+      // description: 'Sections description',
       fields: {
         sections: (0, import_fields22.json)({
           ui: {

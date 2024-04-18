@@ -18,6 +18,7 @@ import useFetchChapters from '../hooks/useFetchChapters.jsx';
 import ValidationError from '../components/ValidationError/ValidationError';
 import useFetchCategories from '../hooks/useFetchCategories.jsx';
 import { useValidation } from '../hooks/useValidation';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
 
 function NewsTeaser({
   onCloseSection,
@@ -164,6 +165,9 @@ function NewsTeaser({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>
+          News Teaser - <ImageTooltip type='NEWSTEASER' />
+        </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.

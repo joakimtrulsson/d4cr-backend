@@ -14,9 +14,10 @@ import CallToActionForm from '../components/CallToActionForm/CallToActionForm.js
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
+import ValidationError from '../components/ValidationError/ValidationError';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
 import { useValidation } from '../hooks/useValidation';
-import ValidationError from '../components/ValidationError/ValidationError';
 
 function Banner({
   onCloseSection,
@@ -159,6 +160,9 @@ function Banner({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>
+          Banner - <ImageTooltip type='BANNER' />
+        </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.

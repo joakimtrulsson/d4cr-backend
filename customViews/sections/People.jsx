@@ -14,6 +14,7 @@ import Editor from '../components/Editor/Editor';
 import ValidationError from '../components/ValidationError/ValidationError';
 import { useValidation } from '../hooks/useValidation';
 import useFetchPeopleList from '../hooks/useFetchPeopleList.jsx';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
 
 function People({
   onCloseSection,
@@ -138,6 +139,9 @@ function People({
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>
+          People - <ImageTooltip type='PEOPLE' />
+        </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.

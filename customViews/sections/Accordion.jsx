@@ -16,6 +16,7 @@ import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSection
 import CancelButton from '../components/CancelButton/CancelButton';
 import ValidationError from '../components/ValidationError/ValidationError';
 import { useValidation } from '../hooks/useValidation';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip';
 
 function Accordion({
   onCloseSection,
@@ -114,7 +115,8 @@ function Accordion({
       fields: prev.fields.filter((_, index) => index !== indexToRemove),
     }));
   };
-
+  // const loc = window.location;
+  // const IMAGE_URL = `${loc.protocol}//${loc.host}/public/images/sections/accordion.png`;
   return (
     <FieldContainer>
       <div
@@ -122,6 +124,9 @@ function Accordion({
           marginBottom: '2rem',
         }}
       >
+        <FieldLabel style={{ paddingTop: '0.5rem' }}>
+          Accordion - <ImageTooltip type='ACCORDION' />
+        </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.

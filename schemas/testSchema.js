@@ -35,7 +35,7 @@ export const testSchema = list({
 
     ...group({
       label: 'Sections',
-      description: 'Sections description',
+      // description: 'Sections description',
       fields: {
         sections: json({
           ui: {

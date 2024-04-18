@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { FieldContainer, FieldLabel, FieldDescription } from '@keystone-ui/fields';
+import { AlertDialog } from '@keystone-ui/modals';
 
 import { options } from './utils/constants';
 
@@ -37,7 +38,12 @@ import StoredSections from './components/StoredSections/StoredSections';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [sectionsData, setSectionsData] = useState(value ? JSON.parse(value) : []);
-  const [activeSection, setActiveSection] = useState('');
+  const [activeSection, setActiveSection] = useState('Select');
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [sectionToDelete, setSectionToDelete] = React.useState({
+    sectionId: '',
+    sectionTitle: '',
+  });
 
   const [editFormData, setEditFormData] = useState();
 
@@ -58,13 +64,35 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
     setActiveSection(sectionToEditData.sectionType);
   };
 
-  const handleDeleteSection = async (sectionId) => {
+  const handleOpenDeleteModal = async (sectionId, sectionTitle) => {
+    setSectionToDelete({ sectionId, sectionTitle });
+    setIsOpen(true);
+
+    // if (onChange) {
+    //   const updatedSectionsData = sectionsData.filter((item) => item.id !== sectionId);
+
+    //   setSectionsData(() => [...updatedSectionsData]);
+    //   onChange(JSON.stringify(updatedSectionsData));
+    // }
+    // handleCloseSection();
+  };
+
+  const handleDelete = () => {
+    // Delete the post here
     if (onChange) {
-      const updatedSectionsData = sectionsData.filter((item) => item.id !== sectionId);
+      const updatedSectionsData = sectionsData.filter(
+        (item) => item.id !== sectionToDelete.sectionId
+      );
 
       setSectionsData(() => [...updatedSectionsData]);
       onChange(JSON.stringify(updatedSectionsData));
     }
+    handleCloseSection();
+    setIsOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
   };
 
   const handleCloseSection = () => {
@@ -110,9 +138,11 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
         return null;
       })}
 
-      <FieldLabel style={{ marginTop: '1rem', marginBottom: '-1rem' }}>
-        Stored Sections
-      </FieldLabel>
+      <FieldLabel style={{ marginTop: '2rem' }}>Stored Sections</FieldLabel>
+      <FieldDescription style={{ marginTop: '0rem', marginBottom: '-1rem' }}>
+        Sections stored in this field will be displayed in the order they are listed.
+        Click and drag to reorder.
+      </FieldDescription>
       {sectionsData.length === 0 ? (
         <FieldDescription>
           <p>No sections stored</p>
@@ -122,10 +152,28 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
           sectionsData={sectionsData}
           setSectionsData={setSectionsData}
           onEditSection={handleEditSection}
-          onDelete={handleDeleteSection}
+          onDelete={handleOpenDeleteModal}
           onChange={onChange}
+          activeSection={activeSection}
         />
       )}
+      <AlertDialog
+        isOpen={isOpen}
+        title='Confirm Delete'
+        actions={{
+          confirm: {
+            action: handleDelete,
+            label: 'Delete',
+            loading: false,
+          },
+          cancel: {
+            action: handleCancel,
+            label: 'Cancel',
+          },
+        }}
+      >
+        Are you sure you want to delete {sectionToDelete.sectionTitle}?
+      </AlertDialog>
     </FieldContainer>
   );
 };
