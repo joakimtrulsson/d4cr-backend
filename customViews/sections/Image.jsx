@@ -11,8 +11,9 @@ import {
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
-
 import ImageLibrary from '../components/ImageLibrary/ImageLibrary.jsx';
+import ValidationError from '../components/ValidationError/ValidationError';
+import { useValidation } from '../hooks/useValidation';
 
 function Image({
   onCloseSection,
@@ -25,23 +26,33 @@ function Image({
 }) {
   const [title, setTitle] = useState();
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const { validateFields, errors, setErrors } = useValidation(['sectionTitle', 'images']);
 
   useEffect(() => {
     if (!editData) {
       return;
     }
-    setTitle(editData.title);
+    setTitle(editData.sectionTitle);
     setSelectedFiles(editData.images);
   }, [editData]);
 
   async function handleSave() {
+    const fieldsToValidate = {
+      sectionTitle: title,
+      images: selectedFiles,
+    };
+
+    if (!validateFields(fieldsToValidate)) {
+      return;
+    }
+
     if (onChange) {
       const newId = uuidv4();
 
       const newItem = {
         sectionType: 'IMAGE',
         id: newId,
-        title,
+        sectionTitle: title,
         images: selectedFiles,
       };
 
@@ -51,14 +62,21 @@ function Image({
     }
   }
 
-  async function handleSaveUpdate(event) {
-    event.preventDefault();
+  async function handleSaveUpdate() {
+    const fieldsToValidate = {
+      sectionTitle: title,
+      images: selectedFiles,
+    };
+
+    if (!validateFields(fieldsToValidate)) {
+      return;
+    }
 
     if (onChange) {
       const updatedSection = {
         sectionType: 'IMAGE',
         id: editData.id,
-        title,
+        sectionTitle: title,
         images: selectedFiles,
       };
 
@@ -71,6 +89,7 @@ function Image({
 
   const handleChange = (key, inputValue) => {
     setTitle(inputValue);
+    setErrors((prev) => prev.filter((error) => error !== key));
   };
 
   return (
@@ -85,6 +104,10 @@ function Image({
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={title}
         />
+
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
       </div>
 
       <ImageLibrary
@@ -92,6 +115,7 @@ function Image({
         setSelectedFile={setSelectedFiles}
         isMultiSelect={true}
       />
+      {errors.includes('images') && <ValidationError field='Images' />}
 
       <div style={{ paddingTop: '1rem', borderTop: '1px solid #e1e5e9' }}>
         {editData ? (

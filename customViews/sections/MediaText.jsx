@@ -14,9 +14,9 @@ import CallToActionForm from '../components/CallToActionForm/CallToActionForm.js
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
-
 import ImageLibrary from '../components/ImageLibrary/ImageLibrary.jsx';
-
+import ValidationError from '../components/ValidationError/ValidationError';
+import { useValidation } from '../hooks/useValidation';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
 
 function MediaText({
@@ -33,6 +33,16 @@ function MediaText({
   const pagesOptions = useFetchLinkOptions();
   const [pageOneValue, setPageOneValue] = useState('');
   const [pageTwoValue, setPageTwoValue] = useState('');
+  const { validateFields, errors, setErrors } = useValidation([
+    'sectionTitle',
+    'title',
+    'subHeading',
+    'backgroundColor',
+    'border',
+    'image',
+    'imagePosition',
+    'preamble',
+  ]);
 
   const [colorOptions] = useState([
     { value: 'ORANGE', label: 'Orange' },
@@ -76,6 +86,19 @@ function MediaText({
   }, [editData]);
 
   async function handleSave() {
+    // if (!validateFields(value)) {
+    //   return;
+    // }
+
+    const fieldsToValidate = {
+      ...value,
+      image: selectedFile,
+    };
+
+    if (!validateFields(fieldsToValidate)) {
+      return;
+    }
+
     if (onChange) {
       const newId = uuidv4();
 
@@ -100,8 +123,15 @@ function MediaText({
     }
   }
 
-  async function handleSaveUpdate(event) {
-    event.preventDefault();
+  async function handleSaveUpdate() {
+    const fieldsToValidate = {
+      ...value,
+      image: selectedFile,
+    };
+
+    if (!validateFields(fieldsToValidate)) {
+      return;
+    }
 
     if (onChange) {
       const updatedSection = {
@@ -127,6 +157,7 @@ function MediaText({
   }
 
   function setPreamble(preamble) {
+    setErrors((prev) => prev.filter((error) => error !== 'preamble'));
     setValue((prev) => ({
       ...prev,
       preamble,
@@ -134,6 +165,9 @@ function MediaText({
   }
 
   const handleChange = (key, inputValue, ctaIdentifier) => {
+    // Rensa fältets felstatus
+    setErrors((prev) => prev.filter((error) => error !== key));
+
     if (ctaIdentifier === 1) {
       // Update values for the first CTA
       setPageOneValue(inputValue);
@@ -167,8 +201,10 @@ function MediaText({
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={value.sectionTitle}
-          style={{ marginBottom: '2rem' }}
         />
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
 
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
@@ -179,6 +215,7 @@ function MediaText({
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
         />
+        {errors.includes('title') && <ValidationError field='Title' />}
       </div>
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Subheading</FieldLabel>
@@ -191,6 +228,7 @@ function MediaText({
           onChange={(event) => handleChange('subHeading', event.target.value)}
           value={value.subHeading}
         />
+        {errors.includes('subHeading') && <ValidationError field='Subheading' />}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -202,6 +240,9 @@ function MediaText({
             handleChange('backgroundColor', selectedOption.value)
           }
         />
+        {errors.includes('backgroundColor') && (
+          <ValidationError field='Background color' />
+        )}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -219,6 +260,7 @@ function MediaText({
           options={borderOptions}
           onChange={(selectedOption) => handleChange('border', selectedOption.value)}
         />
+        {errors.includes('border') && <ValidationError field='Border' />}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -231,6 +273,7 @@ function MediaText({
             handleChange('imagePosition', selectedOption.value)
           }
         />
+        {errors.includes('imagePosition') && <ValidationError field='Image position' />}
       </div>
 
       <div
@@ -247,6 +290,7 @@ function MediaText({
           setSelectedFile={setSelectedFile}
           isMultiSelect={false}
         />
+        {errors.includes('image') && <ValidationError field='Image' />}
       </div>
 
       <div
@@ -262,7 +306,9 @@ function MediaText({
           editData={editData?.preamble}
           extended={false}
         />
+        {errors.includes('preamble') && <ValidationError field='Preamble text' />}
       </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Call to action 1</FieldLabel>
         <FieldDescription>
@@ -280,6 +326,7 @@ function MediaText({
           ctaIdentifier={1}
         />
       </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Call to action 2</FieldLabel>
         <FieldDescription>

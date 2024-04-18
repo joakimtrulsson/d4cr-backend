@@ -11,6 +11,8 @@ import Editor from '../components/Editor/Editor.jsx';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
+import ValidationError from '../components/ValidationError/ValidationError';
+import { useValidation } from '../hooks/useValidation';
 
 function WysiwygSection({
   onCloseSection,
@@ -22,6 +24,10 @@ function WysiwygSection({
   setSectionsData,
 }) {
   const [value, setValue] = useState({ sectionTitle: '' });
+  const { validateFields, errors, setErrors } = useValidation([
+    'sectionTitle',
+    'preamble',
+  ]);
 
   useEffect(() => {
     if (!editData) {
@@ -31,6 +37,10 @@ function WysiwygSection({
   }, [editData]);
 
   async function handleSave() {
+    if (!validateFields(value)) {
+      return;
+    }
+
     if (onChange) {
       const newId = uuidv4();
 
@@ -47,8 +57,10 @@ function WysiwygSection({
     }
   }
 
-  async function handleSaveUpdate(event) {
-    event.preventDefault();
+  async function handleSaveUpdate() {
+    if (!validateFields(value)) {
+      return;
+    }
 
     if (onChange) {
       const updatedSection = {
@@ -65,6 +77,7 @@ function WysiwygSection({
   }
 
   function setPreamble(preamble) {
+    setErrors((prev) => prev.filter((error) => error !== 'preamble'));
     setValue((prev) => ({
       ...prev,
       preamble,
@@ -72,14 +85,8 @@ function WysiwygSection({
   }
 
   const handleChange = (key, inputValue) => {
-    if (key === 'anchorText' || key === 'url') {
-      setValue((prev) => ({
-        ...prev,
-        cta: { ...prev.cta, [key]: inputValue },
-        // url: inputValue.toLowerCase().replace(/\s/g, '-'),
-      }));
-      return;
-    }
+    // Rensa fältets felstatus
+    setErrors((prev) => prev.filter((error) => error !== key));
 
     setValue((prev) => ({
       ...prev,
@@ -98,14 +105,10 @@ function WysiwygSection({
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={value.sectionTitle}
-          style={{ marginBottom: '2rem' }}
         />
-        {/* <FieldLabel>Title</FieldLabel>
-        <TextInput
-          autoFocus={autoFocus}
-          onChange={(event) => handleChange('title', event.target.value)}
-          value={value.title}
-        /> */}
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
       </div>
 
       <div>
@@ -115,6 +118,7 @@ function WysiwygSection({
           extended={true}
           editData={editData?.preamble}
         />
+        {errors.includes('preamble') && <ValidationError field='Preamble text' />}
       </div>
 
       <div style={{ margin: '1rem 0' }}>

@@ -39,7 +39,7 @@ const IconPicker = ({ value, onChange }) => {
         value={value}
         InputProps={{
           style: {
-            marginBottom: '1rem',
+            // marginBottom: '1rem',
             backgroundColor: '#fafbfc',
             borderRadius: '7px',
             border: '1px solid #e1e5e9',

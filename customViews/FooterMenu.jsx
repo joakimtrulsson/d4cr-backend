@@ -78,6 +78,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
           <FieldLabel style={{ marginBottom: '0.2rem' }}>Enter anchor text</FieldLabel>
           <FieldDescription>Link {linkIndex + 1}</FieldDescription>
           <TextInput
+            // invalid='false'
             style={{ marginBottom: '1rem' }}
             placeholder='Anchor text'
             value={link.anchorText}

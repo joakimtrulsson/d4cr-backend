@@ -8,12 +8,14 @@ import {
   TextInput,
 } from '@keystone-ui/fields';
 
-import Wysiwyg from '../components/Wysiwyg/Wysiwyg';
+import Editor from '../components/Editor/Editor';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton';
 import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton';
 import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton';
 import CancelButton from '../components/CancelButton/CancelButton';
+import ValidationError from '../components/ValidationError/ValidationError';
+import { useValidation } from '../hooks/useValidation';
 
 function Accordion({
   onCloseSection,
@@ -34,6 +36,10 @@ function Accordion({
       };
     }
   });
+  const { validateFields, errors, objectErrors } = useValidation(
+    ['sectionTitle', 'title'],
+    ['heading', 'bodyText']
+  );
 
   useEffect(() => {
     if (editData) {
@@ -42,6 +48,10 @@ function Accordion({
   }, [editData]);
 
   function handleSave() {
+    if (!validateFields(value)) {
+      return;
+    }
+
     if (onChange) {
       const newItem = {
         sectionType: 'ACCORDION',
@@ -56,6 +66,10 @@ function Accordion({
 
   async function handleSaveUpdate(event) {
     event.preventDefault();
+
+    if (!validateFields(value)) {
+      return;
+    }
 
     if (onChange) {
       const updatedSection = {
@@ -113,10 +127,14 @@ function Accordion({
           Unique identifier for this section, used in the sections list.
         </FieldDescription>
         <TextInput
+          valid={true}
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={value.sectionTitle}
         />
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
 
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Accordion title</FieldLabel>
         <FieldDescription>
@@ -127,6 +145,7 @@ function Accordion({
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
         />
+        {errors.includes('title') && <ValidationError field='Accordion title' />}
       </div>
 
       {value.fields.map((field, index) => (
@@ -145,15 +164,24 @@ function Accordion({
             onChange={(event) => handleFieldChange(index, 'heading', event.target.value)}
             value={field.heading}
           />
+          {objectErrors.some(
+            (obj) => obj.index === index && obj.emptyFields.includes('heading')
+          ) && <ValidationError field={`Content title ${index + 1}`} />}
+
           <FieldLabel>{`Body Text ${index + 1}`}</FieldLabel>
           <FieldDescription>
             This field specifies the text to the content title.
           </FieldDescription>
-          <Wysiwyg
+          <Editor
             onSetPreamble={(preamble) => handleFieldChange(index, 'bodyText', preamble)}
             editData={field.bodyText}
             extended={false}
           />
+
+          {objectErrors.some(
+            (obj) => obj.index === index && obj.emptyFields.includes('bodyText')
+          ) && <ValidationError field={`Body Text ${index + 1}`} />}
+
           {value.fields.length > 1 && (
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <RemoveEntryButton

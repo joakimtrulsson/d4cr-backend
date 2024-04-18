@@ -15,6 +15,8 @@ import AddSectionButton from '../components/AddSectionButton/AddSectionButton.js
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
+import { useValidation } from '../hooks/useValidation';
+import ValidationError from '../components/ValidationError/ValidationError';
 
 function Banner({
   onCloseSection,
@@ -30,6 +32,13 @@ function Banner({
 
   const pagesOptions = useFetchLinkOptions();
   const [pageValue, setPageValue] = useState('');
+  const { validateFields, errors, setErrors } = useValidation([
+    'sectionTitle',
+    'title',
+    'preamble',
+    'cta',
+    'iconName',
+  ]);
 
   useEffect(() => {
     if (!editData) {
@@ -48,6 +57,12 @@ function Banner({
   }, [editData]);
 
   async function handleSave() {
+    const newValue = { ...value, iconName };
+
+    if (!validateFields(newValue)) {
+      return;
+    }
+
     if (onChange) {
       const newId = uuidv4();
 
@@ -68,8 +83,12 @@ function Banner({
     }
   }
 
-  async function handleSaveUpdate(event) {
-    // event.preventDefault();
+  async function handleSaveUpdate() {
+    const newValue = { ...value, iconName };
+
+    if (!validateFields(newValue)) {
+      return;
+    }
 
     if (onChange) {
       const updatedSection = {
@@ -91,6 +110,8 @@ function Banner({
   }
 
   function setPreamble(preamble) {
+    setErrors((prev) => prev.filter((error) => error !== 'preamble'));
+
     setValue((prev) => ({
       ...prev,
       preamble,
@@ -98,6 +119,13 @@ function Banner({
   }
 
   const handleChange = (key, inputValue) => {
+    // Rensa fältets felstatus
+    setErrors((prev) => prev.filter((error) => error !== key));
+
+    if (key !== 'cta' || (inputValue.url && inputValue.anchorText)) {
+      setErrors((prev) => prev.filter((error) => error !== 'cta'));
+    }
+
     if (key === 'page') {
       setPageValue(inputValue);
     } else if (key === 'url') {
@@ -118,6 +146,16 @@ function Banner({
     }
   };
 
+  const handleIconNameChange = (newIconName) => {
+    // Sätt det nya iconNamnet
+    setIconName(newIconName);
+
+    // Ta bort ValidationError under iconName om det nya värdet är satt
+    if (newIconName && errors.includes('iconName')) {
+      setErrors((prevErrors) => prevErrors.filter((error) => error !== 'iconName'));
+    }
+  };
+
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
@@ -129,8 +167,10 @@ function Banner({
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={value.sectionTitle}
-          style={{ marginBottom: '2rem' }}
         />
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
 
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
@@ -141,8 +181,8 @@ function Banner({
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
         />
+        {errors.includes('title') && <ValidationError field='Title' />}
       </div>
-
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
         <FieldDescription>
@@ -153,6 +193,7 @@ function Banner({
           extended={false}
           editData={editData?.preamble}
         />
+        {errors.includes('preamble') && <ValidationError field='Preamble text' />}
       </div>
       <div>
         <FieldLabel>Call to action</FieldLabel>
@@ -170,13 +211,15 @@ function Banner({
           pagesOptions={pagesOptions}
           ctaIdentifier={1}
         />
+        {errors.includes('cta') && <ValidationError field='Call to action' />}
       </div>
-
       <FieldLabel>Select an icon:</FieldLabel>
       <FieldDescription>
         This required field specifies the icon to be rendered in the banner.
       </FieldDescription>
-      <IconPicker value={iconName} onChange={setIconName} />
+      <IconPicker value={iconName} onChange={handleIconNameChange} />
+
+      {errors.includes('iconName') && <ValidationError field='Icon' />}
 
       <div style={{ paddingTop: '1rem', borderTop: '1px solid #e1e5e9' }}>
         {editData ? (

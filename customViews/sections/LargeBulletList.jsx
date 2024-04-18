@@ -9,13 +9,14 @@ import {
   FieldDescription,
 } from '@keystone-ui/fields';
 
-// import Wysiwyg from '../components/Wysiwyg/Wysiwyg';
 import Editor from '../components/Editor/Editor';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton';
 import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton';
 import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton';
 import CancelButton from '../components/CancelButton/CancelButton';
+import { useValidation } from '../hooks/useValidation';
+import ValidationError from '../components/ValidationError/ValidationError';
 
 const listOptions = [
   { value: 'ORDERED', label: 'Numbered List' },
@@ -41,6 +42,11 @@ function BulletList({
       };
     }
   });
+  const { validateFields, errors, setErrors, objectErrors } = useValidation(
+    ['sectionTitle', 'title', 'subHeader', 'listType'],
+    ['bodyText'],
+    'bullets'
+  );
 
   useEffect(() => {
     if (editData) {
@@ -49,6 +55,10 @@ function BulletList({
   }, [editData]);
 
   function handleSave() {
+    if (!validateFields(value)) {
+      return;
+    }
+
     if (onChange) {
       const newItem = {
         sectionType: 'BULLETLIST',
@@ -64,9 +74,13 @@ function BulletList({
   async function handleSaveUpdate(event) {
     event.preventDefault();
 
+    if (!validateFields(value)) {
+      return;
+    }
+
     if (onChange) {
       const updatedSection = {
-        sectionType: 'MEDIATEXT',
+        sectionType: 'BULLETLIST',
         id: editData.id,
         ...value,
       };
@@ -79,6 +93,7 @@ function BulletList({
   }
 
   const handleChange = (key, inputValue) => {
+    setErrors((prev) => prev.filter((error) => error !== key));
     setValue((prev) => ({
       ...prev,
       [key]: inputValue,
@@ -124,8 +139,10 @@ function BulletList({
           autoFocus={autoFocus}
           onChange={(event) => handleChange('sectionTitle', event.target.value)}
           value={value.sectionTitle}
-          style={{ marginBottom: '2rem' }}
         />
+        {errors.includes('sectionTitle') && (
+          <ValidationError field='Section identifier' />
+        )}
 
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
@@ -136,6 +153,7 @@ function BulletList({
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
         />
+        {errors.includes('title') && <ValidationError field='Title' />}
       </div>
 
       <div
@@ -153,6 +171,7 @@ function BulletList({
           onChange={(event) => handleChange('subHeader', event.target.value)}
           value={value.subHeader}
         />
+        {errors.includes('subHeader') && <ValidationError field='Preamble text' />}
       </div>
 
       <div>
@@ -169,6 +188,7 @@ function BulletList({
           options={listOptions}
           onChange={(selectedOption) => handleChange('listType', selectedOption.value)}
         />
+        {errors.includes('listType') && <ValidationError field='List type' />}
       </div>
 
       {value.bullets.map((field, index) => {
@@ -186,6 +206,11 @@ function BulletList({
               extended={true}
               editData={field?.bodyText}
             />
+
+            {objectErrors.some(
+              (obj) => obj.index === index && obj.emptyFields.includes('bodyText')
+            ) && <ValidationError field={`Body Text ${index + 1}`} />}
+
             {value.bullets.length > 1 && (
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <RemoveEntryButton

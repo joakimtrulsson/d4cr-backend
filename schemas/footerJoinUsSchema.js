@@ -30,6 +30,7 @@ export const footerJoinUsSchema = list({
 
     icon1: json({
       label: 'Social Media Icon 1',
+      validation: { isRequired: true },
       ui: {
         description:
           'This field specifies the icon that represents the button to the social media link 1.',
