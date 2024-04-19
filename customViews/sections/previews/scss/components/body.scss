@@ -1,0 +1,27 @@
+@import '../variables/color-variables.scss';
+@import '../variables/layout-variables.scss';
+
+body {
+    background-color: $-background-color;
+    margin: 0;
+    padding: 0; 
+}
+
+.site-container__top {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: $max-width-desktop-large;
+    width: 100%;
+}
+
+.site-content {
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+    height: auto;
+    max-width: $max-width-desktop-large;
+    min-height: 100vh;
+}
+

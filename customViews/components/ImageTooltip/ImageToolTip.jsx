@@ -16,9 +16,7 @@ const IMAGE_MAP = {
 
 const ImageTooltip = ({ type }) => {
   const imageUrl = IMAGE_MAP[type];
-
-  const loc = window.location;
-  const imageSrc = `${loc.protocol}//${loc.host}${imageUrl}`;
+  const imageSrc = `${process.env.NEXT_PUBLIC_BASE_URL}${imageUrl}`;
 
   return (
     <Tooltip

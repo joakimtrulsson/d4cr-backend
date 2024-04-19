@@ -139,9 +139,10 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
       })}
 
       <FieldLabel style={{ marginTop: '2rem' }}>Stored Sections</FieldLabel>
-      <FieldDescription style={{ marginTop: '0rem', marginBottom: '-1rem' }}>
-        Sections stored in this field will be displayed in the order they are listed.
-        Click and drag to reorder.
+      <FieldDescription style={{ marginTop: '0rem', marginBottom: '-0.5rem' }}>
+        Sections stored in this field will be displayed in the order listed. You can
+        easily reorder them by clicking and dragging. To preview how the section will
+        appear in the frontend application, simply click the Preview button.
       </FieldDescription>
       {sectionsData.length === 0 ? (
         <FieldDescription>

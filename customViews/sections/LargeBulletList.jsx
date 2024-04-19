@@ -18,6 +18,7 @@ import CancelButton from '../components/CancelButton/CancelButton';
 import { useValidation } from '../hooks/useValidation';
 import ValidationError from '../components/ValidationError/ValidationError';
 import ImageTooltip from '../components/ImageTooltip/ImageToolTip';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 
 const listOptions = [
   { value: 'ORDERED', label: 'Numbered List' },
@@ -48,6 +49,7 @@ function BulletList({
     ['bodyText'],
     'bullets'
   );
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (editData) {
@@ -124,6 +126,14 @@ function BulletList({
     }));
   };
 
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div
@@ -131,9 +141,21 @@ function BulletList({
           marginBottom: '1rem',
         }}
       >
-        <FieldLabel>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           Large bullet list - <ImageTooltip type='LARGEBULLETLIST' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
+
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
@@ -244,6 +266,12 @@ function BulletList({
         )}
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
+
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

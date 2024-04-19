@@ -12,8 +12,9 @@ import AddSectionButton from '../components/AddSectionButton/AddSectionButton.js
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import ValidationError from '../components/ValidationError/ValidationError';
-import { useValidation } from '../hooks/useValidation';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
+import { useValidation } from '../hooks/useValidation';
 
 function WysiwygSection({
   onCloseSection,
@@ -29,6 +30,7 @@ function WysiwygSection({
     'sectionTitle',
     'preamble',
   ]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!editData) {
@@ -95,11 +97,30 @@ function WysiwygSection({
     }));
   };
 
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           WYSIWYG - <ImageTooltip type='WYSIWYG' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
@@ -140,6 +161,12 @@ function WysiwygSection({
       <div style={{ borderTop: '1px solid #e1e5e9' }}>
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
+
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

@@ -17,6 +17,7 @@ import CancelButton from '../components/CancelButton/CancelButton';
 import ValidationError from '../components/ValidationError/ValidationError';
 import { useValidation } from '../hooks/useValidation';
 import ImageTooltip from '../components/ImageTooltip/ImageToolTip';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 
 function Accordion({
   onCloseSection,
@@ -41,6 +42,7 @@ function Accordion({
     ['sectionTitle', 'title'],
     ['heading', 'bodyText']
   );
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (editData) {
@@ -115,8 +117,15 @@ function Accordion({
       fields: prev.fields.filter((_, index) => index !== indexToRemove),
     }));
   };
-  // const loc = window.location;
-  // const IMAGE_URL = `${loc.protocol}//${loc.host}/public/images/sections/accordion.png`;
+
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div
@@ -124,8 +133,19 @@ function Accordion({
           marginBottom: '2rem',
         }}
       >
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           Accordion - <ImageTooltip type='ACCORDION' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
@@ -215,6 +235,12 @@ function Accordion({
         )}
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
+
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

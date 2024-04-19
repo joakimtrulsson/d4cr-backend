@@ -1,0 +1,131 @@
+.slug-resources-outer-container {
+  color: $-grey-700;
+  width: 100vw;
+  max-width: 100%;
+
+  .slug-resources-inner-container {
+    border: solid $-grey-100 1px;
+    margin: 2%;
+    padding-top: 1.5%;
+    padding-left: 0.8%;
+    padding-right: 0.8%;
+    width: 95%;
+  }
+
+  .pagination-buttons {
+    .page-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: none;
+      margin: 5px;
+      color: #595959;
+      cursor: pointer;
+    }
+
+    .active {
+      background-color: $-orange-500;
+      color: #fff2ec;
+    }
+
+    .arrow-button {
+      border: none;
+      background: none;
+      margin: 5px 5px 3px 5px;
+      cursor: pointer;
+    }
+  }
+}
+
+.slug-news-outer-container {
+  color: $-grey-700;
+  width: 100vw;
+  max-width: 100%;
+
+  .slug-news-inner-container {
+    // border: solid $-grey-100 1px;
+    margin: 2%;
+    padding-top: 1.5%;
+    padding-left: 0.8%;
+    padding-right: 0.8%;
+    width: 95%;
+    gap: 20px;
+  }
+
+  .pagination-buttons {
+    .page-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: none;
+      margin: 5px;
+      color: #595959;
+      cursor: pointer;
+    }
+
+    .active {
+      background-color: $-orange-500;
+      color: #fff2ec;
+    }
+
+    .arrow-button {
+      border: none;
+      background: none;
+      margin: 5px 5px 3px 5px;
+      cursor: pointer;
+    }
+  }
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0.5em 0.5em;
+  cursor: pointer;
+  user-select: none;
+  background-color: $-orange-50;
+  border: solid $-orange-500 2px;
+  border-radius: 4px;
+}
+
+.checkbox-container input {
+  position: relative;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  border-radius: 4px;
+  position: relative;
+  margin-right: 0.5em;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: $-orange-100;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  background-color: $-orange-100;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: $-orange-100;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 5px;
+    height: 10px;
+    border: solid $-orange-500;
+    border-width: 0 2px 2px 0;
+  }
+}

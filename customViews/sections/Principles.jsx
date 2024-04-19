@@ -15,9 +15,10 @@ import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton
 import AddEntryButton from '../components/AddEntryButton/AddEntryButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
-import { useValidation } from '../hooks/useValidation';
 import ValidationError from '../components/ValidationError/ValidationError';
 import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
+import { useValidation } from '../hooks/useValidation';
 
 function Principles({
   onCloseSection,
@@ -59,6 +60,7 @@ function Principles({
     'title',
     'preamble',
   ]);
+  const [isOpen, setIsOpen] = useState(false);
 
   async function handleSave() {
     if (!validateFields({ ...value, groups })) {
@@ -87,6 +89,7 @@ function Principles({
       const updatedSection = {
         sectionType: 'PRINCIPLES',
         id: editData.id,
+        sectionTitle: value.sectionTitle,
         title: value.title,
         preamble: value.preamble,
         groups: newItems.length > 0 ? [...value.groups, ...newItems] : [...value.groups],
@@ -187,12 +190,32 @@ function Principles({
     }));
   };
 
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           Principles - <ImageTooltip type='PRINCIPLES' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
+
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
@@ -272,6 +295,12 @@ function Principles({
         </AddSectionButton>
       )}
       {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
+
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

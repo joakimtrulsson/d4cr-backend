@@ -16,6 +16,7 @@ import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSection
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
 import ValidationError from '../components/ValidationError/ValidationError';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
 import { useValidation } from '../hooks/useValidation';
 
@@ -30,7 +31,7 @@ function Banner({
 }) {
   const [iconName, setIconName] = useState('');
   const [value, setValue] = useState({ title: '' });
-
+  const [isOpen, setIsOpen] = useState(false);
   const pagesOptions = useFetchLinkOptions();
   const [pageValue, setPageValue] = useState('');
   const { validateFields, errors, setErrors } = useValidation([
@@ -157,11 +158,30 @@ function Banner({
     }
   };
 
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           Banner - <ImageTooltip type='BANNER' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
@@ -238,6 +258,11 @@ function Banner({
 
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

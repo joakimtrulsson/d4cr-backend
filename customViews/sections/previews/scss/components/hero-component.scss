@@ -1,0 +1,171 @@
+.hero-container {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+
+    .text-div {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .title {
+            font-size: larger;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .preamble {
+            font-size: medium;
+            text-align: center;
+            margin-bottom: 50px;
+            color: $-grey-700;
+            margin-left: 3%;
+            margin-right: 3%;
+        }
+
+        .buttons-bottom {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+
+            .link {
+                margin-bottom: 20px;
+                text-decoration: none;
+            }
+        }
+    }
+
+    .video-div {
+        position: relative;
+        width: 90%;
+        border-radius: 15px;
+
+
+        .ball-1 {
+            position: absolute;
+            top: -60px;
+            right: 5px;
+            background-color: $-purple-500;
+            width: 10vw;
+            height: 10vw;
+            border-radius: 50%;
+            opacity: 90%;
+            mix-blend-mode: darken;
+        }
+
+        .ball-2 {
+            position: absolute;
+            top: -40px;
+            right: 15px;
+            background-color: $-turquoise-500;
+            width: 12vw;
+            height: 12vw;
+            border-radius: 50%;
+            opacity: 90%;
+            mix-blend-mode: darken;
+        }
+
+        .ball-3 {
+            position: absolute;
+            top: -15px;
+            right: 80px;
+            background-color: $-yellow-500;
+            width: 5vw;
+            height: 5vw;
+            border-radius: 50%;
+            opacity: 90%;
+            mix-blend-mode: darken;
+        }
+
+    }
+
+}
+
+@media (min-width: 900px) {
+    .hero-container {
+        display: flex;
+        flex-flow: row;
+        align-items: flex-start;
+        padding: 7%;
+        justify-items: center;
+
+        .text-div {
+            display: flex;
+            flex-flow: column;
+            align-items: flex-start;
+            padding-bottom: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+            margin-right: 0;
+            height: 100%;
+            width: 50%;
+
+            .title {
+                font-size: xxx-large;
+                text-align: flex-start;
+                font-weight: 700;
+                margin-bottom: 10px;
+                margin-top: 0;
+            }
+
+            .preamble {
+                font-weight: normal;
+                font-size: medium;
+                text-align: flex-start;
+                margin-bottom: 50px;
+                color: $-grey-700;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .buttons-bottom {
+                display: flex;
+                flex-flow: row;
+                margin-bottom: 0;
+
+
+                .link {
+                    padding-right: 5%;
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .video-div {
+            width: 50%;
+            padding-left: 5%;
+
+            .ball-1 {
+                top: -60px;
+                right: -20px;
+                width: 4vw;
+                height: 4vw;
+
+
+            }
+
+            .ball-2 {
+                top: -30px;
+                right: -50px;
+                width: 5vw;
+                height: 5vw;
+
+            }
+
+            .ball-3 {
+
+                top: 50px;
+                right: -15px;
+                background-color: $-yellow-500;
+                width: 2vw;
+                height: 2vw;
+                border-radius: 50%;
+                opacity: 90%;
+                mix-blend-mode: darken;
+            }
+
+        }
+    }
+}

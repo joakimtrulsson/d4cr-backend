@@ -1,0 +1,41 @@
+.news-teaser-container {
+  // position: relative;
+  max-width: 1000px;
+  // width: 98vw;
+  overflow: hidden;
+  font-family: $-montserrat-normal;
+
+  .animation-background {
+    position: absolute;
+    left: -20%;
+    right: 0;
+    top: -1%;
+    overflow: hidden;
+    transform: scale(0.9);
+    z-index: 0;
+  }
+
+  .heading-text {
+    position: relative;
+  }
+
+  .news-card-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch; // This ensures all child cards stretch to the same height
+    // width: 90%;
+    height: auto;
+    //min-height: 90vh;
+  }
+
+  .button-wrapper {
+    transition: transform 0.2s ease-in-out;
+    z-index: 2;
+  }
+
+  .button-wrapper:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s ease-in-out;
+  }
+}

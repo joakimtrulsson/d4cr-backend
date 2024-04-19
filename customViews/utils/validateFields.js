@@ -1,8 +1,17 @@
 export function validateStaticFields(data, requiredFields) {
   const emptyFields = requiredFields.filter((field) => {
     if (field === 'preamble') {
-      // Kontrollera om preamble innehåller någon text
-      return !data[field] || data[field].some((paragraph) => !paragraph.children[0].text);
+      return (
+        !data[field] ||
+        data[field].length === 0 ||
+        (data[field].every((item) => {
+          return (
+            item.type === 'paragraph' &&
+            (!item.children || !item.children[0] || !item.children[0].text)
+          );
+        }) &&
+          data[field].length > 0)
+      );
     } else if (field === 'images') {
       // Kontrollera om images innehåller några bilder
       return !data[field] || data[field].length === 0;

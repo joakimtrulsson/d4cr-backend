@@ -15,6 +15,7 @@ import ImageLibrary from '../components/ImageLibrary/ImageLibrary.jsx';
 import ValidationError from '../components/ValidationError/ValidationError';
 import { useValidation } from '../hooks/useValidation';
 import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 
 function Image({
   onCloseSection,
@@ -28,6 +29,7 @@ function Image({
   const [title, setTitle] = useState();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const { validateFields, errors, setErrors } = useValidation(['sectionTitle', 'images']);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!editData) {
@@ -93,12 +95,32 @@ function Image({
     setErrors((prev) => prev.filter((error) => error !== key));
   };
 
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           Images - <ImageTooltip type='IMAGE' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
+
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
@@ -134,6 +156,12 @@ function Image({
 
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
+
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

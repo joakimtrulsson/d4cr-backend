@@ -16,9 +16,10 @@ import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSection
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import useFetchChapters from '../hooks/useFetchChapters.jsx';
 import ValidationError from '../components/ValidationError/ValidationError';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 import useFetchCategories from '../hooks/useFetchCategories.jsx';
 import { useValidation } from '../hooks/useValidation';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
 
 function NewsTeaser({
   onCloseSection,
@@ -43,6 +44,7 @@ function NewsTeaser({
       };
     }
   });
+  const [isOpen, setIsOpen] = useState(false);
 
   const { chapters } = useFetchChapters();
   const { categories } = useFetchCategories();
@@ -58,7 +60,7 @@ function NewsTeaser({
     if (chapters) {
       const chaptersOptions = chapters.map((chapter) => ({
         label: `${chapter.title}`,
-        value: `${chapter.title}`,
+        value: `${chapter.slug}`,
       }));
 
       chaptersOptions.unshift({ value: 'ALLCHAPTERS', label: 'All Chapters' });
@@ -162,12 +164,32 @@ function NewsTeaser({
     }));
   };
 
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           News Teaser - <ImageTooltip type='NEWSTEASER' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
+
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
@@ -245,6 +267,12 @@ function NewsTeaser({
         )}
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
+
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

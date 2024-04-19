@@ -19,6 +19,7 @@ import ValidationError from '../components/ValidationError/ValidationError';
 import { useValidation } from '../hooks/useValidation';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
 import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 
 function MediaText({
   onCloseSection,
@@ -34,6 +35,7 @@ function MediaText({
   const pagesOptions = useFetchLinkOptions();
   const [pageOneValue, setPageOneValue] = useState('');
   const [pageTwoValue, setPageTwoValue] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
   const { validateFields, errors, setErrors } = useValidation([
     'sectionTitle',
     'title',
@@ -191,12 +193,32 @@ function MediaText({
     }
   };
 
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           Media with Text - <ImageTooltip type='MEDIATEXT' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
+
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
@@ -360,6 +382,12 @@ function MediaText({
         )}
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
+
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

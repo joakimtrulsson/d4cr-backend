@@ -12,9 +12,10 @@ import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSection
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import Editor from '../components/Editor/Editor';
 import ValidationError from '../components/ValidationError/ValidationError';
+import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
+import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 import { useValidation } from '../hooks/useValidation';
 import useFetchPeopleList from '../hooks/useFetchPeopleList.jsx';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
 
 function People({
   onCloseSection,
@@ -27,6 +28,7 @@ function People({
 }) {
   const [value, setValue] = useState('');
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const { peopleList } = useFetchPeopleList();
   const { validateFields, errors, setErrors } = useValidation([
     'sectionTitle',
@@ -136,12 +138,32 @@ function People({
   //   );
   // }
 
+  const handleOpenModal = async () => {
+    setIsOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <FieldContainer>
       <div style={{ marginBottom: '1rem' }}>
-        <FieldLabel>
+        <FieldLabel
+          style={{
+            display: 'flex',
+            paddingTop: '0.5rem',
+          }}
+        >
           People - <ImageTooltip type='PEOPLE' />
+          <CancelButton
+            handleClose={handleOpenModal}
+            style={{ marginTop: 0, marginLeft: 'auto' }}
+          >
+            Close section
+          </CancelButton>
         </FieldLabel>
+
         <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
@@ -212,6 +234,12 @@ function People({
         )}
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
+
+      <CloseSectionAlert
+        isOpen={isOpen}
+        handleCancel={handleCancel}
+        handleConfirm={onCloseSection}
+      />
     </FieldContainer>
   );
 }

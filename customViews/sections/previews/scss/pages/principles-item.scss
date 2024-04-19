@@ -1,0 +1,191 @@
+.main-container {
+    position: relative;
+    padding-bottom: 60px;
+
+    .title-image-container {
+        position: relative;
+        max-width: 100%;
+        width: 100%;
+        overflow: hidden;
+
+        .left-absolute {
+            position: absolute;
+            left: -15%;
+            width: auto;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .right-absolute {
+            position: absolute;
+            right: -5%;
+            width: auto;
+            height: 92%;
+            z-index: 1;
+        }
+
+
+
+        .title-div {
+            z-index: 2;
+            padding-left: 15%;
+            padding-right: 15%;
+
+            color: $-grey-700;
+            width: 100%;
+
+            .left-part {
+                align-self: flex-start;
+                padding: 15% 2% 0 0;
+
+                .gray-color {
+                    color: $-grey-500;
+                }
+
+            }
+
+            .right-part {
+                align-self: center;
+                padding: 4% 0 0 2%;
+
+
+                .quote-container {
+                    display: flex;
+                    /* Use flexbox to center the quote */
+                    justify-content: center;
+                    /* Center the quote horizontally */
+                    flex-direction: column;
+                    /* Stack quote and author vertically */
+                    align-items: center;
+                    /* Center align the items for vertical alignment */
+                    position: relative;
+
+
+                    .quote {
+                        font-size: medium;
+                        padding: 4%;
+                        margin: 6%;
+                        border-radius: 62.988px;
+                        border: 3.178px solid var(--turquoise-turquoise-100, #E9F5F5);
+                        background: var(--grey-grey-0, #FFF);
+                        position: relative;
+                        text-align: center;
+                        display: inline-block;
+                        min-width: 200px;
+                    }
+
+                    .quote-author {
+                        font-size: small;
+                        padding: 1% 5% 1% 5%;
+                        border-radius: 62.988px;
+                        background: var(--turquoise-turquoise-200, #D3EBEA);
+                        position: absolute;
+                        bottom: 1%;
+                        /* Adjust this value as needed */
+                        left: 40%;
+                        /* Center align the quote author relative to the quote's width */
+                        transform: translateX(-20%);
+                        /* Adjust horizontally to truly center */
+                        transform: translateY(7%);
+                        width: auto;
+                        white-space: nowrap;
+                    }
+
+                    .quote-marks {
+                        position: absolute;
+                        top: 12%;
+                        left: 15%;
+                        transform: translateY(-12%);
+                    }
+                }
+            }
+
+
+        }
+
+    }
+
+
+    .image-container {
+        position: absolute;
+
+        width: 100%;
+
+        z-index: 1;
+
+        .scroll-button {
+            position: absolute;
+            left: 48%;
+        }
+    }
+
+}
+
+.bottom-wave {
+    z-index: 4;
+}
+
+.bullet-div {
+
+    padding-top: 5%;
+}
+
+.navbar-principle-links {
+    position: -webkit-sticky;
+    /* For Safari */
+    position: sticky;
+    top: 0;
+    /* Adjust this value as needed */
+    z-index: 1000;
+    /* Ensures the navbar stays on top of other content */
+    padding: 10px;
+
+    .links {
+        text-decoration: none;
+
+    }
+
+    .numbers {
+        font-size: large;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #FFF;
+        border: solid $-turquoise-800 1px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        text-decoration: none;
+        margin: 5px;
+        color: $-turquoise-800;
+    }
+
+    .image-arrows {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+
+        p {
+            margin: 0;
+            font-size: large;
+            text-decoration: none;
+            padding-left: 14px;
+            padding-right: 14px;
+            font-weight: 400;
+        }
+
+        .link-no-previous {
+            color: #BDBDBD
+        }
+    }
+
+    .active-link {
+        color: #FC7C37;
+        background-color: #FFF9EB;
+        border-color: #FBBF34;
+        text-decoration: none;
+    }
+
+}

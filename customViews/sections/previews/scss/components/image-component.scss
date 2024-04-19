@@ -1,0 +1,35 @@
+.image-container {
+
+    &-1 {
+        .image-wrapper {
+            width: 50rem;
+            height: 25rem;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            overflow: hidden;
+            position: relative; 
+        }
+    }
+
+    &-2 {
+        .image-wrapper {
+            width: 24.5rem;
+            height: 20rem;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            overflow: hidden;
+            position: relative; 
+        }
+    }
+
+    &-3 {
+        .image-wrapper {
+            width: 16rem;
+            height: 16rem;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            overflow: hidden;
+            position: relative; 
+        }
+    }    
+}

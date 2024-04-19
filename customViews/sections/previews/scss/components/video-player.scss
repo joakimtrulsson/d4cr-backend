@@ -1,0 +1,274 @@
+.main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .video-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+        }
+
+        .custom-play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            cursor: pointer;
+
+            .play-btn {
+                position: absolute;
+                top: -40px;
+                left: -40px;
+                z-index: 6;
+            }
+
+            .play-bg {
+                position: absolute;
+                top: -40px;
+                left: -40px;
+                z-index: 5;
+            }
+        }
+
+
+
+        &.hovered {
+            animation: jelly-back 0.6s ease-in-out forwards;
+
+            .custom-play-button {
+                animation: jelly-btn-back 0.6s ease-in-out forwards;
+            }
+
+            &:hover,
+            &:focus {
+                animation: jelly-hover 0.6s ease-in-out forwards;
+
+                .custom-play-button {
+                    animation: jelly-btn-hover 0.6s ease-in-out forwards;
+                }
+            }
+        }
+
+    }
+
+    .clicked {
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        animation: fadeInBackground 0.5s ease-out forwards;
+
+        .modal {
+            position: fixed;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            height: 60vh;
+            animation: slideInFromBottom 0.5s ease-out forwards;
+
+            .video-player-popup {
+                width: 100%;
+                height: 100%;
+                border-radius: 16px;
+            }
+
+            .btn-exit-video {
+                position: absolute;
+                top: -2%;
+                right: -2%;
+                height: 5vh;
+                width: 5vh;
+                border-radius: 50%;
+                background-color: #d4eae9;
+                border: none;
+                transform: scale(1);
+                transition: transform 0.4s ease-in-out;
+                font-weight: 600;
+                font-family: Courier 'Courier New';
+
+                &:hover,
+                &:focus {
+                    transform: scale(1.1);
+                    transition: transform 0.4s ease-in-out;
+                    background-color: #b7f0ee;
+                }
+            }
+
+            &.slide-out {
+                animation: slideOut 0.5s ease-out forwards;
+            }
+        }
+
+        &.clicked-exit {
+            animation: fadeOutBackground 0.5s ease-in forwards
+        }
+    }
+
+    .not-clicked {
+        visibility: hidden;
+    }
+
+}
+
+@media (max-width: 900px) {
+    .main {
+
+        .clicked {
+            .modal {
+                width: 95vw;
+
+                .btn-exit-video {
+
+                    top: -1%;
+                    right: -1%;
+                    height: 2.7vh;
+                    width: 2.7vh;
+                    font-size: small;
+                    font-weight: 600;
+
+                }
+            }
+        }
+    }
+}
+
+@keyframes fadeInBackground {
+    from {
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    to {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+}
+
+@keyframes fadeOutBackground {
+    from {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    to {
+        background-color: rgba(0, 0, 0, 0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        transform: translate(-50%, 100vh);
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translate(-50%, -50%);
+    }
+
+    to {
+        transform: translate(-50%, 100vh);
+    }
+}
+
+
+//when hovering it is wobbling like jelly
+@keyframes jelly-hover {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.06);
+    }
+
+    50% {
+        transform: scale(1.045);
+    }
+
+    75% {
+        transform: scale(1.055);
+    }
+
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes jelly-btn-hover {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(0.89);
+    }
+
+    50% {
+        transform: scale(0.91);
+    }
+
+    75% {
+        transform: scale(0.89);
+    }
+
+    100% {
+        transform: scale(0.9);
+    }
+}
+
+@keyframes jelly-back {
+    0% {
+        transform: scale(1.05);
+    }
+
+    25% {
+        transform: scale(0.99);
+    }
+
+    50% {
+        transform: scale(1.005);
+    }
+
+    75% {
+        transform: scale(0.995);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes jelly-btn-back {
+    0% {
+        transform: scale(0.9);
+    }
+
+    25% {
+        transform: scale(1.01);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    75% {
+        transform: scale(1.005);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

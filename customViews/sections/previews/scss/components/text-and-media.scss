@@ -1,0 +1,136 @@
+@import '../variables/color-variables.scss';
+
+.text-and-media-container {
+  font-family: $-montserrat-normal;
+  gap: 4rem;
+
+  .text-content {
+    height: auto;
+
+    p {
+      color: $-grey-500;
+      font-size: 1.1rem;
+      line-height: 1.7rem;
+      letter-spacing: 0.03rem;
+      font-weight: 400;
+    }
+
+    a {
+      color: $-orange-500;
+    }
+
+    .primary-button {
+      margin-right: 0.45rem;
+    }
+
+    .clicked {
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      animation: fadeInBackground 0.5s ease-out forwards;
+
+      .modal {
+        position: fixed;
+        top: 2%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        height: 95vh;
+        animation: slideInFromBottomForm 0.5s ease-out forwards;
+
+        .box {
+          width: 100%;
+          height: 100%;
+          border-radius: 10px;
+          background-color: white;
+        }
+
+        .btn-exit-video {
+          position: absolute;
+          top: -2%;
+          right: -2%;
+          height: 5vh;
+          width: 5vh;
+          border-radius: 50%;
+          background-color: #d4eae9;
+          border: none;
+          transform: scale(1);
+          transition: transform 0.4s ease-in-out;
+          font-weight: 600;
+          font-family: Courier 'Courier New';
+          z-index: 3;
+
+          &:hover,
+          &:focus {
+            transform: scale(1.1);
+            transition: transform 0.4s ease-in-out;
+            background-color: #b7f0ee;
+          }
+        }
+
+        &.slide-out {
+          animation: slideOutForm 0.5s ease-out forwards;
+        }
+      }
+
+      &.clicked-exit {
+        animation: fadeOutBackground 0.5s ease-in forwards;
+      }
+    }
+
+    .not-clicked {
+      display: none;
+    }
+  }
+
+  .media-content {
+    width: 50%;
+    height: 25rem;
+    max-width: 53rem;
+    overflow: hidden;
+    position: relative;
+    object-fit: cover;
+  }
+}
+
+@media (min-width: 600px) {
+  .text-and-media-container {
+    .text-content {
+      .clicked {
+        .modal {
+          position: fixed;
+          top: 2%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 50%;
+          height: 95vh;
+          animation: slideInFromBottomForm 0.5s ease-out forwards;
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideInFromBottomForm {
+  from {
+    transform: translate(-50%, 100vh);
+  }
+
+  to {
+    transform: translate(-50%, 0vh);
+  }
+}
+
+@keyframes slideOutForm {
+  from {
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    transform: translate(-50%, 100vh);
+  }
+}
