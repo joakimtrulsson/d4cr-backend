@@ -14,6 +14,7 @@ import NewsTeaserPreview from '../../sections/previews/NewsTeaserPreview.jsx';
 import ImagePreview from '../../sections/previews/ImagesPreview.jsx';
 import PrinciplesPreview from '../../sections/previews/PrinciplesPreview.jsx';
 import WyiswygPreview from '../../sections/previews/WysiwygPreview.jsx';
+import ChapterTeaserPreview from '../../sections/previews/ChapterTeaserPreview.jsx';
 
 import { styles } from '../../styles.js';
 
@@ -33,12 +34,13 @@ const customStyles = {
 };
 
 const sectionComponents = {
+  ACCORDION: AccordionPreview,
   BANNER: BannerPreview,
   BULLETLIST: LargeBulletListPreview,
-  ACCORDION: AccordionPreview,
+  CHAPTERTEASER: ChapterTeaserPreview,
+  IMAGE: ImagePreview,
   MEDIATEXT: MediaTextPreview,
   NEWSTEASER: NewsTeaserPreview,
-  IMAGE: ImagePreview,
   PRINCIPLES: PrinciplesPreview,
   WYSIWYG: WyiswygPreview,
 };
