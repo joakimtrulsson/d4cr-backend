@@ -15,6 +15,7 @@ import ImagePreview from '../../sections/previews/ImagesPreview.jsx';
 import PrinciplesPreview from '../../sections/previews/PrinciplesPreview.jsx';
 import WyiswygPreview from '../../sections/previews/WysiwygPreview.jsx';
 import ChapterTeaserPreview from '../../sections/previews/ChapterTeaserPreview.jsx';
+import PeoplePreview from '../../sections/previews/PeoplePreview.jsx';
 
 import { styles } from '../../styles.js';
 
@@ -41,6 +42,7 @@ const sectionComponents = {
   IMAGE: ImagePreview,
   MEDIATEXT: MediaTextPreview,
   NEWSTEASER: NewsTeaserPreview,
+  PEOPLE: PeoplePreview,
   PRINCIPLES: PrinciplesPreview,
   WYSIWYG: WyiswygPreview,
 };
