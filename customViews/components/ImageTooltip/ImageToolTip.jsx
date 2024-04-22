@@ -34,7 +34,7 @@ const ImageTooltip = ({ type }) => {
     >
       {(tooltipProps) => (
         <a {...tooltipProps} href='#'>
-          (see image)
+          (see example)
         </a>
       )}
     </Tooltip>

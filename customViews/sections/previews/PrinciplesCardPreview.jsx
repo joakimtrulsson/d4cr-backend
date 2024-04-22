@@ -4,7 +4,8 @@ import Image from 'next/image';
 
 import ArrowRight from './assets/graphics/icons/arrow-right.svg';
 
-const PrinciplesCard = ({ title, url, img }) => {
+const PrinciplesCard = ({ title, url, img, subHeader }) => {
+  console.log(subHeader);
   return (
     <div
       className={`principles-card flex flex-row
@@ -26,10 +27,10 @@ const PrinciplesCard = ({ title, url, img }) => {
       </div>
       <div className='text-container'>
         <div className='title-text'>
-          <a className='no-decoration' href={url}>
-            <h4 className='color-grey-700 text-overflow'>{title}</h4>
-          </a>
+          <h4 className='color-grey-700 text-overflow'>{title}</h4>
+          <a className='no-decoration' href={url}></a>
         </div>
+        {/* <p className='color-grey-700'>{subHeader} </p> */}
 
         <div className='arrow-text'>
           <a>

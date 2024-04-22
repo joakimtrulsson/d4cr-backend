@@ -254,8 +254,6 @@ model Case {
 }
 
 model Test {
-  id               String @id @default(uuid()) @postgresql.Uuid
-  someFieldName    String @default("")
-  anotherFieldName String @default("")
-  sections         Json?
+  id       String @id @default(uuid()) @postgresql.Uuid
+  sections Json?
 }

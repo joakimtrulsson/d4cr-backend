@@ -1,15 +1,16 @@
 import React from 'react';
 import Image from 'next/image';
-import Mapbase from './assets/graphics/mapbase.png';
+
 import CountryCard from './CountryCard';
 
 export default function ChapterTeaserPreview({ content }) {
   const title = 'Our local chapters';
-  console.log(content);
+  const imageSrc = `${process.env.NEXT_PUBLIC_BASE_URL}public/images/sections/mapbase.png`;
+
   return (
     <div className='chapter-teaser'>
       <div className='image-container'>
-        <Image className='full-width-height' src={Mapbase} alt='A map of the world' />
+        <img className='full-width-height' src={imageSrc} alt='A map of the world' />
       </div>
 
       <div className='text-container'>

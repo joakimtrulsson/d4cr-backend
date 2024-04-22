@@ -22,18 +22,6 @@ export const testSchema = list({
   },
   fields: {
     ...group({
-      label: 'Group label',
-      description: 'Group description',
-      fields: {
-        someFieldName: text({
-          /* ... */
-        }),
-        anotherFieldName: text({}),
-        /* ... */
-      },
-    }),
-
-    ...group({
       label: 'Sections',
       // description: 'Sections description',
       fields: {

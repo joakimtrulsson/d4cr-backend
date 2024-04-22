@@ -22,6 +22,7 @@ const useFetchPrinciples = () => {
               principles {
                 id
                 title
+                subHeader
                 slug                           
                 image
                 principleCategory {

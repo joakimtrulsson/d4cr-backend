@@ -2285,17 +2285,6 @@ var testSchema = (0, import_core26.list)({
   },
   fields: {
     ...(0, import_core27.group)({
-      label: "Group label",
-      description: "Group description",
-      fields: {
-        someFieldName: (0, import_fields22.text)({
-          /* ... */
-        }),
-        anotherFieldName: (0, import_fields22.text)({})
-        /* ... */
-      }
-    }),
-    ...(0, import_core27.group)({
       label: "Sections",
       // description: 'Sections description',
       fields: {

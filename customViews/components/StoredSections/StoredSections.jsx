@@ -25,13 +25,24 @@ const customStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    // marginRight: '-30%',
     transform: 'translate(-50%, -50%)',
     border: 'none',
     boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.2)',
     borderRadius: '12px',
-    width: '80%',
   },
+};
+
+const sectionText = {
+  ACCORDION: 'Accordion',
+  BANNER: 'Banner',
+  BULLETLIST: 'Bullet List',
+  CHAPTERTEASER: 'Chapter Teaser',
+  IMAGE: 'Image',
+  MEDIATEXT: 'Media Text',
+  NEWSTEASER: 'News Teaser',
+  PEOPLE: 'People',
+  PRINCIPLES: 'Principles',
+  WYSIWYG: 'WYSIWYG',
 };
 
 const sectionComponents = {
@@ -103,11 +114,33 @@ function StoredSections({
                     <div className={styles.list.data}>
                       <div>
                         {index + 1}.
-                        {section.sectionType === 'CHAPTERTEASER'
+                        {/* {section.sectionType === 'CHAPTERTEASER'
                           ? ' Chapter Teaser'
                           : section.sectionType === 'STEERINGGROUP'
                           ? ' Steering Group'
                           : ` ${section.sectionType} - ${
+                              section.sectionTitle && section.sectionTitle
+                            }${
+                              section.sectionType === 'MEDIATEXT'
+                                ? (() => {
+                                    switch (section.border) {
+                                      case 'TOPBOTTOM':
+                                        return ' Border: Top & Bottom';
+                                      case 'TOP':
+                                        return ' Border: Top';
+                                      case 'BOTTOM':
+                                        return ' Border: Bottom';
+                                      default:
+                                        return '';
+                                    }
+                                  })()
+                                : ''
+                            }`} */}
+                        {section.sectionType === 'CHAPTERTEASER'
+                          ? ' Chapter Teaser'
+                          : section.sectionType === 'STEERINGGROUP'
+                          ? ' Steering Group'
+                          : ` ${sectionText[section.sectionType]} - ${
                               section.sectionTitle && section.sectionTitle
                             }${
                               section.sectionType === 'MEDIATEXT'

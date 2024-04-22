@@ -10,6 +10,8 @@ export default function PrinciplesPreview({ content: chapterContent }) {
     setShowAllCards(!showAllCards);
   };
 
+  console.log(chapterContentProp);
+
   return (
     <main className='flex flex-column flex-align-center principles margin-t--s'>
       {chapterContentProp ? (
@@ -36,6 +38,7 @@ export default function PrinciplesPreview({ content: chapterContent }) {
                       img={
                         principle.image && principle.image.url ? principle.image.url : ''
                       }
+                      subHeader={principle.subHeader}
                     />
                   </div>
                 ))}
@@ -60,6 +63,7 @@ export default function PrinciplesPreview({ content: chapterContent }) {
                       img={
                         principle.image && principle.image.url ? principle.image.url : ''
                       }
+                      subHeader={principle.subHeader}
                     />
                   </div>
                 ))}
@@ -91,6 +95,7 @@ export default function PrinciplesPreview({ content: chapterContent }) {
                                     ? principle.image.url
                                     : ''
                                 }
+                                subHeader={principle.subHeader}
                               />
                             </div>
                           ))}
