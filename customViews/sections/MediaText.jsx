@@ -202,15 +202,18 @@ function MediaText({
   };
 
   return (
-    <FieldContainer>
+    <FieldContainer style={{ width: '900px' }}>
       <div
         style={{
           display: 'flex',
           flexDirection: 'row',
-          marginBottom: '1rem',
-          paddingBottom: '0.5rem',
+          alignItems: 'center',
           borderBottom: '1px solid #e1e5e9',
-          width: '700px',
+          height: '4rem',
+          position: 'sticky',
+          top: 0,
+          backgroundColor: '#fff',
+          zIndex: 100,
         }}
       >
         <FieldLabel
@@ -270,6 +273,23 @@ function MediaText({
         {errors.includes('subHeading') && <ValidationError field='Subheading' />}
       </div>
 
+      <div
+        style={{
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          marginBottom: '1rem',
+        }}
+      >
+        <FieldLabel>Image</FieldLabel>
+
+        <ImageLibrary
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
+          isMultiSelect={false}
+        />
+        {errors.includes('image') && <ValidationError field='Image' />}
+      </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Background color</FieldLabel>
         <Select
@@ -313,23 +333,6 @@ function MediaText({
           }
         />
         {errors.includes('imagePosition') && <ValidationError field='Image position' />}
-      </div>
-
-      <div
-        style={{
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          marginBottom: '1rem',
-        }}
-      >
-        <FieldLabel>Image</FieldLabel>
-
-        <ImageLibrary
-          selectedFile={selectedFile}
-          setSelectedFile={setSelectedFile}
-          isMultiSelect={false}
-        />
-        {errors.includes('image') && <ValidationError field='Image' />}
       </div>
 
       <div
@@ -384,7 +387,14 @@ function MediaText({
       <div
         style={{
           borderTop: '1px solid #e1e5e9',
-          paddingTop: '0.5rem',
+          height: '5rem',
+          overflow: 'auto',
+          position: 'sticky',
+          bottom: 0,
+          backgroundColor: '#fff',
+          zIndex: 100,
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         {editData ? (

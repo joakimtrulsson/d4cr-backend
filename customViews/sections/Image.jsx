@@ -104,15 +104,25 @@ function Image({
   };
 
   return (
-    <FieldContainer>
+    <FieldContainer
+      style={{
+        width: '900px',
+        minHeight: '800px',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <div
         style={{
           display: 'flex',
           flexDirection: 'row',
-          marginBottom: '1rem',
-          paddingBottom: '0.5rem',
+          alignItems: 'center',
           borderBottom: '1px solid #e1e5e9',
-          width: '700px',
+          height: '4rem',
+          position: 'sticky',
+          top: 0,
+          backgroundColor: '#fff',
+          zIndex: 100,
         }}
       >
         <FieldLabel
@@ -130,7 +140,7 @@ function Image({
         </CancelButton>
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: '1rem', marginTop: '1rem' }}>
         <FieldLabel>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
@@ -158,7 +168,15 @@ function Image({
       <div
         style={{
           borderTop: '1px solid #e1e5e9',
-          paddingTop: '0.5rem',
+          height: '4rem',
+          overflow: 'auto',
+          position: 'sticky',
+          bottom: 0,
+          backgroundColor: '#fff',
+          zIndex: 100,
+          display: 'flex',
+          alignItems: 'center',
+          marginTop: 'auto',
         }}
       >
         {editData ? (

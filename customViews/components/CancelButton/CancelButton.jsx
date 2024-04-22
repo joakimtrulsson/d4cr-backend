@@ -4,7 +4,7 @@ import { Button } from '@keystone-ui/button';
 function CancelButton({ style, handleClose, children }) {
   return (
     <Button
-      style={{ marginTop: '1rem', marginLeft: '0.5rem', ...style }}
+      style={{ marginLeft: '0.5rem', ...style }}
       onClick={handleClose}
       tone='negative'
       weight='light'

@@ -58,7 +58,7 @@ const Editor = ({ onSetPreamble, extended, editData }) => {
   );
   return (
     <div className='h-96 border-x border-gray-300 px-5'>
-      <FieldContainer>
+      <FieldContainer style={{ maxWidth: '900px' }}>
         <Field
           value={description}
           autoFocus={false}

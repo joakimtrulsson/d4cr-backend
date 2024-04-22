@@ -172,10 +172,14 @@ function Banner({
         style={{
           display: 'flex',
           flexDirection: 'row',
-          marginBottom: '1rem',
-          paddingBottom: '0.5rem',
+          alignItems: 'center',
           borderBottom: '1px solid #e1e5e9',
-          width: '700px',
+          width: '900px',
+          height: '4rem',
+          position: 'sticky',
+          top: 0,
+          backgroundColor: '#fff',
+          zIndex: 100,
         }}
       >
         <FieldLabel
@@ -266,7 +270,14 @@ function Banner({
       <div
         style={{
           borderTop: '1px solid #e1e5e9',
-          paddingTop: '0.5rem',
+          height: '4rem',
+          overflow: 'auto',
+          position: 'sticky',
+          bottom: 0,
+          backgroundColor: '#fff',
+          zIndex: 100,
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         {editData ? (

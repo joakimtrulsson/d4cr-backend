@@ -14,12 +14,14 @@ const customStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    width: '800px',
-    height: '80%',
+    width: '1000px',
+    maxHeight: '80%',
     transform: 'translate(-50%, -50%)',
     border: 'none',
     boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.2)',
     borderRadius: '12px',
+    padding: 0,
+    margin: 0,
   },
 };
 
@@ -148,7 +150,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
             <Modal
               isOpen={modalIsOpen}
               onRequestClose={closeModal}
-              contentLabel='Preview section'
+              contentLabel='Create section'
               ariaHideApp={false}
               style={customStyles}
               key={index}
@@ -159,11 +161,11 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'center',
+                  // justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >
-                <SectionComponent key={index} {...commonProps} />;
+                <SectionComponent key={index} {...commonProps} />
               </div>
             </Modal>
           );
@@ -174,7 +176,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
             <Modal
               isOpen={modalIsOpen}
               onRequestClose={closeModal}
-              contentLabel='Preview section'
+              contentLabel='Edit section'
               ariaHideApp={false}
               style={customStyles}
               key={index}
@@ -185,7 +187,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'center',
+                  // justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >

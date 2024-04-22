@@ -114,28 +114,6 @@ function StoredSections({
                     <div className={styles.list.data}>
                       <div>
                         {index + 1}.
-                        {/* {section.sectionType === 'CHAPTERTEASER'
-                          ? ' Chapter Teaser'
-                          : section.sectionType === 'STEERINGGROUP'
-                          ? ' Steering Group'
-                          : ` ${section.sectionType} - ${
-                              section.sectionTitle && section.sectionTitle
-                            }${
-                              section.sectionType === 'MEDIATEXT'
-                                ? (() => {
-                                    switch (section.border) {
-                                      case 'TOPBOTTOM':
-                                        return ' Border: Top & Bottom';
-                                      case 'TOP':
-                                        return ' Border: Top';
-                                      case 'BOTTOM':
-                                        return ' Border: Bottom';
-                                      default:
-                                        return '';
-                                    }
-                                  })()
-                                : ''
-                            }`} */}
                         {section.sectionType === 'CHAPTERTEASER'
                           ? ' Chapter Teaser'
                           : section.sectionType === 'STEERINGGROUP'
