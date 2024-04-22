@@ -5,7 +5,6 @@ import Image from 'next/image';
 import ArrowRight from './assets/graphics/icons/arrow-right.svg';
 
 const PrinciplesCard = ({ title, url, img, subHeader }) => {
-  console.log(subHeader);
   return (
     <div
       className={`principles-card flex flex-row

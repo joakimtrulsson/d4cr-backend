@@ -40,6 +40,7 @@ function BulletList({
     } else {
       return {
         title: '',
+        listType: 'ORDERED',
         bullets: [{ bodyText: '' }],
       };
     }
@@ -138,25 +139,31 @@ function BulletList({
     <FieldContainer>
       <div
         style={{
+          display: 'flex',
+          flexDirection: 'row',
           marginBottom: '1rem',
+          paddingBottom: '0.5rem',
+          borderBottom: '1px solid #e1e5e9',
+          width: '700px',
         }}
       >
         <FieldLabel
           style={{
-            display: 'flex',
-            paddingTop: '0.5rem',
+            fontSize: '1.3rem',
           }}
         >
           Large bullet list - <ImageTooltip type='LARGEBULLETLIST' />
-          <CancelButton
-            handleClose={handleOpenModal}
-            style={{ marginTop: 0, marginLeft: 'auto' }}
-          >
-            Close section
-          </CancelButton>
         </FieldLabel>
+        <CancelButton
+          handleClose={handleOpenModal}
+          style={{ marginTop: 0, marginLeft: 'auto' }}
+        >
+          Close section
+        </CancelButton>
+      </div>
 
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
         </FieldDescription>
@@ -169,7 +176,9 @@ function BulletList({
         {errors.includes('sectionTitle') && (
           <ValidationError field='Section identifier' />
         )}
+      </div>
 
+      <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
           This reqiured field specifies the title text on the Large Bullet List section.
@@ -182,11 +191,7 @@ function BulletList({
         {errors.includes('title') && <ValidationError field='Title' />}
       </div>
 
-      <div
-        style={{
-          marginBottom: '1rem',
-        }}
-      >
+      <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
         <FieldDescription>
           This required field specifies a brief description of the list, which will be
@@ -200,10 +205,8 @@ function BulletList({
         {errors.includes('subHeader') && <ValidationError field='Preamble text' />}
       </div>
 
-      <div>
-        <FieldLabel style={{ paddingTop: '0.5rem', borderTop: '1px solid #e1e5e9' }}>
-          List type
-        </FieldLabel>
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel style={{}}>List type</FieldLabel>
         <FieldDescription>
           This required field specifies the type of list. If Numbered List is selected, it
           will be a numbered list. If Bulleted List is chosen, it will be a bulleted list
@@ -252,7 +255,12 @@ function BulletList({
         );
       })}
 
-      <div>
+      <div
+        style={{
+          borderTop: '1px solid #e1e5e9',
+          paddingTop: '0.5rem',
+        }}
+      >
         <AddEntryButton handleAdd={handleAddField}>Add field</AddEntryButton>
 
         {editData ? (

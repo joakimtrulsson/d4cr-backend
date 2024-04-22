@@ -168,22 +168,33 @@ function Banner({
 
   return (
     <FieldContainer>
-      <div style={{ marginBottom: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          marginBottom: '1rem',
+          paddingBottom: '0.5rem',
+          borderBottom: '1px solid #e1e5e9',
+          width: '700px',
+        }}
+      >
         <FieldLabel
           style={{
-            display: 'flex',
-            paddingTop: '0.5rem',
+            fontSize: '1.3rem',
           }}
         >
           Banner - <ImageTooltip type='BANNER' />
-          <CancelButton
-            handleClose={handleOpenModal}
-            style={{ marginTop: 0, marginLeft: 'auto' }}
-          >
-            Close section
-          </CancelButton>
         </FieldLabel>
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <CancelButton
+          handleClose={handleOpenModal}
+          style={{ marginTop: 0, marginLeft: 'auto' }}
+        >
+          Close section
+        </CancelButton>
+      </div>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
         </FieldDescription>
@@ -195,7 +206,9 @@ function Banner({
         {errors.includes('sectionTitle') && (
           <ValidationError field='Section identifier' />
         )}
+      </div>
 
+      <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
           This reqiured field specifies the title text of the banner.
@@ -207,6 +220,7 @@ function Banner({
         />
         {errors.includes('title') && <ValidationError field='Title' />}
       </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
         <FieldDescription>
@@ -219,7 +233,8 @@ function Banner({
         />
         {errors.includes('preamble') && <ValidationError field='Preamble text' />}
       </div>
-      <div>
+
+      <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Call to action</FieldLabel>
         <FieldDescription>
           This required field represents the anchor text for the call-to-action button
@@ -237,15 +252,23 @@ function Banner({
         />
         {errors.includes('cta') && <ValidationError field='Call to action' />}
       </div>
-      <FieldLabel>Select an icon:</FieldLabel>
-      <FieldDescription>
-        This required field specifies the icon to be rendered in the banner.
-      </FieldDescription>
-      <IconPicker value={iconName} onChange={handleIconNameChange} />
 
-      {errors.includes('iconName') && <ValidationError field='Icon' />}
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Select an icon:</FieldLabel>
+        <FieldDescription>
+          This required field specifies the icon to be rendered in the banner.
+        </FieldDescription>
+        <IconPicker value={iconName} onChange={handleIconNameChange} />
 
-      <div style={{ paddingTop: '1rem', borderTop: '1px solid #e1e5e9' }}>
+        {errors.includes('iconName') && <ValidationError field='Icon' />}
+      </div>
+
+      <div
+        style={{
+          borderTop: '1px solid #e1e5e9',
+          paddingTop: '0.5rem',
+        }}
+      >
         {editData ? (
           <UpdateSectionButton handleUpdate={handleSaveUpdate}>
             Update

@@ -107,22 +107,33 @@ function WysiwygSection({
 
   return (
     <FieldContainer>
-      <div style={{ marginBottom: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          marginBottom: '1rem',
+          paddingBottom: '0.5rem',
+          borderBottom: '1px solid #e1e5e9',
+          width: '700px',
+        }}
+      >
         <FieldLabel
           style={{
-            display: 'flex',
-            paddingTop: '0.5rem',
+            fontSize: '1.3rem',
           }}
         >
           WYSIWYG - <ImageTooltip type='WYSIWYG' />
-          <CancelButton
-            handleClose={handleOpenModal}
-            style={{ marginTop: 0, marginLeft: 'auto' }}
-          >
-            Close section
-          </CancelButton>
         </FieldLabel>
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <CancelButton
+          handleClose={handleOpenModal}
+          style={{ marginTop: 0, marginLeft: 'auto' }}
+        >
+          Close section
+        </CancelButton>
+      </div>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
         </FieldDescription>
@@ -136,7 +147,7 @@ function WysiwygSection({
         )}
       </div>
 
-      <div>
+      <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Text</FieldLabel>
         <Editor
           onSetPreamble={setPreamble}
@@ -146,7 +157,12 @@ function WysiwygSection({
         {errors.includes('preamble') && <ValidationError field='Preamble text' />}
       </div>
 
-      <div style={{ margin: '1rem 0' }}>
+      <div
+        style={{
+          borderTop: '1px solid #e1e5e9',
+          paddingTop: '0.5rem',
+        }}
+      >
         {editData ? (
           <UpdateSectionButton handleUpdate={handleSaveUpdate}>
             Update
@@ -156,9 +172,7 @@ function WysiwygSection({
             Add WYSIWYG section
           </AddSectionButton>
         )}
-      </div>
 
-      <div style={{ borderTop: '1px solid #e1e5e9' }}>
         {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
       </div>
 

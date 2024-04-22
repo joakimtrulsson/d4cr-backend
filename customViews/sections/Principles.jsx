@@ -200,23 +200,33 @@ function Principles({
 
   return (
     <FieldContainer>
-      <div style={{ marginBottom: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          marginBottom: '1rem',
+          paddingBottom: '0.5rem',
+          borderBottom: '1px solid #e1e5e9',
+          width: '700px',
+        }}
+      >
         <FieldLabel
           style={{
-            display: 'flex',
-            paddingTop: '0.5rem',
+            fontSize: '1.3rem',
           }}
         >
           Principles - <ImageTooltip type='PRINCIPLES' />
-          <CancelButton
-            handleClose={handleOpenModal}
-            style={{ marginTop: 0, marginLeft: 'auto' }}
-          >
-            Close section
-          </CancelButton>
         </FieldLabel>
+        <CancelButton
+          handleClose={handleOpenModal}
+          style={{ marginTop: 0, marginLeft: 'auto' }}
+        >
+          Close section
+        </CancelButton>
+      </div>
 
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
         </FieldDescription>
@@ -229,7 +239,9 @@ function Principles({
         {errors.includes('sectionTitle') && (
           <ValidationError field='Section identifier' />
         )}
+      </div>
 
+      <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
           This required field specifies the title text for the Principle section.
@@ -255,7 +267,7 @@ function Principles({
         {errors.includes('preamble') && <ValidationError field='Preamble' />}
       </div>
 
-      <div>
+      <div style={{ marginBottom: '1rem' }}>
         {groups.map((group, index) => (
           <div key={group.id}>
             <PrinciplesForm
@@ -270,7 +282,13 @@ function Principles({
             />
 
             {groups.length > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                }}
+              >
                 <RemoveEntryButton
                   style={{ marginBottom: '1rem' }}
                   handleRemove={handleRemoveGroup}
@@ -283,18 +301,28 @@ function Principles({
           </div>
         ))}
       </div>
-      {isAddAndResetVisible && (
-        <AddEntryButton handleAdd={handleAddGroup}>Add new group</AddEntryButton>
-      )}
 
-      {editData ? (
-        <UpdateSectionButton handleUpdate={handleSaveUpdate}>Update</UpdateSectionButton>
-      ) : (
-        <AddSectionButton handleSaveSection={handleSave}>
-          Add principles section
-        </AddSectionButton>
-      )}
-      {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
+      <div
+        style={{
+          borderTop: '1px solid #e1e5e9',
+          paddingTop: '0.5rem',
+        }}
+      >
+        {isAddAndResetVisible && (
+          <AddEntryButton handleAdd={handleAddGroup}>Add new group</AddEntryButton>
+        )}
+
+        {editData ? (
+          <UpdateSectionButton handleUpdate={handleSaveUpdate}>
+            Update
+          </UpdateSectionButton>
+        ) : (
+          <AddSectionButton handleSaveSection={handleSave}>
+            Add principles section
+          </AddSectionButton>
+        )}
+        {editData && <CancelButton handleClose={onCloseSection}>Cancel</CancelButton>}
+      </div>
 
       <CloseSectionAlert
         isOpen={isOpen}

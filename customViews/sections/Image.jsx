@@ -105,23 +105,33 @@ function Image({
 
   return (
     <FieldContainer>
-      <div style={{ marginBottom: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          marginBottom: '1rem',
+          paddingBottom: '0.5rem',
+          borderBottom: '1px solid #e1e5e9',
+          width: '700px',
+        }}
+      >
         <FieldLabel
           style={{
-            display: 'flex',
-            paddingTop: '0.5rem',
+            fontSize: '1.3rem',
           }}
         >
           Images - <ImageTooltip type='IMAGE' />
-          <CancelButton
-            handleClose={handleOpenModal}
-            style={{ marginTop: 0, marginLeft: 'auto' }}
-          >
-            Close section
-          </CancelButton>
         </FieldLabel>
+        <CancelButton
+          handleClose={handleOpenModal}
+          style={{ marginTop: 0, marginLeft: 'auto' }}
+        >
+          Close section
+        </CancelButton>
+      </div>
 
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
         </FieldDescription>
@@ -136,14 +146,21 @@ function Image({
         )}
       </div>
 
-      <ImageLibrary
-        selectedFile={selectedFiles}
-        setSelectedFile={setSelectedFiles}
-        isMultiSelect={true}
-      />
-      {errors.includes('images') && <ValidationError field='Images' />}
+      <div style={{ marginBottom: '1rem' }}>
+        <ImageLibrary
+          selectedFile={selectedFiles}
+          setSelectedFile={setSelectedFiles}
+          isMultiSelect={true}
+        />
+        {errors.includes('images') && <ValidationError field='Images' />}
+      </div>
 
-      <div style={{ paddingTop: '1rem', borderTop: '1px solid #e1e5e9' }}>
+      <div
+        style={{
+          borderTop: '1px solid #e1e5e9',
+          paddingTop: '0.5rem',
+        }}
+      >
         {editData ? (
           <UpdateSectionButton handleUpdate={handleSaveUpdate}>
             Update

@@ -174,23 +174,33 @@ function NewsTeaser({
 
   return (
     <FieldContainer>
-      <div style={{ marginBottom: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          marginBottom: '1rem',
+          paddingBottom: '0.5rem',
+          borderBottom: '1px solid #e1e5e9',
+          width: '700px',
+        }}
+      >
         <FieldLabel
           style={{
-            display: 'flex',
-            paddingTop: '0.5rem',
+            fontSize: '1.3rem',
           }}
         >
           News Teaser - <ImageTooltip type='NEWSTEASER' />
-          <CancelButton
-            handleClose={handleOpenModal}
-            style={{ marginTop: 0, marginLeft: 'auto' }}
-          >
-            Close section
-          </CancelButton>
         </FieldLabel>
+        <CancelButton
+          handleClose={handleOpenModal}
+          style={{ marginTop: 0, marginLeft: 'auto' }}
+        >
+          Close section
+        </CancelButton>
+      </div>
 
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
         </FieldDescription>
@@ -202,7 +212,9 @@ function NewsTeaser({
         {errors.includes('sectionTitle') && (
           <ValidationError field='Section identifier' />
         )}
+      </div>
 
+      <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
           This reqiured field specifies the title text on the News section.
@@ -255,7 +267,12 @@ function NewsTeaser({
         </div>
       </div>
 
-      <div style={{ paddingTop: '1rem', borderTop: '1px solid #e1e5e9' }}>
+      <div
+        style={{
+          borderTop: '1px solid #e1e5e9',
+          paddingTop: '0.5rem',
+        }}
+      >
         {editData ? (
           <UpdateSectionButton handleUpdate={handleSaveUpdate}>
             Update

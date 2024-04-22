@@ -130,24 +130,31 @@ function Accordion({
     <FieldContainer>
       <div
         style={{
-          marginBottom: '2rem',
+          display: 'flex',
+          flexDirection: 'row',
+          marginBottom: '1rem',
+          paddingBottom: '0.5rem',
+          borderBottom: '1px solid #e1e5e9',
+          width: '700px',
         }}
       >
         <FieldLabel
           style={{
-            display: 'flex',
-            paddingTop: '0.5rem',
+            fontSize: '1.3rem',
           }}
         >
           Accordion - <ImageTooltip type='ACCORDION' />
-          <CancelButton
-            handleClose={handleOpenModal}
-            style={{ marginTop: 0, marginLeft: 'auto' }}
-          >
-            Close section
-          </CancelButton>
         </FieldLabel>
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Section identifier</FieldLabel>
+        <CancelButton
+          handleClose={handleOpenModal}
+          style={{ marginTop: 0, marginLeft: 'auto' }}
+        >
+          Close section
+        </CancelButton>
+      </div>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Section identifier</FieldLabel>
         <FieldDescription>
           Unique identifier for this section, used in the sections list.
         </FieldDescription>
@@ -160,8 +167,10 @@ function Accordion({
         {errors.includes('sectionTitle') && (
           <ValidationError field='Section identifier' />
         )}
+      </div>
 
-        <FieldLabel style={{ paddingTop: '0.5rem' }}>Accordion title</FieldLabel>
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Accordion title</FieldLabel>
         <FieldDescription>
           This required field specifies the title of the accordion.
         </FieldDescription>
@@ -175,13 +184,9 @@ function Accordion({
 
       {value.fields.map((field, index) => (
         <div key={index} style={{ marginBottom: '1rem' }}>
-          <FieldLabel
-            style={{
-              paddingTop: '1rem',
-            }}
-          >{`Content title ${index + 1}`}</FieldLabel>
+          <FieldLabel style={{}}>{`Content title ${index + 1}`}</FieldLabel>
           <FieldDescription>
-            This field specifies the contentTitle of the accordion.
+            This field specifies the content title of the accordion.
           </FieldDescription>
           <TextInput
             style={{ marginBottom: '1rem' }}
@@ -208,7 +213,7 @@ function Accordion({
           ) && <ValidationError field={`Body Text ${index + 1}`} />}
 
           {value.fields.length > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <RemoveEntryButton
                 style={{ marginTop: '1rem' }}
                 handleRemove={handleRemoveField}
@@ -221,7 +226,12 @@ function Accordion({
         </div>
       ))}
 
-      <div style={{ borderTop: '1px solid #e1e5e9' }}>
+      <div
+        style={{
+          borderTop: '1px solid #e1e5e9',
+          paddingTop: '0.5rem',
+        }}
+      >
         <AddEntryButton handleAdd={handleAddField}>Add field</AddEntryButton>
 
         {editData ? (

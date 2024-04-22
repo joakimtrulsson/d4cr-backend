@@ -2,10 +2,26 @@ import React, { useState } from 'react';
 
 import { FieldContainer, FieldLabel, FieldDescription } from '@keystone-ui/fields';
 import { AlertDialog } from '@keystone-ui/modals';
+import Modal from 'react-modal';
 
 import { options } from './utils/constants';
 
 import * as SectionComponents from './sections';
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    width: '800px',
+    height: '80%',
+    transform: 'translate(-50%, -50%)',
+    border: 'none',
+    boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.2)',
+    borderRadius: '12px',
+  },
+};
 
 const {
   ChapterTeaser,
@@ -40,6 +56,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   const [sectionsData, setSectionsData] = useState(value ? JSON.parse(value) : []);
   const [activeSection, setActiveSection] = useState('Select');
   const [isOpen, setIsOpen] = React.useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(true);
   const [sectionToDelete, setSectionToDelete] = React.useState({
     sectionId: '',
     sectionTitle: '',
@@ -49,6 +66,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
 
   const handleActiveSection = (event) => {
     setActiveSection(event.value);
+    setModalIsOpen(true);
   };
 
   const handleEditSection = (sectionId) => {
@@ -100,6 +118,11 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
     setActiveSection(options[0].value);
   };
 
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+  const closeModal = () => setModalIsOpen(false);
+
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
@@ -121,24 +144,66 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
         };
 
         if (!editFormData && activeSection === key) {
-          return <SectionComponent key={index} {...commonProps} />;
+          return (
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              contentLabel='Preview section'
+              ariaHideApp={false}
+              style={customStyles}
+              key={index}
+              shouldCloseOnOverlayClick={false}
+              shouldCloseOnEsc={false}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <SectionComponent key={index} {...commonProps} />;
+              </div>
+            </Modal>
+          );
         }
 
         if (editFormData && editFormData.sectionData.sectionType === key) {
           return (
-            <SectionComponent
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              contentLabel='Preview section'
+              ariaHideApp={false}
+              style={customStyles}
               key={index}
-              {...commonProps}
-              editData={editFormData.sectionData}
-              sectionIndex={editFormData.sectionIndex}
-            />
+              shouldCloseOnOverlayClick={false}
+              shouldCloseOnEsc={false}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <SectionComponent
+                  key={index}
+                  {...commonProps}
+                  editData={editFormData.sectionData}
+                  sectionIndex={editFormData.sectionIndex}
+                />
+              </div>
+            </Modal>
           );
         }
 
         return null;
       })}
 
-      <FieldLabel style={{ marginTop: '2rem' }}>Stored Sections</FieldLabel>
+      <FieldLabel style={{ marginTop: '1rem' }}>Stored Sections</FieldLabel>
       <FieldDescription style={{ marginTop: '0rem', marginBottom: '-0.5rem' }}>
         Sections stored in this field will be displayed in the order listed. You can
         easily reorder them by clicking and dragging. To preview how the section will

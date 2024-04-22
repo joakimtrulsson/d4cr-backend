@@ -34,29 +34,46 @@ function ChapterTeaser({ onCloseSection, onChange, sectionsData, setSectionsData
 
   return (
     <FieldContainer>
-      <FieldLabel
+      <div
         style={{
           display: 'flex',
-          paddingTop: '0.5rem',
+          flexDirection: 'row',
+          marginBottom: '1rem',
+          paddingBottom: '0.5rem',
+          borderBottom: '1px solid #e1e5e9',
+          width: '700px',
         }}
       >
-        Chapter Teaser - <ImageTooltip type='CHAPTERTEASER' />
+        <FieldLabel
+          style={{
+            fontSize: '1.3rem',
+          }}
+        >
+          Chapter Teaser - <ImageTooltip type='CHAPTERTEASER' />
+        </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}
           style={{ marginTop: 0, marginLeft: 'auto' }}
         >
           Close section
         </CancelButton>
-      </FieldLabel>
+      </div>
 
       <FieldDescription style={{ marginBottom: '1rem' }}>
         This will add a Chapter teaser section, featuring the chapters that exist at the
         time of creation.
       </FieldDescription>
-      <AddSectionButton handleSaveSection={handleSave}>
-        Add Chapter Teaser section
-      </AddSectionButton>
 
+      <div
+        style={{
+          borderTop: '1px solid #e1e5e9',
+          paddingTop: '0.5rem',
+        }}
+      >
+        <AddSectionButton handleSaveSection={handleSave}>
+          Add Chapter Teaser section
+        </AddSectionButton>
+      </div>
       <CloseSectionAlert
         isOpen={isOpen}
         handleCancel={handleCancel}
