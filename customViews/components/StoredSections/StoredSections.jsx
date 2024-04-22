@@ -27,6 +27,7 @@ const customStyles = {
     bottom: 'auto',
     transform: 'translate(-50%, -50%)',
     border: 'none',
+    width: '75%',
     boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.2)',
     borderRadius: '12px',
   },
