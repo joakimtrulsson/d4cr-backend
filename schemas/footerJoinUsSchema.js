@@ -34,7 +34,7 @@ export const footerJoinUsSchema = list({
       ui: {
         description:
           'This field specifies the icon that represents the button to the social media link 1.',
-        views: './customViews/IconPickerSection.jsx',
+        views: './customViews/fields/IconPickerField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -53,7 +53,7 @@ export const footerJoinUsSchema = list({
       ui: {
         description:
           'This field specifies the icon that represents the button to the social media link 2.',
-        views: './customViews/IconPickerSection.jsx',
+        views: './customViews/fields/IconPickerField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -72,7 +72,7 @@ export const footerJoinUsSchema = list({
       ui: {
         description:
           'This field specifies the icon that represents the button to the social media link 3.',
-        views: './customViews/IconPickerSection.jsx',
+        views: './customViews/fields/IconPickerField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -91,7 +91,7 @@ export const footerJoinUsSchema = list({
       ui: {
         description:
           'This field specifies the icon that represents the button to the social media link 4.',
-        views: './customViews/IconPickerSection.jsx',
+        views: './customViews/fields/IconPickerField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

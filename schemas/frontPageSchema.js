@@ -49,7 +49,7 @@ export const frontPageSchema = list({
 
     heroVideo: json({
       ui: {
-        views: './customViews/VideoLibrary.jsx',
+        views: './customViews/fields/VideoLibraryField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -66,7 +66,7 @@ export const frontPageSchema = list({
 
     ctaOneUrl: json({
       ui: {
-        views: './customViews/DynamicLinkSection.jsx',
+        views: './customViews/fields/DynamicLinkField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -83,7 +83,7 @@ export const frontPageSchema = list({
 
     ctaTwoUrl: json({
       ui: {
-        views: './customViews/DynamicLinkSection.jsx',
+        views: './customViews/fields/DynamicLinkField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -92,7 +92,7 @@ export const frontPageSchema = list({
 
     sections: json({
       ui: {
-        views: './customViews/AllSections.jsx',
+        views: './customViews/fields/AllSectionsField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

@@ -22,7 +22,7 @@ export const videoSchema = list({
     title: text({
       hooks: {
         resolveInput: ({ operation, resolvedData, inputData }) => {
-          console.log('resolvedData', resolvedData);
+          // console.log('resolvedData', resolvedData);
           if (operation === 'create' && !inputData.title) {
             return resolvedData.file.filename;
           }

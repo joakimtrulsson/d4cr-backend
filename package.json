@@ -30,7 +30,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
-    "react-media-library": "^2.0.1",
+    "react-media-library": "^2.0.3",
     "react-modal": "^3.16.1",
     "sass": "^1.70.0",
     "slate": "^0.101.5",

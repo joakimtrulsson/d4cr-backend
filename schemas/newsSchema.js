@@ -104,7 +104,7 @@ export const newsSchema = list({
       ui: {
         description:
           'This required field specifies the image for the news article. It will be rendered at the top of the news page and also in the news card on the predefined page "/news". ',
-        views: './customViews/ImageLibrary.jsx',
+        views: './customViews/fields/ImageLibraryField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -113,7 +113,7 @@ export const newsSchema = list({
 
     sections: json({
       ui: {
-        views: './customViews/AllSections.jsx',
+        views: './customViews/fields/AllSectionsField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

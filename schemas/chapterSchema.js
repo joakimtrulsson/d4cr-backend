@@ -116,7 +116,7 @@ export const chapterSchema = list({
       ui: {
         description:
           'This required field specifies the hero image for the chapter, which will be prominently displayed above the title and the text "D4CR PRESENTS". The hero image serves as a visual centerpiece.',
-        views: './customViews/ImageLibrary.jsx',
+        views: './customViews/fields/ImageLibraryField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: {
@@ -169,7 +169,7 @@ export const chapterSchema = list({
 
     sections: json({
       ui: {
-        views: './customViews/AllSections.jsx',
+        views: './customViews/fields/AllSectionsField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         // itemView: { fieldMode: 'edit' },

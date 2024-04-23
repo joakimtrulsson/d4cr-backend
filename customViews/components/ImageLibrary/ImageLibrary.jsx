@@ -122,6 +122,7 @@ function ImageLibrary({ selectedFile, setSelectedFile, isMultiSelect }) {
           variables: {
             data: {
               title: `${uploadedFile.name}`,
+              altText: `Image - ${uploadedFile.name}`,
               file: {
                 upload: null,
               },
@@ -284,7 +285,7 @@ function ImageLibrary({ selectedFile, setSelectedFile, isMultiSelect }) {
           // fileLibraryList={files}
           fileLibraryList={filteredFiles ? filteredFiles : files}
           fileUploadCallback={handleFileUpload}
-          filesDeleteCallback={handleDeleteFile}
+          // filesDeleteCallback={handleDeleteFile}
           filesSelectCallback={handleSelectFile}
           finishUploadCallback={function noRefCheck() {}}
           onClose={handleOpenMediaLibrary}

@@ -6,18 +6,18 @@ import { Button } from '@keystone-ui/button';
 import { MinusCircleIcon, EditIcon, MoveIcon, EyeIcon } from '@keystone-ui/icons';
 import Modal from 'react-modal';
 
-import BannerPreview from '../../sections/previews/BannerPreview.jsx';
-import LargeBulletListPreview from '../../sections/previews/LargeBulletListPreview.jsx';
-import AccordionPreview from '../../sections/previews/AccordionPreview.jsx';
-import MediaTextPreview from '../../sections/previews/MediaTextPreview.jsx';
-import NewsTeaserPreview from '../../sections/previews/NewsTeaserPreview.jsx';
-import ImagePreview from '../../sections/previews/ImagesPreview.jsx';
-import PrinciplesPreview from '../../sections/previews/PrinciplesPreview.jsx';
-import WyiswygPreview from '../../sections/previews/WysiwygPreview.jsx';
-import ChapterTeaserPreview from '../../sections/previews/ChapterTeaserPreview.jsx';
-import PeoplePreview from '../../sections/previews/PeoplePreview.jsx';
+import BannerPreview from '../../previews/BannerPreview.jsx';
+import LargeBulletListPreview from '../../previews/LargeBulletListPreview.jsx';
+import AccordionPreview from '../../previews/AccordionPreview.jsx';
+import MediaTextPreview from '../../previews/MediaTextPreview.jsx';
+import NewsTeaserPreview from '../../previews/NewsTeaserPreview.jsx';
+import ImagePreview from '../../previews/ImagesPreview.jsx';
+import PrinciplesPreview from '../../previews/PrinciplesPreview.jsx';
+import WyiswygPreview from '../../previews/WysiwygPreview.jsx';
+import ChapterTeaserPreview from '../../previews/ChapterTeaserPreview.jsx';
+import PeoplePreview from '../../previews/PeoplePreview.jsx';
 
-import { styles } from '../../styles.js';
+import { styles } from './styles.js';
 
 const customStyles = {
   content: {

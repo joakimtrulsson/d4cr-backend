@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ReactMediaLibrary } from 'react-media-library';
+import { ReactMediaLibrary, FileLibrarySelectedItems } from 'react-media-library';
+// import { ReactMediaLibraryContext } from '../node_modules/react-media-library/src/context/ReactMediaLibraryContext';
+
 import {
   FieldContainer,
   FieldLabel,
@@ -9,7 +11,77 @@ import {
 import { Button } from '@keystone-ui/button';
 import FormData from 'form-data';
 
-import { formatFileSize } from '../utils/formatFileSize';
+import { formatFileSize } from '../../utils/formatFileSize';
+import './videoLibraryField.scss';
+
+const VideoItemCard = ({ thumbnailUrl, title, createdAt, size }) => {
+  return (
+    <div className='react-media-library__file-library-card '>
+      <video className='react-media-library__file-library-card__image'>
+        <source src={thumbnailUrl} type='video/mp4' />
+        Your browser does not support the video tag.
+      </video>
+      <h4 className='react-media-library__file-library-card__title'>{title}</h4>
+      <ul className='react-media-library__file-library-card__list'>
+        <li className='react-media-library__file-library-card__list__item'>
+          {(size / (1024 * 1024)).toFixed(1) + ' Mb'}
+        </li>
+        <li className='react-media-library__file-library-card__list__item'>
+          {new Date(createdAt).toDateString()}
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+const CustomSelectedFilesCard = () => {
+  return (
+    // <div className='react-video-library'>
+
+    <FileLibrarySelectedItems />
+  );
+};
+
+// const FileLibrarySelectedItemsCard = (param) => {
+//   console.log(param);
+
+//   // function onRemove() {
+//   //   const newSelectedItems = [...selectedItems];
+//   //   const foundIndex = newSelectedItems.findIndex((element) => element._id === props._id);
+//   //   if (foundIndex > -1) {
+//   //     newSelectedItems.splice(foundIndex, 1);
+//   //   }
+//   //   setSelectedItems(newSelectedItems);
+//   // }
+
+//   return (
+//     <div className='react-media-library__file-library-selected-items-card'>
+//       {/* {props.thumbnailUrl && (
+//         <img
+//           className='react-media-library__file-library-selected-items-card__image'
+//           src={props.thumbnailUrl}
+//           alt={props.title}
+//         />
+//       )}
+//       <div className='react-media-library__file-library-selected-items-card__info'>
+//         <div className='react-media-library__file-library-selected-items-card__title'>
+//           {props.title}
+//         </div>
+//         <div className='react-media-library__file-library-selected-items-card__description'>
+//           {props.description}
+//         </div>
+//         <div className='react-media-library__file-library-selected-items-card__file-name'>
+//           {props.fileName}
+//         </div>
+//       </div>
+//       <div className='react-media-library__file-library-selected-items-card__actions'>
+//         <button type='button' title='Remove from selected list' onClick={onRemove}>
+//           <span className='icon-close' />
+//         </button>
+//       </div> */}
+//     </div>
+//   );
+// };
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
@@ -86,7 +158,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
     setSelectedFile(file[0]);
     handleOpenMediaLibrary();
 
-    file[0].thumbnailUrl = undefined;
+    // file[0].thumbnailUrl = undefined;
 
     onChange(JSON.stringify(file[0]));
   };
@@ -108,6 +180,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
           variables: {
             data: {
               title: `${uploadedFile.name}`,
+              altText: `Video - ${uploadedFile.name}`,
               file: {
                 upload: null,
               },
@@ -196,7 +269,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   );
 
   return (
-    <FieldContainer>
+    <FieldContainer className='react-video-library'>
       <FieldLabel>{field.label}</FieldLabel>
       <FieldDescription style={{ marginBottom: '1rem' }}>
         The heroVideo field is a required component that enables the display of a video on
@@ -238,7 +311,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
       {files && (
         <ReactMediaLibrary
           acceptedTypes={['video/*']}
-          // defaultSelectedItemIds={[files[0]._id]}
+          defaultSelectedItemIds={selectedFile ? [selectedFile._id] : null}
           fileLibraryList={filteredFiles ? filteredFiles : files}
           // fileLibraryList={filteredFiles}
           modalTitle='Video Library'
@@ -249,6 +322,8 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
           onClose={handleOpenMediaLibrary}
           isOpen={isMediaLibraryOpen}
           topBarComponent={searchBar}
+          libraryCardComponent={VideoItemCard}
+          selectedItemsComponent={CustomSelectedFilesCard}
         />
       )}
     </FieldContainer>

@@ -130,7 +130,7 @@ export const caseSchema = list({
       ui: {
         description:
           'This required image will only be displayed on the predefined page "/cases". It is used to illustrate the case in a case card ',
-        views: './customViews/ImageLibrary.jsx',
+        views: './customViews/fields/ImageLibraryField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -147,7 +147,7 @@ export const caseSchema = list({
 
     sections: json({
       ui: {
-        views: './customViews/AllSections.jsx',
+        views: './customViews/fields/AllSectionsField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

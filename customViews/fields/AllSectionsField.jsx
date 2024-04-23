@@ -4,9 +4,9 @@ import { FieldContainer, FieldLabel, FieldDescription } from '@keystone-ui/field
 import { AlertDialog } from '@keystone-ui/modals';
 import Modal from 'react-modal';
 
-import { options } from './utils/constants';
+import { options } from '../utils/constants';
 
-import * as SectionComponents from './sections';
+import * as SectionComponents from '../sections';
 
 const customStyles = {
   content: {
@@ -51,8 +51,8 @@ const SECTIONS = {
   PEOPLE: People,
 };
 
-import SelectSections from './components/SelectSections/SelectSections';
-import StoredSections from './components/StoredSections/StoredSections';
+import SelectSections from '../components/SelectSections/SelectSections';
+import StoredSections from '../components/StoredSections/StoredSections';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [sectionsData, setSectionsData] = useState(value ? JSON.parse(value) : []);

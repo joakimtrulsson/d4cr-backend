@@ -24,7 +24,7 @@ export const footerMenuSchema = list({
       ui: {
         description:
           'Add and remove, items in the footer menu, which is placed beneth the social media links.',
-        views: './customViews/FooterMenu.jsx',
+        views: './customViews/fields/FooterMenuField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

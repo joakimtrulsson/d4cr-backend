@@ -22,7 +22,7 @@ export const mainMenuSchema = list({
   fields: {
     navigation: json({
       ui: {
-        views: './customViews/MainMenu.jsx',
+        views: './customViews/fields/MainMenuField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -40,7 +40,7 @@ export const mainMenuSchema = list({
 
     ctaUrl: json({
       ui: {
-        views: './customViews/DynamicLinkSection.jsx',
+        views: './customViews/fields/DynamicLinkField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

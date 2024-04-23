@@ -51,7 +51,7 @@ export const peopleSchema = list({
     image: json({
       ui: {
         description: 'This field specifies the image of the person.',
-        views: './customViews/ImageLibrary.jsx',
+        views: './customViews/fields/ImageLibraryField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -69,7 +69,7 @@ export const peopleSchema = list({
       label: 'Socialmedia icon 1',
       ui: {
         description: 'This field specifies the icon for the first social media link.',
-        views: './customViews/IconPickerSection.jsx',
+        views: './customViews/fields/IconPickerField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -87,7 +87,7 @@ export const peopleSchema = list({
       label: 'Socialmedia icon 2',
       ui: {
         description: 'This field specifies the icon for the second social media link.',
-        views: './customViews/IconPickerSection.jsx',
+        views: './customViews/fields/IconPickerField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

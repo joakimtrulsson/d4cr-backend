@@ -8,7 +8,7 @@ import {
   TextInput,
 } from '@keystone-ui/fields';
 
-import useFetchLinkOptions from './hooks/useFetchLinkOptions';
+import useFetchLinkOptions from '../hooks/useFetchLinkOptions';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [selectValue, setSelectValue] = useState('');

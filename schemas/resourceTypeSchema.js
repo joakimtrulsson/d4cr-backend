@@ -42,7 +42,7 @@ export const resourceTypeSchema = list({
       ui: {
         description:
           'This required field specifies the icon that represents the type of resource.',
-        views: './customViews/IconPickerSection.jsx',
+        views: './customViews/fields/IconPickerField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

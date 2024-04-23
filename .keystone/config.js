@@ -559,7 +559,7 @@ var chapterSchema = (0, import_core3.list)({
     heroImage: (0, import_fields3.json)({
       ui: {
         description: 'This required field specifies the hero image for the chapter, which will be prominently displayed above the title and the text "D4CR PRESENTS". The hero image serves as a visual centerpiece.',
-        views: "./customViews/ImageLibrary.jsx",
+        views: "./customViews/fields/ImageLibraryField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: {
@@ -605,7 +605,7 @@ var chapterSchema = (0, import_core3.list)({
     }),
     sections: (0, import_fields3.json)({
       ui: {
-        views: "./customViews/AllSections.jsx",
+        views: "./customViews/fields/AllSectionsField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         // itemView: { fieldMode: 'edit' },
@@ -810,7 +810,7 @@ var pageSchema = (0, import_core5.list)({
     }),
     ctaOneUrl: (0, import_fields4.json)({
       ui: {
-        views: "./customViews/DynamicLinkSection.jsx",
+        views: "./customViews/fields/DynamicLinkField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -824,7 +824,7 @@ var pageSchema = (0, import_core5.list)({
     }),
     ctaTwoUrl: (0, import_fields4.json)({
       ui: {
-        views: "./customViews/DynamicLinkSection.jsx",
+        views: "./customViews/fields/DynamicLinkField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -847,7 +847,7 @@ var pageSchema = (0, import_core5.list)({
     }),
     sections: (0, import_fields4.json)({
       ui: {
-        views: "./customViews/AllSections.jsx",
+        views: "./customViews/fields/AllSectionsField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -901,7 +901,7 @@ var frontPageSchema = (0, import_core6.list)({
     }),
     heroVideo: (0, import_fields5.json)({
       ui: {
-        views: "./customViews/VideoLibrary.jsx",
+        views: "./customViews/fields/VideoLibraryField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -915,7 +915,7 @@ var frontPageSchema = (0, import_core6.list)({
     }),
     ctaOneUrl: (0, import_fields5.json)({
       ui: {
-        views: "./customViews/DynamicLinkSection.jsx",
+        views: "./customViews/fields/DynamicLinkField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -929,7 +929,7 @@ var frontPageSchema = (0, import_core6.list)({
     }),
     ctaTwoUrl: (0, import_fields5.json)({
       ui: {
-        views: "./customViews/DynamicLinkSection.jsx",
+        views: "./customViews/fields/DynamicLinkField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -937,7 +937,7 @@ var frontPageSchema = (0, import_core6.list)({
     }),
     sections: (0, import_fields5.json)({
       ui: {
-        views: "./customViews/AllSections.jsx",
+        views: "./customViews/fields/AllSectionsField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1105,7 +1105,7 @@ var footerJoinUsSchema = (0, import_core9.list)({
       validation: { isRequired: true },
       ui: {
         description: "This field specifies the icon that represents the button to the social media link 1.",
-        views: "./customViews/IconPickerSection.jsx",
+        views: "./customViews/fields/IconPickerField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1121,7 +1121,7 @@ var footerJoinUsSchema = (0, import_core9.list)({
       label: "Social Media Icon 2",
       ui: {
         description: "This field specifies the icon that represents the button to the social media link 2.",
-        views: "./customViews/IconPickerSection.jsx",
+        views: "./customViews/fields/IconPickerField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1137,7 +1137,7 @@ var footerJoinUsSchema = (0, import_core9.list)({
       label: "Social Media Icon 3",
       ui: {
         description: "This field specifies the icon that represents the button to the social media link 3.",
-        views: "./customViews/IconPickerSection.jsx",
+        views: "./customViews/fields/IconPickerField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1153,7 +1153,7 @@ var footerJoinUsSchema = (0, import_core9.list)({
       label: "Social Media Icon 4",
       ui: {
         description: "This field specifies the icon that represents the button to the social media link 4.",
-        views: "./customViews/IconPickerSection.jsx",
+        views: "./customViews/fields/IconPickerField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1184,7 +1184,7 @@ var mainMenuSchema = (0, import_core10.list)({
   fields: {
     navigation: (0, import_fields9.json)({
       ui: {
-        views: "./customViews/MainMenu.jsx",
+        views: "./customViews/fields/MainMenuField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1199,7 +1199,7 @@ var mainMenuSchema = (0, import_core10.list)({
     }),
     ctaUrl: (0, import_fields9.json)({
       ui: {
-        views: "./customViews/DynamicLinkSection.jsx",
+        views: "./customViews/fields/DynamicLinkField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1231,7 +1231,7 @@ var footerMenuSchema = (0, import_core11.list)({
     navigation: (0, import_fields10.json)({
       ui: {
         description: "Add and remove, items in the footer menu, which is placed beneth the social media links.",
-        views: "./customViews/FooterMenu.jsx",
+        views: "./customViews/fields/FooterMenuField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1327,7 +1327,7 @@ var newsSchema = (0, import_core12.list)({
     image: (0, import_fields11.json)({
       ui: {
         description: 'This required field specifies the image for the news article. It will be rendered at the top of the news page and also in the news card on the predefined page "/news". ',
-        views: "./customViews/ImageLibrary.jsx",
+        views: "./customViews/fields/ImageLibraryField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1335,7 +1335,7 @@ var newsSchema = (0, import_core12.list)({
     }),
     sections: (0, import_fields11.json)({
       ui: {
-        views: "./customViews/AllSections.jsx",
+        views: "./customViews/fields/AllSectionsField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1477,7 +1477,7 @@ var resourceSchema = (0, import_core15.list)({
     image: (0, import_fields13.json)({
       ui: {
         description: 'This required field specifies the image for the resource. It will be rendered in the resource card on the predefined page "/resources". The image serves as a visual representation of the resource.',
-        views: "./customViews/ImageLibrary.jsx",
+        views: "./customViews/fields/ImageLibraryField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1537,7 +1537,7 @@ var resourceTypeSchema = (0, import_core16.list)({
       validation: { isRequired: true },
       ui: {
         description: "This required field specifies the icon that represents the type of resource.",
-        views: "./customViews/IconPickerSection.jsx",
+        views: "./customViews/fields/IconPickerField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1668,7 +1668,7 @@ var principleSchema = (0, import_core17.list)({
     image: (0, import_fields15.json)({
       ui: {
         description: "This field specifies the image that will be displayed beneath the quote on the page, as well as in Principle Sections. For optimal user experience, the image is recommended to have a transparent background.",
-        views: "./customViews/ImageLibrary.jsx",
+        views: "./customViews/fields/ImageLibraryField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1677,7 +1677,7 @@ var principleSchema = (0, import_core17.list)({
     subPrinciples: (0, import_fields15.json)({
       ui: {
         description: "This required field specifies the sub-principles associated with the main principle. These sub-principles will be displayed beneath the fields mentioned above, rendered as a list where each sub-principle is accompanied by a arrow icon pointing to the text.",
-        views: "./customViews/SubPrinciples.jsx",
+        views: "./customViews/fields/SubPrinciplesField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1927,7 +1927,7 @@ var caseSchema = (0, import_core21.list)({
     caseImage: (0, import_fields18.json)({
       ui: {
         description: 'This required image will only be displayed on the predefined page "/cases". It is used to illustrate the case in a case card ',
-        views: "./customViews/ImageLibrary.jsx",
+        views: "./customViews/fields/ImageLibraryField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -1941,7 +1941,7 @@ var caseSchema = (0, import_core21.list)({
     }),
     sections: (0, import_fields18.json)({
       ui: {
-        views: "./customViews/AllSections.jsx",
+        views: "./customViews/fields/AllSectionsField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -2042,7 +2042,7 @@ var peopleSchema = (0, import_core23.list)({
     image: (0, import_fields19.json)({
       ui: {
         description: "This field specifies the image of the person.",
-        views: "./customViews/ImageLibrary.jsx",
+        views: "./customViews/fields/ImageLibraryField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -2058,7 +2058,7 @@ var peopleSchema = (0, import_core23.list)({
       label: "Socialmedia icon 1",
       ui: {
         description: "This field specifies the icon for the first social media link.",
-        views: "./customViews/IconPickerSection.jsx",
+        views: "./customViews/fields/IconPickerField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -2074,7 +2074,7 @@ var peopleSchema = (0, import_core23.list)({
       label: "Socialmedia icon 2",
       ui: {
         description: "This field specifies the icon for the second social media link.",
-        views: "./customViews/IconPickerSection.jsx",
+        views: "./customViews/fields/IconPickerField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
         itemView: { fieldMode: "edit" }
@@ -2197,7 +2197,6 @@ var videoSchema = (0, import_core25.list)({
     title: (0, import_fields21.text)({
       hooks: {
         resolveInput: ({ operation, resolvedData, inputData }) => {
-          console.log("resolvedData", resolvedData);
           if (operation === "create" && !inputData.title) {
             return resolvedData.file.filename;
           }
@@ -2290,7 +2289,7 @@ var testSchema = (0, import_core26.list)({
       fields: {
         sections: (0, import_fields22.json)({
           ui: {
-            views: "./customViews/AllSections.jsx",
+            views: "./customViews/fields/AllSectionsField.jsx",
             createView: { fieldMode: "edit" },
             listView: { fieldMode: "hidden" },
             itemView: { fieldMode: "edit", fieldPosition: "form" }

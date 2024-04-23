@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FieldContainer } from '@keystone-ui/fields';
-import Editor from './components/Editor/Editor.jsx';
+import Editor from '../components/Editor/Editor.jsx';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   return (

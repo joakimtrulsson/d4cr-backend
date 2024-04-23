@@ -134,7 +134,7 @@ export const principleSchema = list({
       ui: {
         description:
           'This field specifies the image that will be displayed beneath the quote on the page, as well as in Principle Sections. For optimal user experience, the image is recommended to have a transparent background.',
-        views: './customViews/ImageLibrary.jsx',
+        views: './customViews/fields/ImageLibraryField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
@@ -145,7 +145,7 @@ export const principleSchema = list({
       ui: {
         description:
           'This required field specifies the sub-principles associated with the main principle. These sub-principles will be displayed beneath the fields mentioned above, rendered as a list where each sub-principle is accompanied by a arrow icon pointing to the text.',
-        views: './customViews/SubPrinciples.jsx',
+        views: './customViews/fields/SubPrinciplesField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },

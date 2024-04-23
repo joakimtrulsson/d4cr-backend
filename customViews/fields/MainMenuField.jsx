@@ -10,10 +10,10 @@ import {
   TextInput,
 } from '@keystone-ui/fields';
 
-import AddEntryButton from './components/AddEntryButton/AddEntryButton';
-import RemoveEntryButton from './components/RemoveEntryButton/RemoveEntryButton';
+import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
+import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton';
 
-import useFetchLinkOptions from './hooks/useFetchLinkOptions';
+import useFetchLinkOptions from '../hooks/useFetchLinkOptions';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [data, setData] = useState([

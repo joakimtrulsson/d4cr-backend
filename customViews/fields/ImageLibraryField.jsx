@@ -9,9 +9,9 @@ import {
 
 import FormData from 'form-data';
 
-import { formatFileSize } from '../utils/formatFileSize';
+import { formatFileSize } from '../../utils/formatFileSize';
 
-import AddEntryButton from './components/AddEntryButton/AddEntryButton';
+import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
@@ -104,12 +104,14 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
           mutation CreateImage($data: ImageCreateInput!) {
             createImage(data: $data) {
               id
+              altText
             }
           }
         `,
           variables: {
             data: {
               title: `${uploadedFile.name}`,
+              altText: `Image - ${uploadedFile.name}`,
               file: {
                 upload: null,
               },
@@ -249,7 +251,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
           defaultSelectedItemIds={selectedFile ? [selectedFile._id] : null}
           fileLibraryList={filteredFiles ? filteredFiles : files}
           fileUploadCallback={handleFileUpload}
-          filesDeleteCallback={handleDeleteFile}
+          // filesDeleteCallback={handleDeleteFile}
           filesSelectCallback={handleSelectFile}
           finishUploadCallback={handleFinishUpload}
           onClose={handleOpenMediaLibrary}

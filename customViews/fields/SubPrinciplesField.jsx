@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { FieldContainer, FieldLabel, FieldDescription } from '@keystone-ui/fields';
 
-import Editor from './components/Editor/Editor';
-import AddEntryButton from './components/AddEntryButton/AddEntryButton';
-import RemoveEntryButton from './components/RemoveEntryButton/RemoveEntryButton';
+import Editor from '../components/Editor/Editor';
+import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
+import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [values, setValues] = useState(
