@@ -2094,7 +2094,6 @@ var peopleSchema = (0, import_core23.list)({
 var import_core24 = require("@keystone-6/core");
 var import_fields20 = require("@keystone-6/core/fields");
 var import_access39 = require("@keystone-6/core/access");
-var import_uuid = require("uuid");
 var imageSchema = (0, import_core24.list)({
   access: {
     operation: {

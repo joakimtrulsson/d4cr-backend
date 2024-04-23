@@ -3,7 +3,6 @@ import { text, image, timestamp, integer } from '@keystone-6/core/fields';
 
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
-import { validate } from 'uuid';
 
 export const imageSchema = list({
   access: {
