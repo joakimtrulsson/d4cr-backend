@@ -28,18 +28,18 @@ export const pageSchema = list({
       delete: rules.canManageItems,
     },
   },
-  hooks: {
-    afterOperation: async ({ operation, context, listKey, item }) => {
-      if (operation === 'create' || operation === 'update' || operation === 'delete') {
-        const response = await triggerRebuild('Page');
-        if (!response.success) {
-          throw new Error('Failed to trigger rebuild');
-        } else {
-          console.log('NextJs Rebuild triggered successfully');
-        }
-      }
-    },
-  },
+  // hooks: {
+  //   afterOperation: async ({ operation, context, listKey, item }) => {
+  //     if (operation === 'create' || operation === 'update' || operation === 'delete') {
+  //       const response = await triggerRebuild('Page');
+  //       if (!response.success) {
+  //         throw new Error('Failed to trigger rebuild');
+  //       } else {
+  //         console.log('NextJs Rebuild triggered successfully');
+  //       }
+  //     }
+  //   },
+  // },
   ui: {
     isHidden: (args) => {
       return !permissions?.canManageAllItems(args);

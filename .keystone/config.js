@@ -684,36 +684,6 @@ var heroku = new import_heroku_client.default({ token: process.env.HEROKU_API_KE
 var octokit = new import_octokit.Octokit({
   auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN
 });
-var triggerRebuild = async (dataChanged) => {
-  try {
-    const downloadUrl = await octokit.request("GET /repos/{owner}/{repo}/tarball/{ref}", {
-      owner: process.env.GITHUB_REPO_OWNER,
-      repo: process.env.GITHUB_REPO_NAME,
-      ref: process.env.GITHUB_BRANCH_TO_BUILD,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28"
-      }
-    });
-    await heroku.post(`/apps/${process.env.HEROKU_APP_ID}/builds`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/vnd.heroku+json; version=3",
-        Authorization: `Bearer ${process.env.HEROKU_API_KEY}`
-      },
-      body: {
-        source_blob: {
-          url: downloadUrl.url,
-          version_description: `${dataChanged}\xB4s data updated`
-        }
-      }
-    });
-    return { success: true };
-  } catch (error) {
-    console.error("Something went wrong when triggering a new build.", error);
-    return { success: false };
-  }
-};
-var triggerRebuild_default = triggerRebuild;
 
 // schemas/pageSchema.js
 var pageSchema = (0, import_core5.list)({
@@ -735,18 +705,18 @@ var pageSchema = (0, import_core5.list)({
       delete: rules.canManageItems
     }
   },
-  hooks: {
-    afterOperation: async ({ operation, context, listKey, item }) => {
-      if (operation === "create" || operation === "update" || operation === "delete") {
-        const response = await triggerRebuild_default("Page");
-        if (!response.success) {
-          throw new Error("Failed to trigger rebuild");
-        } else {
-          console.log("NextJs Rebuild triggered successfully");
-        }
-      }
-    }
-  },
+  // hooks: {
+  //   afterOperation: async ({ operation, context, listKey, item }) => {
+  //     if (operation === 'create' || operation === 'update' || operation === 'delete') {
+  //       const response = await triggerRebuild('Page');
+  //       if (!response.success) {
+  //         throw new Error('Failed to trigger rebuild');
+  //       } else {
+  //         console.log('NextJs Rebuild triggered successfully');
+  //       }
+  //     }
+  //   },
+  // },
   ui: {
     isHidden: (args) => {
       return !permissions?.canManageAllItems(args);
