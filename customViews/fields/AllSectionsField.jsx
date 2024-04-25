@@ -15,7 +15,7 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     width: '1000px',
-    maxHeight: '80%',
+    height: '90%',
     transform: 'translate(-50%, -50%)',
     border: 'none',
     boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.2)',
