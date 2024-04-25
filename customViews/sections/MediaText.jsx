@@ -30,7 +30,11 @@ function MediaText({
   sectionIndex,
   setSectionsData,
 }) {
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState({
+    border: 'NONE',
+    backgroundColor: 'ORANGE',
+    imagePosition: 'LEFT',
+  });
   const [selectedFile, setSelectedFile] = useState(null);
   const pagesOptions = useFetchLinkOptions();
   const [pageOneValue, setPageOneValue] = useState('');
@@ -71,28 +75,16 @@ function MediaText({
     setValue(editData);
     setSelectedFile(editData.image);
 
-    if (editData.cta1?.url && editData.cta1.url.startsWith('/')) {
-      setPageOneValue(editData.cta1.url);
-      setValue((prev) => ({
-        ...prev,
-        cta1: { ...prev.cta1, url: '' },
-      }));
+    if (editData.cta1?.page) {
+      setPageOneValue(editData.cta1.page);
     }
 
-    if (editData.cta2?.url && editData.cta2.url.startsWith('/')) {
-      setPageTwoValue(editData.cta2.url);
-      setValue((prev) => ({
-        ...prev,
-        cta2: { ...prev.cta2, url: '' },
-      }));
+    if (editData.cta2?.page) {
+      setPageTwoValue(editData.cta2.page);
     }
   }, [editData]);
 
   async function handleSave() {
-    // if (!validateFields(value)) {
-    //   return;
-    // }
-
     const fieldsToValidate = {
       ...value,
       image: selectedFile,
@@ -112,13 +104,13 @@ function MediaText({
         ...value,
       };
 
-      if (pageOneValue) {
-        newItem.cta1.url = pageOneValue;
-      }
+      // if (pageOneValue) {
+      //   newItem.cta1.url = pageOneValue;
+      // }
 
-      if (pageTwoValue) {
-        newItem.cta2.url = pageTwoValue;
-      }
+      // if (pageTwoValue) {
+      //   newItem.cta2.url = pageTwoValue;
+      // }
 
       setSectionsData((prevSectionsData) => [...prevSectionsData, newItem]);
       onChange(JSON.stringify([...sectionsData, newItem]));
@@ -144,14 +136,6 @@ function MediaText({
         image: selectedFile,
       };
 
-      if (pageOneValue) {
-        updatedSection.cta1.url = pageOneValue;
-      }
-
-      if (pageTwoValue) {
-        updatedSection.cta1.url = pageTwoValue;
-      }
-
       sectionsData[sectionIndex] = updatedSection;
 
       onChange(JSON.stringify(sectionsData));
@@ -172,19 +156,54 @@ function MediaText({
     setErrors((prev) => prev.filter((error) => error !== key));
 
     if (ctaIdentifier === 1) {
-      // Update values for the first CTA
-      setPageOneValue(inputValue);
-      setValue((prev) => ({
-        ...prev,
-        cta1: { ...prev.cta1, [key]: inputValue },
-      }));
+      if (key === 'page') {
+        console.log('här borde den tömma urlen och textinput fältet för url');
+        setValue((prev) => ({
+          ...prev,
+          cta1: { ...prev.cta1, page: inputValue, url: '' },
+        }));
+        setPageOneValue(inputValue);
+        console.log('value.cta1.url', value.cta1.url);
+      }
+
+      if (key === 'url') {
+        setPageOneValue('');
+        setValue((prev) => ({
+          ...prev,
+          cta1: { ...prev.cta1, url: inputValue, page: '' },
+        }));
+      }
+
+      if (key === 'anchorText') {
+        setValue((prev) => ({
+          ...prev,
+          cta1: { ...prev.cta1, [key]: inputValue },
+        }));
+      }
     } else if (ctaIdentifier === 2) {
       // Update values for the second CTA
-      setPageTwoValue(inputValue);
-      setValue((prev) => ({
-        ...prev,
-        cta2: { ...prev.cta2, [key]: inputValue },
-      }));
+      if (key === 'page') {
+        setPageTwoValue(inputValue);
+        setValue((prev) => ({
+          ...prev,
+          cta2: { ...prev.cta2, page: inputValue, url: '' },
+        }));
+      }
+
+      if (key === 'url') {
+        setPageTwoValue('');
+        setValue((prev) => ({
+          ...prev,
+          cta2: { ...prev.cta2, url: inputValue, page: '' },
+        }));
+      }
+
+      if (key === 'anchorText') {
+        setValue((prev) => ({
+          ...prev,
+          cta2: { ...prev.cta2, [key]: inputValue },
+        }));
+      }
     } else {
       setValue((prev) => ({
         ...prev,

@@ -23,17 +23,18 @@ const CallToActionForm = ({
       <FieldDescription>Page:</FieldDescription>
       <Select
         value={pagesOptions.find((option) => option.value === pageValue)}
-        onChange={(selectedOption) =>
-          onChange('page', selectedOption.value, ctaIdentifier)
-        }
+        onChange={(selectedOption) => {
+          onChange('page', selectedOption.value, ctaIdentifier);
+        }}
         options={pagesOptions}
       />
       <FieldDescription style={{ marginTop: '1rem' }}>Or External Url:</FieldDescription>
       <TextInput
-        // style={{ marginBottom: '1rem' }}
         autoFocus={autoFocus}
-        onChange={(event) => onChange('url', event.target.value, ctaIdentifier)}
-        value={url}
+        onChange={(event) => {
+          onChange('url', event.target.value, ctaIdentifier);
+        }}
+        value={url || ''}
       />
     </div>
   );
