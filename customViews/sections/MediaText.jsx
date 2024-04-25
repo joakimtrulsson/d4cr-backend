@@ -43,7 +43,7 @@ function MediaText({
   const { validateFields, errors, setErrors } = useValidation([
     'sectionTitle',
     'title',
-    'subHeading',
+    // 'subHeading',
     'backgroundColor',
     'border',
     'image',
@@ -157,13 +157,11 @@ function MediaText({
 
     if (ctaIdentifier === 1) {
       if (key === 'page') {
-        console.log('här borde den tömma urlen och textinput fältet för url');
         setValue((prev) => ({
           ...prev,
           cta1: { ...prev.cta1, page: inputValue, url: '' },
         }));
         setPageOneValue(inputValue);
-        console.log('value.cta1.url', value.cta1.url);
       }
 
       if (key === 'url') {
@@ -281,8 +279,8 @@ function MediaText({
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Subheading</FieldLabel>
         <FieldDescription>
-          This required field specifies the subheader text, which is rendered above the
-          title.
+          This field is not required and it specifies the subheader text, which is
+          rendered above the title.
         </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
