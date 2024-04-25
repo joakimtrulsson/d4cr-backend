@@ -46,7 +46,7 @@ function BulletList({
     }
   });
   const { validateFields, errors, setErrors, objectErrors } = useValidation(
-    ['sectionTitle', 'title', 'subHeader', 'listType'],
+    ['sectionTitle', 'listType'],
     ['bodyText'],
     'bullets'
   );
