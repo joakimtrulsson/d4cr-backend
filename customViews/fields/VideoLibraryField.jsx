@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ReactMediaLibrary, FileLibrarySelectedItems } from 'react-media-library';
-// import { ReactMediaLibraryContext } from '../node_modules/react-media-library/src/context/ReactMediaLibraryContext';
 
 import {
   FieldContainer,
@@ -33,55 +32,6 @@ const VideoItemCard = ({ thumbnailUrl, title, createdAt, size }) => {
     </div>
   );
 };
-
-const CustomSelectedFilesCard = () => {
-  return (
-    // <div className='react-video-library'>
-
-    <FileLibrarySelectedItems />
-  );
-};
-
-// const FileLibrarySelectedItemsCard = (param) => {
-//   console.log(param);
-
-//   // function onRemove() {
-//   //   const newSelectedItems = [...selectedItems];
-//   //   const foundIndex = newSelectedItems.findIndex((element) => element._id === props._id);
-//   //   if (foundIndex > -1) {
-//   //     newSelectedItems.splice(foundIndex, 1);
-//   //   }
-//   //   setSelectedItems(newSelectedItems);
-//   // }
-
-//   return (
-//     <div className='react-media-library__file-library-selected-items-card'>
-//       {/* {props.thumbnailUrl && (
-//         <img
-//           className='react-media-library__file-library-selected-items-card__image'
-//           src={props.thumbnailUrl}
-//           alt={props.title}
-//         />
-//       )}
-//       <div className='react-media-library__file-library-selected-items-card__info'>
-//         <div className='react-media-library__file-library-selected-items-card__title'>
-//           {props.title}
-//         </div>
-//         <div className='react-media-library__file-library-selected-items-card__description'>
-//           {props.description}
-//         </div>
-//         <div className='react-media-library__file-library-selected-items-card__file-name'>
-//           {props.fileName}
-//         </div>
-//       </div>
-//       <div className='react-media-library__file-library-selected-items-card__actions'>
-//         <button type='button' title='Remove from selected list' onClick={onRemove}>
-//           <span className='icon-close' />
-//         </button>
-//       </div> */}
-//     </div>
-//   );
-// };
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
@@ -268,6 +218,45 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
     </div>
   );
 
+  const CustomSelectedFormVideoComponent = (props) => {
+    return (
+      <div>
+        <FieldLabel>Selected video:</FieldLabel>
+        <video
+          style={{ borderRadius: '6px' }}
+          className='react-media-library__file-library-card__image'
+        >
+          <source src={props.thumbnailUrl} type='video/mp4' />
+          Your browser does not support the video tag.
+        </video>
+        <ul className='react-media-library__file-library-card__list'>
+          <li className='react-media-library__file-library-card__list__item'>
+            Title: {props.title}
+          </li>
+          <li className='react-media-library__file-library-card__list__item'>
+            Size: {(props.size / (1024 * 1024)).toFixed(1) + ' Mb'}
+          </li>
+          <li className='react-media-library__file-library-card__list__item'>
+            Uploaded: {new Date(props.createdAt).toDateString()}
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
+  // Använd CustomSelectedFormVideoComponent som itemComponent
+  const SelectedItemsWrapper = () => (
+    <FileLibrarySelectedItems
+      itemComponent={(item) => <CustomSelectedFormVideoComponent {...item} />}
+    />
+  );
+
+  // Använd SelectedItemsWrapper som selectedItemsComponent
+  CustomSelectedFormVideoComponent.args = {
+    selectedItemsComponent: <SelectedItemsWrapper />,
+    fileLibraryList: { files },
+  };
+
   return (
     <FieldContainer className='react-video-library'>
       <FieldLabel>{field.label}</FieldLabel>
@@ -323,7 +312,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
           isOpen={isMediaLibraryOpen}
           topBarComponent={searchBar}
           libraryCardComponent={VideoItemCard}
-          selectedItemsComponent={CustomSelectedFilesCard}
+          selectedItemsComponent={() => <SelectedItemsWrapper />}
         />
       )}
     </FieldContainer>
