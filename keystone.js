@@ -44,7 +44,14 @@ export default withAuth(
       maxFileSize: MAX_FILE_SIZE,
       cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
-        app.use(helmet());
+        app.use(
+          helmet.contentSecurityPolicy({
+            directives: {
+              ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+              'img-src': ['self', 'data:', process.env.MEDIA_URL, process.env.IMAGE_URL],
+            },
+          })
+        );
         app.use(apiLimiter);
 
         app.use(express.json());

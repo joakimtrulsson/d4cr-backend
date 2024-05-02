@@ -2663,7 +2663,14 @@ var keystone_default = withAuth(
       maxFileSize: MAX_FILE_SIZE,
       cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
-        app.use((0, import_helmet.default)());
+        app.use(
+          import_helmet.default.contentSecurityPolicy({
+            directives: {
+              ...import_helmet.default.contentSecurityPolicy.getDefaultDirectives(),
+              "img-src": ["self", "data:", process.env.MEDIA_URL, process.env.IMAGE_URL]
+            }
+          })
+        );
         app.use(apiLimiter);
         app.use(import_express.default.json());
         app.post("/api/email", sendEmailLimiter, sendEmail_default);
