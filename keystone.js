@@ -48,7 +48,11 @@ export default withAuth(
           helmet.contentSecurityPolicy({
             directives: {
               ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-              'img-src': ['self', 'data:', process.env.MEDIA_URL, process.env.IMAGE_URL],
+              'img-src': [
+                'self',
+                'data:',
+                'https://bucketeer-1f163294-7339-4eb0-af5c-400b0ce7209a.s3.eu-west-1.amazonaws.com',
+              ],
             },
           })
         );
