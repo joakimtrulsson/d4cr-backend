@@ -35,6 +35,8 @@ module.exports = __toCommonJS(keystone_exports);
 var import_dotenv = __toESM(require("dotenv"));
 var import_core28 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
+var import_express_rate_limit = require("express-rate-limit");
+var import_helmet = __toESM(require("helmet"));
 
 // schemas/userSchema.js
 var import_core = require("@keystone-6/core");
@@ -2636,6 +2638,24 @@ var validateRecaptcha_default = validateRecaptcha;
 import_dotenv.default.config();
 var { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
 var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",");
+var apiLimiter = (0, import_express_rate_limit.rateLimit)({
+  windowMs: 15 * 60 * 1e3,
+  // 15 minuter
+  limit: 2e3,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: "Too many requests, please try again later."
+});
+var sendEmailLimiter = (0, import_express_rate_limit.rateLimit)({
+  windowMs: 15 * 60 * 1e3,
+  max: 100,
+  message: "Too many requests, please try again later."
+});
+var signInLimiter = (0, import_express_rate_limit.rateLimit)({
+  windowMs: 15 * 60 * 1e3,
+  max: 100,
+  message: "Too many requests, please try again later."
+});
 var keystone_default = withAuth(
   (0, import_core28.config)({
     server: {
@@ -2643,10 +2663,12 @@ var keystone_default = withAuth(
       maxFileSize: MAX_FILE_SIZE,
       cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
+        app.use((0, import_helmet.default)());
+        app.use(apiLimiter);
         app.use(import_express.default.json());
-        app.post("/api/email", sendEmail_default);
+        app.post("/api/email", sendEmailLimiter, sendEmail_default);
         app.use("/public", import_express.default.static("public"));
-        app.get("/signin", (req, res) => res.redirect("/sign-in"));
+        app.get("/signin", signInLimiter, (req, res) => res.redirect("/sign-in"));
         app.post("/api/validate-recaptcha", validateRecaptcha_default);
       }
     },
