@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -6,18 +6,17 @@ import {
   FieldLabel,
   TextInput,
   FieldDescription,
+  MultiSelect,
 } from '@keystone-ui/fields';
 
 import Editor from '../components/Editor/Editor.jsx';
-import PrinciplesForm from '../components/PrinciplesForm/PrinciplesForm.jsx';
 import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton.jsx';
-import AddEntryButton from '../components/AddEntryButton/AddEntryButton.jsx';
 import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
 import CancelButton from '../components/CancelButton/CancelButton.jsx';
 import ValidationError from '../components/ValidationError/ValidationError';
 import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
 import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
+import useFetchPrinciples from '../hooks/useFetchPrinciples.jsx';
 import { useValidation } from '../hooks/useValidation';
 
 function Principles({
@@ -36,25 +35,13 @@ function Principles({
       return {
         title: '',
         preamble: '',
-        groups: [],
+        principles: [],
       };
     }
   });
-  const [groups, setGroups] = useState(() => {
-    if (editData) {
-      return editData.groups || [];
-    } else {
-      return [
-        {
-          id: uuidv4(),
-          title: '',
-          groups: [],
-        },
-      ];
-    }
-  });
-  const [newItems, setNewItems] = useState([]);
-  const [isAddAndResetVisible, setIsAddAndResetVisible] = useState(true);
+  const [options, setOptions] = useState([]);
+  const { allPrinciples, loading, error } = useFetchPrinciples();
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const { validateFields, errors, setErrors } = useValidation([
     'sectionTitle',
     'title',
@@ -62,10 +49,50 @@ function Principles({
   ]);
   const [isOpen, setIsOpen] = useState(false);
 
+  // om editData.principles finns så sätts selectedOptions till de principer som redan finns
+  useEffect(() => {
+    if (editData && editData.principles) {
+      const newSelectedOptions = editData.principles.map((principle) => ({
+        value: principle.id,
+        label: `${principle.principleNumber.number}. ${principle.title}`,
+      }));
+      setSelectedOptions(newSelectedOptions);
+    }
+  }, [editData]);
+
+  useEffect(() => {
+    if (
+      allPrinciples &&
+      allPrinciples.principles &&
+      allPrinciples.principles.length > 0
+    ) {
+      // Sortera principerna efter principleNumber.number
+      const sortedPrinciples = [...allPrinciples.principles].sort(
+        (a, b) => a.principleNumber.number - b.principleNumber.number
+      );
+
+      const newOptions = sortedPrinciples.reduce((acc, principle) => {
+        const principleItem = {
+          value: principle.id,
+          label: `${principle.principleNumber.number}. ${principle.title}`,
+        };
+
+        return [...acc, principleItem];
+      }, []);
+
+      setOptions(newOptions);
+    }
+  }, [allPrinciples]);
+
   async function handleSave() {
-    if (!validateFields({ ...value, groups })) {
+    if (!validateFields({ ...value })) {
       return;
     }
+    const newItems = selectedOptions.map((selectedOption) => {
+      return allPrinciples.principles.find(
+        (principle) => principle.id === selectedOption.value
+      );
+    });
 
     if (onChange) {
       const newId = uuidv4();
@@ -74,7 +101,7 @@ function Principles({
         sectionType: 'PRINCIPLES',
         id: newId,
         ...value,
-        groups: newItems,
+        principles: newItems,
       };
 
       setSectionsData((prevSectionsData) => [...prevSectionsData, newItem]);
@@ -85,6 +112,13 @@ function Principles({
 
   async function handleSaveUpdate(event) {
     event.preventDefault();
+
+    const newItems = selectedOptions.map((selectedOption) => {
+      return allPrinciples.principles.find(
+        (principle) => principle.id === selectedOption.value
+      );
+    });
+
     if (onChange) {
       const updatedSection = {
         sectionType: 'PRINCIPLES',
@@ -92,7 +126,7 @@ function Principles({
         sectionTitle: value.sectionTitle,
         title: value.title,
         preamble: value.preamble,
-        groups: newItems.length > 0 ? [...value.groups, ...newItems] : [...value.groups],
+        principles: newItems,
       };
 
       sectionsData[sectionIndex] = updatedSection;
@@ -119,76 +153,6 @@ function Principles({
       preamble: preamble,
     }));
   }
-
-  const handleAddGroupDataToNewItems = (newItem) => {
-    const groupIndex = newItems.findIndex(
-      (item) => item.groupTitle === newItem.groupTitle
-    );
-    if (groupIndex !== -1) {
-      const updatedGroup = newItems[groupIndex];
-      newItem.principles.forEach((group) => {
-        const existingGroups = updatedGroup.principles.find(
-          (existingGroup) => existingGroup.id === group.id
-        );
-        if (!existingGroups) {
-          updatedGroup.principles.push(group);
-        }
-      });
-    } else {
-      setNewItems((prevNewItems) => [...prevNewItems, newItem]);
-    }
-  };
-
-  const handleUpdateItem = (updatedGroup) => {
-    setValue((prev) => {
-      const updatedGroups = prev.groups.map((group) => {
-        if (group.id === updatedGroup.id) {
-          return updatedGroup;
-        }
-        return group;
-      });
-
-      if (!updatedGroups.some((resource) => resource.id === updatedGroup.id)) {
-        setNewItems((prevNewItems) => [...prevNewItems, updatedGroup]);
-      }
-
-      return {
-        ...prev,
-        groups: updatedGroups,
-      };
-    });
-  };
-
-  const handleAddGroup = () => {
-    setGroups((prevGroups) => [
-      ...prevGroups,
-      {
-        id: uuidv4(),
-        title: '',
-        groups: [],
-      },
-    ]);
-  };
-
-  const handleRemoveGroup = (groupIndex) => {
-    const groupToRemove = groups[groupIndex];
-
-    setGroups((prevGroups) => {
-      const updatedGroups = [...prevGroups];
-      updatedGroups.splice(groupIndex, 1);
-      return updatedGroups;
-    });
-
-    setNewItems((prevNewItems) => {
-      const updatedNewItems = prevNewItems.filter((item) => item.id !== groupToRemove.id);
-      return updatedNewItems;
-    });
-
-    setValue((prev) => ({
-      ...prev,
-      resources: prev.groups.filter((resource) => resource.id !== groupToRemove.id),
-    }));
-  };
 
   const handleOpenModal = async () => {
     setIsOpen(true);
@@ -275,38 +239,20 @@ function Principles({
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
-        {groups.map((group, index) => (
-          <div key={group.id}>
-            <PrinciplesForm
-              autoFocus={autoFocus}
-              onAddNewItem={handleAddGroupDataToNewItems}
-              onUpdateItem={handleUpdateItem}
-              value={group}
-              editData={editData?.groups[index]}
-              isAddAndResetVisible={isAddAndResetVisible}
-              setIsAddAndResetVisible={setIsAddAndResetVisible}
-              groups={groups}
-            />
-
-            {groups.length > 1 && (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <RemoveEntryButton
-                  style={{ marginBottom: '1rem' }}
-                  handleRemove={handleRemoveGroup}
-                  indexToRemove={index}
-                >
-                  Remove group
-                </RemoveEntryButton>
-              </div>
-            )}
-          </div>
-        ))}
+        <FieldLabel>Principles</FieldLabel>
+        <FieldDescription>
+          Select the principles to associate with this section. The selected principles
+          will be rendered and sorted by their principle number within their respective
+          categories.
+        </FieldDescription>
+        <MultiSelect
+          options={options}
+          autoFocus={autoFocus}
+          onChange={(selectedOptions) => {
+            setSelectedOptions(selectedOptions);
+          }}
+          value={selectedOptions || []}
+        />
       </div>
 
       <div
@@ -322,10 +268,6 @@ function Principles({
           alignItems: 'center',
         }}
       >
-        {isAddAndResetVisible && (
-          <AddEntryButton handleAdd={handleAddGroup}>Add new group</AddEntryButton>
-        )}
-
         {editData ? (
           <UpdateSectionButton handleUpdate={handleSaveUpdate}>
             Update

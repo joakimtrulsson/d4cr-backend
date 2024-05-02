@@ -73,7 +73,6 @@ function PrinciplesForm({
     }
   }, [allPrinciples]);
 
-  // När grouptitle och resources finns så skickas det tillbaka till Resources.jsx
   useEffect(() => {
     // Här måste vi kontrollera om editData finns, då ska inte id uppdateras, dvs den ska bli samma som editData.id
     if (editData && groupTitle && principlesData.length > 0) {
@@ -150,7 +149,7 @@ function PrinciplesForm({
 
   return (
     <>
-      <div style={{ marginBottom: '1rem' }}>
+      {/* <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Group title</FieldLabel>
         <FieldDescription>
           Assign a title to categorize this group of principles
@@ -162,7 +161,7 @@ function PrinciplesForm({
             value={groupTitle}
           />
         </div>
-      </div>
+      </div> */}
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Principles</FieldLabel>
         <FieldDescription>
@@ -178,26 +177,27 @@ function PrinciplesForm({
             }}
             value={selectedOptions || []}
           />
-          {isAddAndResetVisible && groups.length === 1 ? (
-            <>
-              <FieldDescription style={{ marginTop: '1rem' }}>
-                This button will add all principles to the selection, organizing and
-                rendering them according to their respective categories, with the group
-                title becoming the category.
-              </FieldDescription>
-              <AddEntryButton handleAdd={addAllPriciples}>
-                Add all principles sorted by category
-              </AddEntryButton>
-            </>
-          ) : (
-            groups.length === 1 && (
-              <div
-                style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}
-              >
-                <RemoveEntryButton handleRemove={resetForm}>Reset form</RemoveEntryButton>
-              </div>
-            )
-          )}
+          {
+            isAddAndResetVisible && groups.length === 1 ? (
+              <>
+                <FieldDescription style={{ marginTop: '1rem' }}>
+                  This button will add all principles to the selection, organizing and
+                  rendering them according to their respective categories, with the group
+                  title becoming the category.
+                </FieldDescription>
+                <AddEntryButton handleAdd={addAllPriciples}>
+                  Add all principles sorted by category
+                </AddEntryButton>
+              </>
+            ) : // groups.length === 1 && (
+            //   <div
+            //     style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}
+            //   >
+            //     <RemoveEntryButton handleRemove={resetForm}>Reset form</RemoveEntryButton>
+            //   </div>
+            null
+            // )
+          }
         </div>
       </div>
     </>
