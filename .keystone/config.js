@@ -2641,7 +2641,7 @@ var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",");
 var apiLimiter = (0, import_express_rate_limit.rateLimit)({
   windowMs: 15 * 60 * 1e3,
   // 15 minuter
-  limit: 2e3,
+  limit: 2e4,
   standardHeaders: "draft-7",
   legacyHeaders: false,
   message: "Too many requests, please try again later."
@@ -2664,20 +2664,6 @@ var keystone_default = withAuth(
       maxFileSize: MAX_FILE_SIZE,
       cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
-        app.use(
-          import_helmet.default.contentSecurityPolicy({
-            directives: {
-              ...import_helmet.default.contentSecurityPolicy.getDefaultDirectives(),
-              "default-src": ["'self'", "'unsafe-eval'"],
-              "img-src": [
-                "'self'",
-                "data:",
-                `https://${process.env.BUCKETEER_BUCKET_NAME}.s3.${process.env.BUCKETEER_AWS_REGION}.amazonaws.com`
-              ],
-              "script-src": isDevelopment ? ["'self'", "'unsafe-eval'"] : ["'self'"]
-            }
-          })
-        );
         app.use(apiLimiter);
         app.use(import_express.default.json());
         app.post("/api/email", sendEmailLimiter, sendEmail_default);

@@ -6,6 +6,7 @@ import {
   FieldLabel,
   TextInput,
   FieldDescription,
+  Select,
 } from '@keystone-ui/fields';
 
 import IconPicker from '../components/IconPicker/IconPicker.jsx';
@@ -29,6 +30,10 @@ function Banner({
   sectionIndex,
   setSectionsData,
 }) {
+  const [colorOptions] = useState([
+    { value: 'ORANGE', label: 'Orange' },
+    { value: 'YELLOW', label: 'Yellow' },
+  ]);
   const [iconName, setIconName] = useState('');
   const [value, setValue] = useState({ title: '' });
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +45,7 @@ function Banner({
     'preamble',
     'cta',
     'iconName',
+    'backgroundColor',
   ]);
 
   useEffect(() => {
@@ -236,6 +242,20 @@ function Banner({
           editData={editData?.preamble}
         />
         {errors.includes('preamble') && <ValidationError field='Preamble text' />}
+      </div>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <FieldLabel>Background color</FieldLabel>
+        <Select
+          value={colorOptions.find((option) => option.value === value.backgroundColor)}
+          options={colorOptions}
+          onChange={(selectedOption) =>
+            handleChange('backgroundColor', selectedOption.value)
+          }
+        />
+        {errors.includes('backgroundColor') && (
+          <ValidationError field='Background color' />
+        )}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>

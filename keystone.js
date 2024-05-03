@@ -20,7 +20,7 @@ const corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(',');
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minuter
-  limit: 2000,
+  limit: 20000,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
   message: 'Too many requests, please try again later.',
@@ -47,21 +47,21 @@ export default withAuth(
       maxFileSize: MAX_FILE_SIZE,
       cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
-        app.use(
-          helmet.contentSecurityPolicy({
-            directives: {
-              ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        // app.use(
+        //   helmet.contentSecurityPolicy({
+        //     directives: {
+        //       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
 
-              'default-src': ["'self'", "'unsafe-eval'"],
-              'img-src': [
-                "'self'",
-                'data:',
-                `https://${process.env.BUCKETEER_BUCKET_NAME}.s3.${process.env.BUCKETEER_AWS_REGION}.amazonaws.com`,
-              ],
-              'script-src': isDevelopment ? ["'self'", "'unsafe-eval'"] : ["'self'"],
-            },
-          })
-        );
+        //       'default-src': ["'self'", "'unsafe-eval'"],
+        //       'img-src': [
+        //         "'self'",
+        //         'data:',
+        //         `https://${process.env.BUCKETEER_BUCKET_NAME}.s3.${process.env.BUCKETEER_AWS_REGION}.amazonaws.com`,
+        //       ],
+        //       'script-src': isDevelopment ? ["'self'", "'unsafe-eval'"] : ["'self'"],
+        //     },
+        //   })
+        // );
 
         app.use(apiLimiter);
 
