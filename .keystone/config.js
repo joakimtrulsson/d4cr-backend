@@ -2656,6 +2656,7 @@ var signInLimiter = (0, import_express_rate_limit.rateLimit)({
   max: 100,
   message: "Too many requests, please try again later."
 });
+var isDevelopment = process.env.NODE_ENV === "development";
 var keystone_default = withAuth(
   (0, import_core28.config)({
     server: {
@@ -2667,7 +2668,13 @@ var keystone_default = withAuth(
           import_helmet.default.contentSecurityPolicy({
             directives: {
               ...import_helmet.default.contentSecurityPolicy.getDefaultDirectives(),
-              "img-src": ["self", "data:", process.env.MEDIA_URL, process.env.IMAGE_URL]
+              "default-src": ["'self'", "'unsafe-eval'"],
+              "img-src": [
+                "'self'",
+                "data:",
+                `https://${process.env.BUCKETEER_BUCKET_NAME}.s3.${process.env.BUCKETEER_AWS_REGION}.amazonaws.com`
+              ],
+              "script-src": isDevelopment ? ["'self'", "'unsafe-eval'"] : ["'self'"]
             }
           })
         );

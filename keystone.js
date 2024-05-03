@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import dotenv from 'dotenv';
 import { config } from '@keystone-6/core';
 import express from 'express';
@@ -37,6 +38,8 @@ const signInLimiter = rateLimit({
   message: 'Too many requests, please try again later.',
 });
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export default withAuth(
   config({
     server: {
@@ -48,21 +51,23 @@ export default withAuth(
           helmet.contentSecurityPolicy({
             directives: {
               ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+
+              'default-src': ["'self'", "'unsafe-eval'"],
               'img-src': [
-                'self',
+                "'self'",
                 'data:',
-                'https://bucketeer-1f163294-7339-4eb0-af5c-400b0ce7209a.s3.eu-west-1.amazonaws.com',
-                'https://d4cr-keystone-19d55dc6f889.herokuapp.com',
+                `https://${process.env.BUCKETEER_BUCKET_NAME}.s3.${process.env.BUCKETEER_AWS_REGION}.amazonaws.com`,
               ],
+              'script-src': isDevelopment ? ["'self'", "'unsafe-eval'"] : ["'self'"],
             },
           })
         );
+
         app.use(apiLimiter);
 
         app.use(express.json());
         app.post('/api/email', sendEmailLimiter, sendEmail);
 
-        // Denna ska bort när vi gått över till S3-Bucket
         app.use('/public', express.static('public'));
 
         app.get('/signin', signInLimiter, (req, res) => res.redirect('/sign-in'));
