@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "keystone dev",
-    "start": "keystone start",
+    "start": "./node_modules/.bin/keystone start",
     "build": "keystone build",
     "postinstall": "keystone build --no-ui --frozen",
     "test": "node __tests__/test.js"
