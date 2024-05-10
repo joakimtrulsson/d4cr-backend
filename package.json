@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "keystone dev",
-    "build": "./node_modules/.bin/keystone build && ./node_modules/.bin/prisma migrate deploy",
+    "build": "./node_modules/.bin/keystone build && ./node_modules/.bin/keystone prisma migrate deploy",
     "start": "./node_modules/.bin/keystone start",
     "postinstall": "./node_modules/.bin/keystone build --no-ui --frozen",
     "test": "node __tests__/test.js"
