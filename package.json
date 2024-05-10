@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "keystone dev",
-    "build": "./node_modules/.bin/keystone build",
+    "build": "./node_modules/.bin/keystone build && ./node_modules/.bin/prisma migrate deploy",
     "start": "./node_modules/.bin/keystone start",
-    "postinstall": "keystone build --no-ui --frozen",
+    "postinstall": "./node_modules/.bin/keystone build --no-ui --frozen",
     "test": "node __tests__/test.js"
   },
   "cacheDirectories": [
