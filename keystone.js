@@ -16,7 +16,7 @@ dotenv.config();
 
 const { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
 
-// const corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(',');
+const corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(',');
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minuter
@@ -45,7 +45,7 @@ export default withAuth(
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,
-      // cors: { origin: [corsFrontendOriginArray], credentials: true },
+      cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
         // app.use(
         //   helmet.contentSecurityPolicy({

@@ -2637,6 +2637,7 @@ var validateRecaptcha_default = validateRecaptcha;
 // keystone.js
 import_dotenv.default.config();
 var { PORT, MAX_FILE_SIZE, DATABASE_URL, CORS_FRONTEND_ORIGIN } = process.env;
+var corsFrontendOriginArray = CORS_FRONTEND_ORIGIN.split(",");
 var apiLimiter = (0, import_express_rate_limit.rateLimit)({
   windowMs: 15 * 60 * 1e3,
   // 15 minuter
@@ -2661,7 +2662,7 @@ var keystone_default = withAuth(
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,
-      // cors: { origin: [corsFrontendOriginArray], credentials: true },
+      cors: { origin: [corsFrontendOriginArray], credentials: true },
       extendExpressApp: (app, commonContext) => {
         app.use(apiLimiter);
         app.use(import_express.default.json());

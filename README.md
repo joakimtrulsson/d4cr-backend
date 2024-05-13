@@ -6,48 +6,40 @@
 
 ```
 PORT=3000
+
 MAX_FILE_SIZE = 10
-BASE_URL = 'http://localhost:${PORT}/'
+BASE_URL = 'https://localhost:${PORT}/'
+NEXT_PUBLIC_BASE_URL = 'http://localhost:${PORT}/'
 API_URL = '${BASE_URL}api/graphql'
-CORS_FRONTEND_ORIGIN="http://localhost:4000,http://localhost:3001/"
+CORS_FRONTEND_ORIGIN="http://localhost:3001,http://localhost:3001/"
 
 # Session
-SESSION_SECRET="myultrasecretstringmyultrasecretstring"
+SESSION_SECRET="AC84999C253C5F579114176142392AC84999C253C5F579114176142392"
 SESSION_MAX_AGE=2592000
 
 # Database
-DATABASE_URL="postgres://username@localhost:5432/db_name"
+DATABASE_URL="postgres://postgres@localhost:5432/d4cr_db"
 
 # Media
-MEDIA_URL="${BASE_URL}public/media"
-IMAGE_URL="${BASE_URL}public/images"
+MEDIA_URL="https://bucketeer-1f163294-7339-4eb0-af5c-400b0ce7209a.s3.eu-west-1.amazonaws.com/public/media"
+IMAGE_URL="https://bucketeer-1f163294-7339-4eb0-af5c-400b0ce7209a.s3.eu-west-1.amazonaws.com/public/images"
 
 # Mail
-EMAIL_SECURE=false
-EMAIL_USERNAME=yourusername
-EMAIL_PASSWORD=yourpassword
+EMAIL_USERNAME=48baced3ac2193
+EMAIL_PASSWORD=6330846f88ef93
 EMAIL_HOST=sandbox.smtp.mailtrap.io
 EMAIL_PORT=465
+EMAIL_SECURE=false
 EMAIL_FROM=send@d4cr.com
 
 # reCaptcha
-RECAPTCHA_SITE_SECRET=yoursitesecret
+RECAPTCHA_SITE_SECRET="Yoursecret"
 
-```
-
-## Mailtrap
-
-- Gå till Mailtrap och skapa ett konto om du inte redan har ett.
-- Efter att du har loggat in, skapa en ny inkorg genom att klicka på "Add Inbox" (Lägg till inkorg) och följ instruktionerna för att konfigurera den.
-- När inkorgen är skapad, klicka på den för att få tillgång till dess inställningar.
-- I inställningarna kommer du att hitta SMTP-serverinformation som du behöver för att fylla i din .env-fil. Notera användarnamn, lösenord, host och port.
-- Återgå till din .env-fil och fyll i följande fält under "Mail":
-
-```
-   EMAIL_USERNAME: Ditt Mailtrap-användarnamn
-   EMAIL_PASSWORD: Ditt Mailtrap-lösenord
-   EMAIL_HOST: SMTP-host som tillhandahålls av Mailtrap
-   EMAIL_PORT: SMTP-port som tillhandahålls av Mailtrap
+# Bucketeer
+BUCKETEER_BUCKET_NAME="bucketname"
+BUCKETEER_AWS_REGION="eu-west-1"
+BUCKETEER_AWS_ACCESS_KEY_ID="Accesskey"
+BUCKETEER_AWS_SECRET_ACCESS_KEY="Secretkey"
 ```
 
 ## Skapa en Postgres databas lokalt
