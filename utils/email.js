@@ -49,6 +49,7 @@ export default class Email {
       from: this.from,
       // from: process.env.EMAIL_USERNAME,
       to: this.to,
+      replyTo: this.contactEmail,
       subject,
       html,
       text: htmlToText(html),

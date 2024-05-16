@@ -2430,6 +2430,7 @@ var Email = class {
       from: this.from,
       // from: process.env.EMAIL_USERNAME,
       to: this.to,
+      replyTo: this.contactEmail,
       subject,
       html,
       text: (0, import_html_to_text.htmlToText)(html)
