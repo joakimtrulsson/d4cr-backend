@@ -36,7 +36,6 @@ var import_dotenv = __toESM(require("dotenv"));
 var import_core28 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
 var import_express_rate_limit = require("express-rate-limit");
-var import_helmet = __toESM(require("helmet"));
 
 // schemas/userSchema.js
 var import_core = require("@keystone-6/core");
@@ -2656,7 +2655,6 @@ var signInLimiter = (0, import_express_rate_limit.rateLimit)({
   max: 100,
   message: "Too many requests, please try again later."
 });
-var isDevelopment = process.env.NODE_ENV === "development";
 var keystone_default = withAuth(
   (0, import_core28.config)({
     server: {
@@ -2676,7 +2674,6 @@ var keystone_default = withAuth(
       provider: "postgresql",
       url: DATABASE_URL,
       idField: { kind: "uuid" }
-      // shadowDatabaseUrl: 'postgres://dbuser:dbpass@localhost:5432/shadowdb'
     },
     lists,
     session,

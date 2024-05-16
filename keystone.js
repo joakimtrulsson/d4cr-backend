@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { config } from '@keystone-6/core';
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
-import helmet from 'helmet';
+// import helmet from 'helmet';
 
 import { lists } from './schema.js';
 import { storage } from './storage.js';
@@ -38,7 +38,7 @@ const signInLimiter = rateLimit({
   message: 'Too many requests, please try again later.',
 });
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+// const isDevelopment = process.env.NODE_ENV === 'development';
 
 export default withAuth(
   config({
@@ -78,7 +78,6 @@ export default withAuth(
       provider: 'postgresql',
       url: DATABASE_URL,
       idField: { kind: 'uuid' },
-      // shadowDatabaseUrl: 'postgres://dbuser:dbpass@localhost:5432/shadowdb'
     },
     lists,
     session,
