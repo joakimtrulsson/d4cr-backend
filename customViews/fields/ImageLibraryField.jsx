@@ -20,6 +20,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   const [search, setSearch] = useState('');
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [filteredFiles, setFilteredFiles] = useState();
+  const [lastUploadedFile, setLastUploadedFile] = useState(null);
 
   const loc = window.location;
   const API_URL = `${loc.protocol}//${loc.host}/api/graphql`;
@@ -32,12 +33,13 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   useEffect(() => {
     if (isFileUploaded) {
       fetchData();
-      setIsFileUploaded(false);
+      // setIsFileUploaded(false);
     }
   }, [isFileUploaded]);
 
   const fetchData = async () => {
-    if (value) {
+    console.log('här borde');
+    if (value && !isFileUploaded) {
       setSelectedFile(JSON.parse(value));
     }
 
@@ -75,8 +77,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
         };
       });
 
-      setFiles((prevFiles) => [...modifiedFiles]);
-      // setFiles((prevFiles) => [...prevFiles, ...modifiedFiles]);
+      setFiles(modifiedFiles);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -135,6 +136,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
 
       if (!result.errors) {
         setIsFileUploaded(true);
+        setLastUploadedFile(result.data.createImage.id);
 
         return true;
       }
@@ -142,38 +144,6 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
     } catch (error) {
       console.error('Error uploading file:', error);
       return false;
-    }
-  };
-
-  // Export till hooks
-  const handleDeleteFile = async (file) => {
-    try {
-      const response = await fetch(`${API_URL}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Apollo-Require-Preflight': 'true',
-        },
-        body: JSON.stringify({
-          query: `
-          mutation DeleteImage($id: ID!) {
-            deleteImage(where: { id: $id }) {
-              id
-            }
-          }
-    `,
-          variables: {
-            id: file[0]._id,
-          },
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!result.errors) return true;
-      return false;
-    } catch (error) {
-      console.error('Error deleting file:', error);
     }
   };
 
@@ -198,9 +168,20 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
     </div>
   );
 
-  const handleFinishUpload = (uploadedFile) => {
-    setFiles((prev) => [...prev, uploadedFile]);
-  };
+  async function handleFinishUpload() {
+    // setFiles((prev) => [...prev, uploadedFile]);
+    setIsFileUploaded(true);
+    await fetchData();
+    // setSelectedFile(lastUploadedFile);
+    // i lastUploadedFile finns id på den uppladdade bilden.
+    // nu behöver vi hitta den bilden i files och sätta den som selectedFile
+    const foundFile = files.find((file) => file._id === lastUploadedFile);
+    // console.log('foundFile', filxwes);
+    setSelectedFile(foundFile);
+
+    onChange(JSON.stringify(selectedFile));
+    setIsMediaLibraryOpen(false);
+  }
 
   return (
     <FieldContainer>

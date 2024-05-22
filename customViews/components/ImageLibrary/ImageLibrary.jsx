@@ -211,6 +211,15 @@ function ImageLibrary({ selectedFile, setSelectedFile, isMultiSelect }) {
     </div>
   );
 
+  async function fileFinishUploadCallback() {
+    if (!isMultiSelect) {
+      fetchData();
+
+      setSelectedFile(files[0]);
+      setIsMediaLibraryOpen(false);
+    }
+  }
+
   return (
     <FieldContainer>
       {isMultiSelect && <FieldLabel>Images</FieldLabel>}
@@ -287,7 +296,7 @@ function ImageLibrary({ selectedFile, setSelectedFile, isMultiSelect }) {
           fileUploadCallback={handleFileUpload}
           // filesDeleteCallback={handleDeleteFile}
           filesSelectCallback={handleSelectFile}
-          finishUploadCallback={function noRefCheck() {}}
+          finishUploadCallback={fileFinishUploadCallback}
           onClose={handleOpenMediaLibrary}
           isOpen={isMediaLibraryOpen}
           multiSelect={isMultiSelect}
