@@ -15,7 +15,7 @@ import {
   UpdateSectionButton,
   CancelButton,
   ValidationError,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
 } from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
@@ -148,7 +148,7 @@ function Accordion({
             fontSize: '1.3rem',
           }}
         >
-          Accordion - <ImageToolTip type='ACCORDION' />
+          Accordion - <SectionImageToolTip type='ACCORDION' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

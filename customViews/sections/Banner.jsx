@@ -16,7 +16,7 @@ import {
   CancelButton,
   ValidationError,
   CallToActionForm,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
 } from '../components/index.js';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
@@ -194,7 +194,7 @@ function Banner({
             fontSize: '1.3rem',
           }}
         >
-          Banner - <ImageToolTip type='BANNER' />
+          Banner - <SectionImageToolTip type='BANNER' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

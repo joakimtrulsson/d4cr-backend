@@ -4,7 +4,7 @@ import { FieldContainer, FieldDescription, FieldLabel } from '@keystone-ui/field
 
 import {
   AddSectionButton,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
   CancelButton,
 } from '../components/index.js';
@@ -56,7 +56,7 @@ function ChapterTeaser({ onCloseSection, onChange, sectionsData, setSectionsData
             fontSize: '1.3rem',
           }}
         >
-          Chapter Teaser - <ImageToolTip type='CHAPTERTEASER' />
+          Chapter Teaser - <SectionImageToolTip type='CHAPTERTEASER' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

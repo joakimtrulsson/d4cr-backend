@@ -6,7 +6,7 @@ export { default as CloseSectionAlert } from './CloseSectionAlert/CloseSectionAl
 export { default as Editor } from './Editor/Editor';
 export { default as IconPicker } from './IconPicker/IconPicker';
 export { default as ImageLibrary } from './ImageLibrary/ImageLibrary';
-export { default as ImageToolTip } from './ImageToolTip/ImageToolTip';
+export { default as SectionImageToolTip } from './SectionImageToolTip/SectionImageToolTip';
 export { default as PrinciplesForm } from './PrinciplesForm/PrinciplesForm';
 export { default as RemoveEntryButton } from './RemoveEntryButton/RemoveEntryButton';
 export { default as SelectSections } from './SelectSections/SelectSections';

@@ -13,7 +13,7 @@ import {
   UpdateSectionButton,
   CancelButton,
   ValidationError,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
 } from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
@@ -128,7 +128,7 @@ function WysiwygSection({
             fontSize: '1.3rem',
           }}
         >
-          WYSIWYG - <ImageToolTip type='WYSIWYG' />
+          WYSIWYG - <SectionImageToolTip type='WYSIWYG' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

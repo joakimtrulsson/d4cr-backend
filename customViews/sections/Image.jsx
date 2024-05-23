@@ -13,7 +13,7 @@ import {
   CancelButton,
   ImageLibrary,
   ValidationError,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
 } from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
@@ -131,7 +131,7 @@ function Image({
             fontSize: '1.3rem',
           }}
         >
-          Images - <ImageToolTip type='IMAGE' />
+          Images - <SectionImageToolTip type='IMAGE' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

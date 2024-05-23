@@ -16,7 +16,7 @@ import {
   UpdateSectionButton,
   CancelButton,
   ValidationError,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
 } from '../components/index.js';
 import useFetchChapters from '../hooks/useFetchChapters.jsx';
@@ -195,7 +195,7 @@ function NewsTeaser({
             fontSize: '1.3rem',
           }}
         >
-          News Teaser - <ImageToolTip type='NEWSTEASER' />
+          News Teaser - <SectionImageToolTip type='NEWSTEASER' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

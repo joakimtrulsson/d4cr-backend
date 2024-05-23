@@ -16,7 +16,7 @@ import {
   UpdateSectionButton,
   CancelButton,
   ValidationError,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
 } from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
@@ -156,7 +156,7 @@ function BulletList({
             fontSize: '1.3rem',
           }}
         >
-          Large bullet list - <ImageToolTip type='LARGEBULLETLIST' />
+          Large bullet list - <SectionImageToolTip type='LARGEBULLETLIST' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

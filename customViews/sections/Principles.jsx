@@ -14,7 +14,7 @@ import {
   UpdateSectionButton,
   CancelButton,
   ValidationError,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
 } from '../components/index.js';
 
@@ -188,7 +188,7 @@ function Principles({
             fontSize: '1.3rem',
           }}
         >
-          Principles - <ImageToolTip type='PRINCIPLES' />
+          Principles - <SectionImageToolTip type='PRINCIPLES' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

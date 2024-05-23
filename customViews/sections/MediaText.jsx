@@ -16,7 +16,7 @@ import {
   UpdateSectionButton,
   CancelButton,
   ValidationError,
-  ImageToolTip,
+  SectionImageToolTip,
   CloseSectionAlert,
   CallToActionForm,
 } from '../components/index.js';
@@ -232,7 +232,7 @@ function MediaText({
             fontSize: '1.3rem',
           }}
         >
-          Media with Text - <ImageToolTip type='MEDIATEXT' />
+          Media with Text - <SectionImageToolTip type='MEDIATEXT' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

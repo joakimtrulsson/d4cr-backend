@@ -13,7 +13,7 @@ import {
   UpdateSectionButton,
   CancelButton,
   Editor,
-  ImageToolTip,
+  SectionImageToolTip,
   ValidationError,
   CloseSectionAlert,
 } from '../components/index.js';
@@ -164,7 +164,7 @@ function People({
             fontSize: '1.3rem',
           }}
         >
-          People - <ImageToolTip type='PEOPLE' />
+          People - <SectionImageToolTip type='PEOPLE' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}
