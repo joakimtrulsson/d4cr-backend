@@ -6,12 +6,10 @@ import {
   FieldDescription,
   TextInput,
 } from '@keystone-ui/fields';
-
 import FormData from 'form-data';
 
-import { formatFileSize } from '../../utils/formatFileSize';
-
 import { AddEntryButton } from '../components/index.js';
+import { formatFileSize } from '../../utils/formatFileSize';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);

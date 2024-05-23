@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
 import {
   FieldContainer,
   FieldLabel,
@@ -15,22 +14,11 @@ import {
   AddSectionButton,
   UpdateSectionButton,
   CancelButton,
-  ImageTooltip,
   ValidationError,
   CallToActionForm,
   ImageToolTip,
   CloseSectionAlert,
 } from '../components/index.js';
-
-// import IconPicker from '../components/IconPicker/IconPicker.jsx';
-// import Editor from '../components/Editor/Editor.jsx';
-// import CallToActionForm from '../components/CallToActionForm/CallToActionForm.jsx';
-// import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-// import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
-// import CancelButton from '../components/CancelButton/CancelButton.jsx';
-// import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
-// import ValidationError from '../components/ValidationError/ValidationError';
-// import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
 import { useValidation } from '../hooks/useValidation';
 
