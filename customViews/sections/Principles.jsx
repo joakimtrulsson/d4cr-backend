@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
 import {
   FieldContainer,
   FieldLabel,
@@ -9,13 +8,16 @@ import {
   MultiSelect,
 } from '@keystone-ui/fields';
 
-import Editor from '../components/Editor/Editor.jsx';
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
-import CancelButton from '../components/CancelButton/CancelButton.jsx';
-import ValidationError from '../components/ValidationError/ValidationError';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
+import {
+  Editor,
+  AddSectionButton,
+  UpdateSectionButton,
+  CancelButton,
+  ValidationError,
+  ImageToolTip,
+  CloseSectionAlert,
+} from '../components/index.js';
+
 import useFetchPrinciples from '../hooks/useFetchPrinciples.jsx';
 import { useValidation } from '../hooks/useValidation';
 
@@ -186,7 +188,7 @@ function Principles({
             fontSize: '1.3rem',
           }}
         >
-          Principles - <ImageTooltip type='PRINCIPLES' />
+          Principles - <ImageToolTip type='PRINCIPLES' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

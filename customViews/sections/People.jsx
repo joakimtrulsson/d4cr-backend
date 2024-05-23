@@ -7,13 +7,16 @@ import {
   MultiSelect,
   FieldDescription,
 } from '@keystone-ui/fields';
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
-import CancelButton from '../components/CancelButton/CancelButton.jsx';
-import Editor from '../components/Editor/Editor';
-import ValidationError from '../components/ValidationError/ValidationError';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
+
+import {
+  AddSectionButton,
+  UpdateSectionButton,
+  CancelButton,
+  Editor,
+  ImageToolTip,
+  ValidationError,
+  CloseSectionAlert,
+} from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
 import useFetchPeopleList from '../hooks/useFetchPeopleList.jsx';
 
@@ -132,12 +135,6 @@ function People({
     }));
   };
 
-  // function selectAll() {
-  //   setSelectedOptions(
-  //     peopleList.map((person) => ({ label: person.fullName, value: person.id }))
-  //   );
-  // }
-
   const handleOpenModal = async () => {
     setIsOpen(true);
   };
@@ -167,7 +164,7 @@ function People({
             fontSize: '1.3rem',
           }}
         >
-          People - <ImageTooltip type='PEOPLE' />
+          People - <ImageToolTip type='PEOPLE' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

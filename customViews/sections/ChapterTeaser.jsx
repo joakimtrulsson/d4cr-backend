@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FieldContainer, FieldDescription, FieldLabel } from '@keystone-ui/fields';
+
+import {
+  AddSectionButton,
+  ImageToolTip,
+  CloseSectionAlert,
+  CancelButton,
+} from '../components/index.js';
 import useFetchChapters from '../hooks/useFetchChapters.jsx';
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
-import CancelButton from '../components/CancelButton/CancelButton.jsx';
 
 function ChapterTeaser({ onCloseSection, onChange, sectionsData, setSectionsData }) {
   const { chapters } = useFetchChapters();
@@ -53,7 +56,7 @@ function ChapterTeaser({ onCloseSection, onChange, sectionsData, setSectionsData
             fontSize: '1.3rem',
           }}
         >
-          Chapter Teaser - <ImageTooltip type='CHAPTERTEASER' />
+          Chapter Teaser - <ImageToolTip type='CHAPTERTEASER' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

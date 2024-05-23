@@ -9,17 +9,20 @@ import {
   FieldDescription,
 } from '@keystone-ui/fields';
 
-import Editor from '../components/Editor/Editor';
-import CallToActionForm from '../components/CallToActionForm/CallToActionForm.jsx';
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
-import CancelButton from '../components/CancelButton/CancelButton.jsx';
-import ImageLibrary from '../components/ImageLibrary/ImageLibrary.jsx';
-import ValidationError from '../components/ValidationError/ValidationError';
+import {
+  Editor,
+  ImageLibrary,
+  AddSectionButton,
+  UpdateSectionButton,
+  CancelButton,
+  ValidationError,
+  ImageToolTip,
+  CloseSectionAlert,
+  CallToActionForm,
+} from '../components/index.js';
+
 import { useValidation } from '../hooks/useValidation';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions.jsx';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 
 function MediaText({
   onCloseSection,
@@ -103,15 +106,6 @@ function MediaText({
         image: selectedFile,
         ...value,
       };
-
-      // if (pageOneValue) {
-      //   newItem.cta1.url = pageOneValue;
-      // }
-
-      // if (pageTwoValue) {
-      //   newItem.cta2.url = pageTwoValue;
-      // }
-
       setSectionsData((prevSectionsData) => [...prevSectionsData, newItem]);
       onChange(JSON.stringify([...sectionsData, newItem]));
       onCloseSection();
@@ -238,7 +232,7 @@ function MediaText({
             fontSize: '1.3rem',
           }}
         >
-          Media with Text - <ImageTooltip type='MEDIATEXT' />
+          Media with Text - <ImageToolTip type='MEDIATEXT' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

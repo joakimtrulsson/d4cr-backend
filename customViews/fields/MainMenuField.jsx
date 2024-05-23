@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
 import { v4 as uuid } from 'uuid';
-
 import {
   FieldContainer,
   FieldLabel,
@@ -10,9 +8,7 @@ import {
   TextInput,
 } from '@keystone-ui/fields';
 
-import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
-import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton';
-
+import { AddEntryButton, RemoveEntryButton } from '../components/index.js';
 import useFetchLinkOptions from '../hooks/useFetchLinkOptions';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {

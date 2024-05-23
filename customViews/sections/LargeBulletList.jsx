@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
 import {
   FieldContainer,
   FieldLabel,
@@ -9,16 +8,18 @@ import {
   FieldDescription,
 } from '@keystone-ui/fields';
 
-import Editor from '../components/Editor/Editor';
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton';
-import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton';
-import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
-import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton';
-import CancelButton from '../components/CancelButton/CancelButton';
+import {
+  Editor,
+  AddSectionButton,
+  RemoveEntryButton,
+  AddEntryButton,
+  UpdateSectionButton,
+  CancelButton,
+  ValidationError,
+  ImageToolTip,
+  CloseSectionAlert,
+} from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
-import ValidationError from '../components/ValidationError/ValidationError';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 
 const listOptions = [
   { value: 'ORDERED', label: 'Numbered List' },
@@ -155,7 +156,7 @@ function BulletList({
             fontSize: '1.3rem',
           }}
         >
-          Large bullet list - <ImageTooltip type='LARGEBULLETLIST' />
+          Large bullet list - <ImageToolTip type='LARGEBULLETLIST' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

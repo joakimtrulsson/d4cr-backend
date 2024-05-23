@@ -7,13 +7,15 @@ import {
   FieldDescription,
 } from '@keystone-ui/fields';
 
-import Editor from '../components/Editor/Editor.jsx';
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
-import CancelButton from '../components/CancelButton/CancelButton.jsx';
-import ValidationError from '../components/ValidationError/ValidationError';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
+import {
+  Editor,
+  AddSectionButton,
+  UpdateSectionButton,
+  CancelButton,
+  ValidationError,
+  ImageToolTip,
+  CloseSectionAlert,
+} from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
 
 function WysiwygSection({
@@ -126,7 +128,7 @@ function WysiwygSection({
             fontSize: '1.3rem',
           }}
         >
-          WYSIWYG - <ImageTooltip type='WYSIWYG' />
+          WYSIWYG - <ImageToolTip type='WYSIWYG' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

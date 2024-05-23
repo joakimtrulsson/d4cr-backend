@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
 import {
   FieldContainer,
   FieldLabel,
@@ -8,14 +7,16 @@ import {
   FieldDescription,
 } from '@keystone-ui/fields';
 
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
-import CancelButton from '../components/CancelButton/CancelButton.jsx';
-import ImageLibrary from '../components/ImageLibrary/ImageLibrary.jsx';
-import ValidationError from '../components/ValidationError/ValidationError';
+import {
+  AddSectionButton,
+  UpdateSectionButton,
+  CancelButton,
+  ImageLibrary,
+  ValidationError,
+  ImageToolTip,
+  CloseSectionAlert,
+} from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 
 function Image({
   onCloseSection,
@@ -130,7 +131,7 @@ function Image({
             fontSize: '1.3rem',
           }}
         >
-          Images - <ImageTooltip type='IMAGE' />
+          Images - <ImageToolTip type='IMAGE' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

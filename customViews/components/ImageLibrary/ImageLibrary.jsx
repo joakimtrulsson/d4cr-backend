@@ -10,7 +10,7 @@ import {
 import FormData from 'form-data';
 
 import { formatFileSize } from '../../../utils/formatFileSize';
-import AddEntryButton from '../AddEntryButton/AddEntryButton';
+import { AddEntryButton } from '../index.js';
 
 function ImageLibrary({ selectedFile, setSelectedFile, isMultiSelect }) {
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
@@ -100,6 +100,8 @@ function ImageLibrary({ selectedFile, setSelectedFile, isMultiSelect }) {
       });
 
       setFiles(modifiedFiles);
+
+      return modifiedFiles;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -212,12 +214,27 @@ function ImageLibrary({ selectedFile, setSelectedFile, isMultiSelect }) {
   );
 
   async function fileFinishUploadCallback() {
-    if (!isMultiSelect) {
-      fetchData();
+    // Ingen tillgång vill vilka bilder som laddats upp
+    const updatedFilesList = await fetchData();
 
-      setSelectedFile(files[0]);
-      setIsMediaLibraryOpen(false);
+    // Sortera bilderna efter senast uppladdade
+    const sortedFiles = updatedFilesList.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    // Hämta senast uppladdade bildernas createdAt
+    const mostRecentUploadTime = new Date(sortedFiles[0].createdAt);
+    const newFiles = sortedFiles.filter(
+      (file) => (mostRecentUploadTime - new Date(file.createdAt)) / 1000 <= 5
+    );
+
+    if (isMultiSelect) {
+      setSelectedFile(newFiles);
+    } else {
+      setSelectedFile(newFiles[0]);
     }
+
+    setIsMediaLibraryOpen(false);
   }
 
   return (

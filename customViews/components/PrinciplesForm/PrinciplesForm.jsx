@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {
-  FieldLabel,
-  TextInput,
-  FieldDescription,
-  MultiSelect,
-} from '@keystone-ui/fields';
+import { FieldLabel, FieldDescription, MultiSelect } from '@keystone-ui/fields';
 import { v4 as uuidv4 } from 'uuid';
 
 import useFetchPrinciples from '../../hooks/useFetchPrinciples';
-import AddEntryButton from '../AddEntryButton/AddEntryButton';
-import RemoveEntryButton from '../RemoveEntryButton/RemoveEntryButton';
+import { AddEntryButton } from '../index.js';
 
 function PrinciplesForm({
   autoFocus,

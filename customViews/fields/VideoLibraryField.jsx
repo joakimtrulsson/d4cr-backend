@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ReactMediaLibrary, FileLibrarySelectedItems } from 'react-media-library';
-
 import {
   FieldContainer,
   FieldLabel,

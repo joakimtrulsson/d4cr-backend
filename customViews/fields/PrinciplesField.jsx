@@ -8,11 +8,12 @@ import {
   TextInput,
 } from '@keystone-ui/fields';
 
-import Wysiwyg from './components/Wysiwyg/Wysiwyg.jsx';
-import PrinciplesForm from '../components/PrinciplesForm/PrinciplesForm.jsx';
-
-import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton.jsx';
-import AddEntryButton from '../components/AddEntryButton/AddEntryButton.jsx';
+import {
+  Wysiwyg,
+  PrinciplesForm,
+  RemoveEntryButton,
+  AddEntryButton,
+} from '../components/index.js';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [data, setData] = useState(value ? JSON.parse(value) : []);

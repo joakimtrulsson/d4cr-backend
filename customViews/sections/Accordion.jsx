@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
 import {
   FieldContainer,
   FieldLabel,
@@ -8,16 +7,18 @@ import {
   TextInput,
 } from '@keystone-ui/fields';
 
-import Editor from '../components/Editor/Editor';
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton';
-import RemoveEntryButton from '../components/RemoveEntryButton/RemoveEntryButton';
-import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
-import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton';
-import CancelButton from '../components/CancelButton/CancelButton';
-import ValidationError from '../components/ValidationError/ValidationError';
+import {
+  Editor,
+  AddSectionButton,
+  RemoveEntryButton,
+  AddEntryButton,
+  UpdateSectionButton,
+  CancelButton,
+  ValidationError,
+  ImageToolTip,
+  CloseSectionAlert,
+} from '../components/index.js';
 import { useValidation } from '../hooks/useValidation';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 
 function Accordion({
   onCloseSection,
@@ -147,7 +148,7 @@ function Accordion({
             fontSize: '1.3rem',
           }}
         >
-          Accordion - <ImageTooltip type='ACCORDION' />
+          Accordion - <ImageToolTip type='ACCORDION' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}

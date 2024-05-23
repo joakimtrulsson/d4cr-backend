@@ -14,7 +14,7 @@ const IMAGE_MAP = {
   WYSIWYG: '/public/images/sections/wysiwyg.png',
 };
 
-const ImageTooltip = ({ type }) => {
+const ImageToolTip = ({ type }) => {
   const imageUrl = IMAGE_MAP[type];
   const imageSrc = `${process.env.NEXT_PUBLIC_BASE_URL}${imageUrl}`;
 
@@ -41,4 +41,4 @@ const ImageTooltip = ({ type }) => {
   );
 };
 
-export default ImageTooltip;
+export default ImageToolTip;

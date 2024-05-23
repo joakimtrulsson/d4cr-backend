@@ -11,7 +11,7 @@ import FormData from 'form-data';
 
 import { formatFileSize } from '../../utils/formatFileSize';
 
-import AddEntryButton from '../components/AddEntryButton/AddEntryButton';
+import { AddEntryButton } from '../components/index.js';
 
 export const Field = ({ field, value, onChange, autoFocus }) => {
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
@@ -20,7 +20,6 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   const [search, setSearch] = useState('');
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [filteredFiles, setFilteredFiles] = useState();
-  const [lastUploadedFile, setLastUploadedFile] = useState(null);
 
   const loc = window.location;
   const API_URL = `${loc.protocol}//${loc.host}/api/graphql`;
@@ -33,12 +32,10 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   useEffect(() => {
     if (isFileUploaded) {
       fetchData();
-      // setIsFileUploaded(false);
     }
   }, [isFileUploaded]);
 
   const fetchData = async () => {
-    console.log('här borde');
     if (value && !isFileUploaded) {
       setSelectedFile(JSON.parse(value));
     }
@@ -78,6 +75,8 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
       });
 
       setFiles(modifiedFiles);
+
+      return modifiedFiles;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -136,7 +135,6 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
 
       if (!result.errors) {
         setIsFileUploaded(true);
-        setLastUploadedFile(result.data.createImage.id);
 
         return true;
       }
@@ -169,17 +167,21 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
   );
 
   async function handleFinishUpload() {
-    // setFiles((prev) => [...prev, uploadedFile]);
-    setIsFileUploaded(true);
-    await fetchData();
-    // setSelectedFile(lastUploadedFile);
-    // i lastUploadedFile finns id på den uppladdade bilden.
-    // nu behöver vi hitta den bilden i files och sätta den som selectedFile
-    const foundFile = files.find((file) => file._id === lastUploadedFile);
-    // console.log('foundFile', filxwes);
-    setSelectedFile(foundFile);
+    const updatedFilesList = await fetchData();
 
-    onChange(JSON.stringify(selectedFile));
+    // Sortera bilderna efter senast uppladdade
+    const sortedFiles = updatedFilesList.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    // Hämta senast uppladdade bildernas createdAt
+    const mostRecentUploadTime = new Date(sortedFiles[0].createdAt);
+    const newFiles = sortedFiles.filter(
+      (file) => (mostRecentUploadTime - new Date(file.createdAt)) / 1000 <= 5
+    );
+    setSelectedFile(newFiles[0]);
+
+    onChange(JSON.stringify(newFiles[0]));
     setIsMediaLibraryOpen(false);
   }
 

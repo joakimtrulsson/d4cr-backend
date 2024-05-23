@@ -164,7 +164,11 @@ function StoredSections({
                           />
                         </div>
                         <Tooltip
-                          content='Edit this section'
+                          content={
+                            section.sectionType !== 'CHAPTERTEASER'
+                              ? 'Edit this section'
+                              : 'Not available for Chapter Teaser sections'
+                          }
                           weight='subtle'
                           placement='top'
                         >
@@ -175,7 +179,11 @@ function StoredSections({
                                 className={styles.list.optionButton}
                                 onClick={() => onEditSection(section.id)}
                               >
-                                <EditIcon size='small' color='blue' />
+                                {section.sectionType !== 'CHAPTERTEASER' ? (
+                                  <EditIcon size='small' color='blue' />
+                                ) : (
+                                  <div style={{ width: '16px', height: '24px' }} />
+                                )}
                               </Button>
                             </div>
                           )}

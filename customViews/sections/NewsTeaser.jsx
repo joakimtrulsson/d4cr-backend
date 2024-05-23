@@ -10,14 +10,16 @@ import {
   FieldDescription,
 } from '@keystone-ui/fields';
 
-import Editor from '../components/Editor/Editor.jsx';
-import AddSectionButton from '../components/AddSectionButton/AddSectionButton.jsx';
-import UpdateSectionButton from '../components/UpdateSectionButton/UpdateSectionButton.jsx';
-import CancelButton from '../components/CancelButton/CancelButton.jsx';
+import {
+  Editor,
+  AddSectionButton,
+  UpdateSectionButton,
+  CancelButton,
+  ValidationError,
+  ImageToolTip,
+  CloseSectionAlert,
+} from '../components/index.js';
 import useFetchChapters from '../hooks/useFetchChapters.jsx';
-import ValidationError from '../components/ValidationError/ValidationError';
-import ImageTooltip from '../components/ImageTooltip/ImageToolTip.jsx';
-import CloseSectionAlert from '../components/CloseSectionAlert/CloseSectionAlert';
 import useFetchCategories from '../hooks/useFetchCategories.jsx';
 import { useValidation } from '../hooks/useValidation';
 
@@ -193,7 +195,7 @@ function NewsTeaser({
             fontSize: '1.3rem',
           }}
         >
-          News Teaser - <ImageTooltip type='NEWSTEASER' />
+          News Teaser - <ImageToolTip type='NEWSTEASER' />
         </FieldLabel>
         <CancelButton
           handleClose={handleOpenModal}
