@@ -33,7 +33,9 @@ export const newsSchema = list({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === 'create' || operation === 'update' || operation === 'delete') {
-        const { response, data } = await triggerRevalidation(item.slug);
+        const url = operation === 'delete' ? '/news' : item.url;
+        const { response, data } = await triggerRevalidation(url);
+
         if (response.status !== 200) {
           throw new Error('Failed to trigger revalidation of the frontend application.');
         } else if (data.revalidated) {

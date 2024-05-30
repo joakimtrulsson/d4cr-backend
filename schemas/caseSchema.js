@@ -31,11 +31,12 @@ export const caseSchema = list({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (
-        operation === 'create' ||
-        operation === 'update' ||
-        (operation === 'delete' && item.linkType === 'internal')
+        ['create', 'update', 'delete'].includes(operation) &&
+        item.linkType === 'internal'
       ) {
-        const { response, data } = await triggerRevalidation(item.url);
+        const url = operation === 'delete' ? '/cases' : item.url;
+        const { response, data } = await triggerRevalidation(url);
+
         if (response.status !== 200) {
           throw new Error('Failed to trigger revalidation of the frontend application.');
         } else if (data.revalidated) {

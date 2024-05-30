@@ -19,7 +19,6 @@ export { newsCategorySchema as NewsCategory } from './newsCategorySchema.js';
 
 // Resources
 export { resourceSchema as Resource } from './resourceSchema.js';
-// export { resourceCategorySchema as ResourceCategory } from './resourceCategorySchema.js';
 export { resourceTypeSchema as ResourceType } from './resourceTypeSchema.js';
 
 // Principles

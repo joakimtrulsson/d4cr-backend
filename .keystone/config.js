@@ -502,7 +502,7 @@ var chapterSchema = (0, import_core3.list)({
   },
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
-      if (operation === "create" || operation === "update" || operation === "delete") {
+      if (operation === "create" || operation === "update") {
         const { response, data } = await triggerRevalidation(item.slug);
         if (response.status !== 200) {
           throw new Error("Failed to trigger revalidation of the frontend application.");
@@ -726,7 +726,7 @@ var pageSchema = (0, import_core5.list)({
   },
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
-      if (operation === "create" || operation === "update" || operation === "delete") {
+      if (operation === "create" || operation === "update") {
         const { response, data } = await triggerRevalidation(item.slug);
         if (response.status !== 200) {
           throw new Error("Failed to trigger revalidation of the frontend application.");
@@ -867,7 +867,7 @@ var frontPageSchema = (0, import_core6.list)({
   isSingleton: true,
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
-      if (operation === "create" || operation === "update" || operation === "delete") {
+      if (operation === "create" || operation === "update") {
         const { response, data } = await triggerRevalidation("/");
         if (response.status !== 200) {
           throw new Error("Failed to trigger revalidation of the frontend application.");
@@ -1271,7 +1271,8 @@ var newsSchema = (0, import_core12.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update" || operation === "delete") {
-        const { response, data } = await triggerRevalidation(item.slug);
+        const url = operation === "delete" ? "/news" : item.url;
+        const { response, data } = await triggerRevalidation(url);
         if (response.status !== 200) {
           throw new Error("Failed to trigger revalidation of the frontend application.");
         } else if (data.revalidated) {
@@ -1628,7 +1629,7 @@ var principleSchema = (0, import_core17.list)({
   },
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
-      if (operation === "create" || operation === "update" || operation === "delete") {
+      if (operation === "create" || operation === "update") {
         const { response, data } = await triggerRevalidation(item.slug);
         if (response.status !== 200) {
           throw new Error("Failed to trigger revalidation of the frontend application.");
@@ -1912,8 +1913,9 @@ var caseSchema = (0, import_core21.list)({
   },
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
-      if (operation === "create" || operation === "update" || operation === "delete" && item.linkType === "internal") {
-        const { response, data } = await triggerRevalidation(item.url);
+      if (["create", "update", "delete"].includes(operation) && item.linkType === "internal") {
+        const url = operation === "delete" ? "/cases" : item.url;
+        const { response, data } = await triggerRevalidation(url);
         if (response.status !== 200) {
           throw new Error("Failed to trigger revalidation of the frontend application.");
         } else if (data.revalidated) {
@@ -2452,7 +2454,6 @@ var lists = {
   News: newsSchema,
   NewsCategory: newsCategorySchema,
   Resource: resourceSchema,
-  // ResourceCategory,
   ResourceType: resourceTypeSchema,
   Image: imageSchema,
   Video: videoSchema,
