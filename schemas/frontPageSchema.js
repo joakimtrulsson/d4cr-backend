@@ -4,6 +4,7 @@ import { document } from '@keystone-6/fields-document';
 
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
+import triggerRevalidation from '../utils/triggerRevalidation.js';
 
 export const frontPageSchema = list({
   access: {
@@ -20,6 +21,18 @@ export const frontPageSchema = list({
     },
   },
   isSingleton: true,
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === 'create' || operation === 'update' || operation === 'delete') {
+        const { response, data } = await triggerRevalidation('/');
+        if (response.status !== 200) {
+          throw new Error('Failed to trigger revalidation of the frontend application.');
+        } else if (data.revalidated) {
+          console.log('NextJs Revalidation triggered successfully');
+        }
+      }
+    },
+  },
   fields: {
     heroTitle: text({
       validation: { isRequired: true },
