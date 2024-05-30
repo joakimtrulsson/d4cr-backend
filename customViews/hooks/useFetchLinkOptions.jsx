@@ -27,6 +27,12 @@ const useFetchLinkOptions = () => {
               principles(where: { status: { equals: "published" } }) {
                 slug
               }
+              cases(where: { status: { equals: "published" }, linkType: { equals: "internal" } }) {
+                url
+              }
+              newsItems(where: { status: { equals: "published" } }) {
+                slug
+              }
             }
             `,
           }),
@@ -49,10 +55,22 @@ const useFetchLinkOptions = () => {
           value: `/principles${principle.slug}`,
         }));
 
+        const casesOptions = data.cases.map((c) => ({
+          label: c.url,
+          value: c.url,
+        }));
+
+        const newsOptions = data.newsItems.map((news) => ({
+          label: `${news.slug}`,
+          value: `${news.slug}`,
+        }));
+
         const options = [...staticPages].concat(
           chaptersOptions,
           pagesOptions,
-          principlesOptions
+          principlesOptions,
+          casesOptions,
+          newsOptions
           // resourcesOptions
         );
 

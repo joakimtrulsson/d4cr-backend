@@ -6,6 +6,7 @@ import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
 
 import { buildSlug } from '../utils/buildSlug.js';
+import triggerRevalidation from '../utils/triggerRevalidation.js';
 
 export const caseSchema = list({
   access: {
@@ -25,6 +26,22 @@ export const caseSchema = list({
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems,
+    },
+  },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (
+        operation === 'create' ||
+        operation === 'update' ||
+        (operation === 'delete' && item.linkType === 'internal')
+      ) {
+        const { response, data } = await triggerRevalidation(item.url);
+        if (response.status !== 200) {
+          throw new Error('Failed to trigger revalidation of the frontend application.');
+        } else if (data.revalidated) {
+          console.log('NextJs Revalidation triggered successfully');
+        }
+      }
     },
   },
   ui: {

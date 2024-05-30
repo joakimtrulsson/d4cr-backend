@@ -4,9 +4,9 @@ import { document } from '@keystone-6/fields-document';
 
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
-import triggerRebuild from '../utils/triggerRebuild.js';
 
 import { buildSlug } from '../utils/buildSlug.js';
+import triggerRevalidation from '../utils/triggerRevalidation.js';
 
 export const pageSchema = list({
   access: {
@@ -28,18 +28,18 @@ export const pageSchema = list({
       delete: rules.canManageItems,
     },
   },
-  // hooks: {
-  //   afterOperation: async ({ operation, context, listKey, item }) => {
-  //     if (operation === 'create' || operation === 'update' || operation === 'delete') {
-  //       const response = await triggerRebuild('Page');
-  //       if (!response.success) {
-  //         throw new Error('Failed to trigger rebuild');
-  //       } else {
-  //         console.log('NextJs Rebuild triggered successfully');
-  //       }
-  //     }
-  //   },
-  // },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === 'create' || operation === 'update' || operation === 'delete') {
+        const { response, data } = await triggerRevalidation(item.slug);
+        if (response.status !== 200) {
+          throw new Error('Failed to trigger revalidation of the frontend application.');
+        } else if (data.revalidated) {
+          console.log('NextJs Revalidation triggered successfully');
+        }
+      }
+    },
+  },
   ui: {
     isHidden: (args) => {
       return !permissions?.canManageAllItems(args);

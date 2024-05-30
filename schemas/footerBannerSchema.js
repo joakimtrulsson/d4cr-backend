@@ -19,7 +19,6 @@ export const footerBannerSchema = list({
       delete: rules.canManageItems,
     },
   },
-
   isSingleton: true,
   fields: {
     title: text({

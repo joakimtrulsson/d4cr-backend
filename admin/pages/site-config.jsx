@@ -33,6 +33,8 @@ export default function SiteConfig() {
         <CellLink href='/form-email/1'>Forms - Email</CellLink>
         <Divider />
         <CellLink href='/footer-join-us/1'>Footer - Social Media Links</CellLink>
+        <Divider />
+        <CellLink href='/revalidate-frontend'>Update Frontend application</CellLink>
       </CellContainer>
     </PageContainer>
   );

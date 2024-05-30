@@ -7,6 +7,7 @@ import { graphql } from '@keystone-6/core';
 
 import { languageCodesData } from '../utils/languageCodes.js';
 import { buildSlug } from '../utils/buildSlug.js';
+import triggerRevalidation from '../utils/triggerRevalidation.js';
 
 export const chapterSchema = list({
   access: {
@@ -25,6 +26,18 @@ export const chapterSchema = list({
       },
       update: rules.canManageItems,
       delete: rules.canManageItems,
+    },
+  },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === 'create' || operation === 'update' || operation === 'delete') {
+        const { response, data } = await triggerRevalidation(item.slug);
+        if (response.status !== 200) {
+          throw new Error('Failed to trigger revalidation of the frontend application.');
+        } else if (data.revalidated) {
+          console.log('NextJs Revalidation triggered successfully');
+        }
+      }
     },
   },
   ui: {
@@ -228,7 +241,7 @@ export const chapterSchema = list({
           fieldMode: (args) => (permissions.canManageAllItems(args) ? 'edit' : 'read'),
         },
       },
-      // Defaulta alltid nya items till den nuvarande användaren; detta är viktigt eftersom användare utan rättigheten canManageAllItems inte ser detta fält när de skapar nya.
+      // Default ska alltid nya items till den nuvarande användaren; detta är viktigt eftersom användare utan rättigheten canManageAllItems inte ser detta fält när de skapar nya.
       // hooks: {
       //   resolveInput({ operation, resolvedData, context }) {
       //     if (operation === 'create' && !resolvedData.contentOwner && context.session) {

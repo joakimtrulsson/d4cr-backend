@@ -465,6 +465,22 @@ function buildSlug(input, subUrlType = "") {
   return result;
 }
 
+// utils/triggerRevalidation.js
+async function triggerRevalidation(contentToUpdate) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}api/revalidate?path=${contentToUpdate}`,
+    {
+      method: "GET",
+      headers: {
+        "Access-Control-Allow-Headers": "Authorization",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_STATIC_REVALIDATE_TOKEN}`
+      }
+    }
+  );
+  const data = await response.json();
+  return { response, data };
+}
+
 // schemas/chapterSchema.js
 var chapterSchema = (0, import_core3.list)({
   access: {
@@ -482,6 +498,18 @@ var chapterSchema = (0, import_core3.list)({
       },
       update: rules.canManageItems,
       delete: rules.canManageItems
+    }
+  },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation(item.slug);
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
     }
   },
   ui: {
@@ -659,7 +687,7 @@ var chapterSchema = (0, import_core3.list)({
           fieldMode: (args) => permissions.canManageAllItems(args) ? "edit" : "read"
         }
       }
-      // Defaulta alltid nya items till den nuvarande användaren; detta är viktigt eftersom användare utan rättigheten canManageAllItems inte ser detta fält när de skapar nya.
+      // Default ska alltid nya items till den nuvarande användaren; detta är viktigt eftersom användare utan rättigheten canManageAllItems inte ser detta fält när de skapar nya.
       // hooks: {
       //   resolveInput({ operation, resolvedData, context }) {
       //     if (operation === 'create' && !resolvedData.contentOwner && context.session) {
@@ -677,16 +705,6 @@ var import_core5 = require("@keystone-6/core");
 var import_fields4 = require("@keystone-6/core/fields");
 var import_fields_document2 = require("@keystone-6/fields-document");
 var import_access7 = require("@keystone-6/core/access");
-
-// utils/triggerRebuild.js
-var import_heroku_client = __toESM(require("heroku-client"));
-var import_octokit = require("octokit");
-var heroku = new import_heroku_client.default({ token: process.env.HEROKU_API_KEY });
-var octokit = new import_octokit.Octokit({
-  auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN
-});
-
-// schemas/pageSchema.js
 var pageSchema = (0, import_core5.list)({
   access: {
     operation: {
@@ -706,18 +724,18 @@ var pageSchema = (0, import_core5.list)({
       delete: rules.canManageItems
     }
   },
-  // hooks: {
-  //   afterOperation: async ({ operation, context, listKey, item }) => {
-  //     if (operation === 'create' || operation === 'update' || operation === 'delete') {
-  //       const response = await triggerRebuild('Page');
-  //       if (!response.success) {
-  //         throw new Error('Failed to trigger rebuild');
-  //       } else {
-  //         console.log('NextJs Rebuild triggered successfully');
-  //       }
-  //     }
-  //   },
-  // },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation(item.slug);
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
+    }
+  },
   ui: {
     isHidden: (args) => {
       return !permissions?.canManageAllItems(args);
@@ -847,6 +865,18 @@ var frontPageSchema = (0, import_core6.list)({
     }
   },
   isSingleton: true,
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation("/");
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
+    }
+  },
   fields: {
     heroTitle: (0, import_fields5.text)({
       validation: { isRequired: true },
@@ -1238,6 +1268,18 @@ var newsSchema = (0, import_core12.list)({
   graphql: {
     plural: "NewsItems"
   },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation(item.slug);
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
+    }
+  },
   ui: {
     label: "News",
     singular: "News",
@@ -1375,6 +1417,18 @@ var newsCategorySchema = (0, import_core14.list)({
       delete: rules.canManageItems
     }
   },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation("/news");
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
+    }
+  },
   ui: {
     labelField: "categoryTitle",
     listView: {
@@ -1421,6 +1475,18 @@ var resourceSchema = (0, import_core15.list)({
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems
+    }
+  },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation("/resources");
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
     }
   },
   ui: {
@@ -1487,6 +1553,18 @@ var resourceTypeSchema = (0, import_core16.list)({
       delete: rules.canManageItems
     }
   },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation("/resources");
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
+    }
+  },
   ui: {
     description: "This list is used to categorize resources based on their types.",
     labelField: "type",
@@ -1546,6 +1624,18 @@ var principleSchema = (0, import_core17.list)({
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems
+    }
+  },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation(item.slug);
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
     }
   },
   ui: {
@@ -1818,6 +1908,18 @@ var caseSchema = (0, import_core21.list)({
       // query: rules.canReadItems,
       update: rules.canManageItems,
       delete: rules.canManageItems
+    }
+  },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete" && item.linkType === "internal") {
+        const { response, data } = await triggerRevalidation(item.url);
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
     }
   },
   ui: {
