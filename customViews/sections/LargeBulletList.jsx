@@ -185,28 +185,28 @@ function BulletList({
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Title</FieldLabel>
         <FieldDescription>
-          This reqiured field specifies the title text on the Large Bullet List section.
+          This field specifies the title text on the Large Bullet List section.
         </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('title', event.target.value)}
           value={value.title}
         />
-        {errors.includes('title') && <ValidationError field='Title' />}
+        {/* {errors.includes('title') && <ValidationError field='Title' />} */}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
         <FieldLabel>Preamble</FieldLabel>
         <FieldDescription>
-          This required field specifies a brief description of the list, which will be
-          rendered below the title.
+          This field specifies a brief description of the list, which will be rendered
+          below the title.
         </FieldDescription>
         <TextInput
           autoFocus={autoFocus}
           onChange={(event) => handleChange('subHeader', event.target.value)}
           value={value.subHeader}
         />
-        {errors.includes('subHeader') && <ValidationError field='Preamble text' />}
+        {/* {errors.includes('subHeader') && <ValidationError field='Preamble text' />} */}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>

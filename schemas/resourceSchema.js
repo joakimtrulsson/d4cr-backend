@@ -22,11 +22,9 @@ export const resourceSchema = list({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === 'create' || operation === 'update' || operation === 'delete') {
-        const { response, data } = await triggerRevalidation('/resources');
+        const { data } = await triggerRevalidation('/resources');
 
-        if (response.status !== 200) {
-          throw new Error('Failed to trigger revalidation of the frontend application.');
-        } else if (data.revalidated) {
+        if (data.revalidated) {
           console.log('NextJs Revalidation triggered successfully');
         }
       }
@@ -80,8 +78,31 @@ export const resourceSchema = list({
     }),
 
     createdAt: timestamp({
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        description:
+          'The date and time the news was created. If not supplied, the current date and time will be used.',
+      },
       isRequired: true,
-      defaultValue: { kind: 'now' },
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === 'create' && !inputData.createdAt) {
+            let date = new Date();
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else if (operation === 'update' && inputData.createdAt) {
+            let date = new Date(inputData.createdAt);
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else {
+            let date = inputData.createdAt;
+            date.setMilliseconds(0);
+            return date.toISOString();
+          }
+        },
+      },
     }),
   },
 });

@@ -31,12 +31,7 @@ export const pageSchema = list({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === 'create' || operation === 'update') {
-        const { response, data } = await triggerRevalidation(item.slug);
-        if (response.status !== 200) {
-          throw new Error('Failed to trigger revalidation of the frontend application.');
-        } else if (data.revalidated) {
-          console.log('NextJs Revalidation triggered successfully');
-        }
+        const { data } = await triggerRevalidation(item.slug);
       }
     },
   },

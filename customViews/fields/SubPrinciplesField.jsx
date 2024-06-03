@@ -35,13 +35,13 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
 
   return (
     <FieldContainer>
-      <FieldLabel>Subprinciples</FieldLabel>
+      <FieldLabel>Principle Bulletpoint</FieldLabel>
       {field.description && <FieldDescription>{field.description}</FieldDescription>}
 
       {values.map((subprinciple, index) => {
         return (
           <div key={subprinciple.id} style={{ marginBottom: '1rem', marginTop: '1rem' }}>
-            <FieldLabel>{`Subprinciple ${index + 1}`}</FieldLabel>
+            <FieldLabel>{`Bulletpoint ${index + 1}`}</FieldLabel>
             <Editor
               onSetPreamble={(value) => handleInputChange(index, value)}
               editData={values[index].text}
@@ -51,6 +51,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
             <RemoveEntryButton
               handleRemove={handleRemoveField}
               indexToRemove={subprinciple.id}
+              style={{ marginTop: '1rem' }}
             >
               Remove entry
             </RemoveEntryButton>
@@ -58,7 +59,7 @@ export const Field = ({ field, value, onChange, autoFocus }) => {
         );
       })}
 
-      <AddEntryButton handleAdd={handleAddField}>Add new subprinciple</AddEntryButton>
+      <AddEntryButton handleAdd={handleAddField}>Add new point</AddEntryButton>
     </FieldContainer>
   );
 };

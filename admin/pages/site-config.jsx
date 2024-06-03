@@ -30,7 +30,7 @@ export default function SiteConfig() {
         <Divider />
         <CellLink href='/footer-banner/1'>Footer - Banner</CellLink>
         <Divider />
-        <CellLink href='/form-email/1'>Forms - Email</CellLink>
+        <CellLink href='/form-email/1'>Forms - Contact us</CellLink>
         <Divider />
         <CellLink href='/footer-join-us/1'>Footer - Social Media Links</CellLink>
         <Divider />

@@ -467,18 +467,23 @@ function buildSlug(input, subUrlType = "") {
 
 // utils/triggerRevalidation.js
 async function triggerRevalidation(contentToUpdate) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_FRONTEND_URL}api/revalidate?path=${contentToUpdate}`,
-    {
-      method: "GET",
-      headers: {
-        "Access-Control-Allow-Headers": "Authorization",
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_STATIC_REVALIDATE_TOKEN}`
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_FRONTEND_URL}api/revalidate?path=${contentToUpdate}`,
+      {
+        method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers": "Authorization",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_STATIC_REVALIDATE_TOKEN}`
+        }
       }
-    }
-  );
-  const data = await response.json();
-  return { response, data };
+    );
+    const data = await response.json();
+    return { response, data };
+  } catch (error) {
+    console.error("Error in triggerRevalidation:", error);
+    return { response: { status: 500 }, data: { revalidated: false } };
+  }
 }
 
 // schemas/chapterSchema.js
@@ -503,12 +508,7 @@ var chapterSchema = (0, import_core3.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update") {
-        const { response, data } = await triggerRevalidation(item.slug);
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
-          console.log("NextJs Revalidation triggered successfully");
-        }
+        const { data } = await triggerRevalidation(item.slug);
       }
     }
   },
@@ -727,12 +727,7 @@ var pageSchema = (0, import_core5.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update") {
-        const { response, data } = await triggerRevalidation(item.slug);
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
-          console.log("NextJs Revalidation triggered successfully");
-        }
+        const { data } = await triggerRevalidation(item.slug);
       }
     }
   },
@@ -868,12 +863,7 @@ var frontPageSchema = (0, import_core6.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update") {
-        const { response, data } = await triggerRevalidation("/");
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
-          console.log("NextJs Revalidation triggered successfully");
-        }
+        const { data } = await triggerRevalidation("/");
       }
     }
   },
@@ -995,6 +985,7 @@ var footerBannerSchema = (0, import_core7.list)({
 // schemas/formEmailSchema.js
 var import_core8 = require("@keystone-6/core");
 var import_fields7 = require("@keystone-6/core/fields");
+var import_fields_document5 = require("@keystone-6/fields-document");
 var import_access13 = require("@keystone-6/core/access");
 
 // utils/validateEmail.js
@@ -1005,6 +996,9 @@ function validateEmail(email) {
 
 // schemas/formEmailSchema.js
 var formEmailSchema = (0, import_core8.list)({
+  ui: {
+    label: "Form - Contact us"
+  },
   access: {
     operation: {
       ...(0, import_access13.allOperations)(isSignedIn),
@@ -1037,6 +1031,29 @@ var formEmailSchema = (0, import_core8.list)({
         }
       }
     }),
+    contactUsPreamble: (0, import_fields_document5.document)({
+      ui: {
+        description: "This field is required and is used to specify a short introductory text to the contact form."
+      },
+      hooks: {
+        afterOperation: async ({ operation, context, listKey, item }) => {
+          if (operation === "create" || operation === "update") {
+            const { data } = await triggerRevalidation("/contact-us");
+          }
+        }
+      },
+      validation: { isRequired: true },
+      links: true,
+      formatting: {
+        inlineMarks: {
+          bold: true,
+          italic: true,
+          underline: true,
+          strikethrough: true
+        },
+        softBreaks: true
+      }
+    }),
     shareStoryEmail: (0, import_fields7.text)({
       validation: { isRequired: true },
       ui: {
@@ -1054,6 +1071,22 @@ var formEmailSchema = (0, import_core8.list)({
         }
       }
     }),
+    shareStoryPreamble: (0, import_fields_document5.document)({
+      ui: {
+        description: "This field is required and is used to specify a short introductory text to the contact form."
+      },
+      validation: { isRequired: true },
+      links: true,
+      formatting: {
+        inlineMarks: {
+          bold: true,
+          italic: true,
+          underline: true,
+          strikethrough: true
+        },
+        softBreaks: true
+      }
+    }),
     joinSlackEmail: (0, import_fields7.text)({
       validation: { isRequired: true },
       ui: {
@@ -1069,6 +1102,22 @@ var formEmailSchema = (0, import_core8.list)({
             );
           }
         }
+      }
+    }),
+    joinSlackPreamble: (0, import_fields_document5.document)({
+      ui: {
+        description: "This field is required and is used to specify a short introductory text to the contact form."
+      },
+      validation: { isRequired: true },
+      links: true,
+      formatting: {
+        inlineMarks: {
+          bold: true,
+          italic: true,
+          underline: true,
+          strikethrough: true
+        },
+        softBreaks: true
       }
     })
   }
@@ -1271,13 +1320,10 @@ var newsSchema = (0, import_core12.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update" || operation === "delete") {
-        const url = operation === "delete" ? "/news" : item.url;
-        const { response, data } = await triggerRevalidation(url);
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
+        const url = operation === "delete" ? "/news" : item.slug;
+        const { data } = await triggerRevalidation(url);
+        if (data.revalidated)
           console.log("NextJs Revalidation triggered successfully");
-        }
       }
     }
   },
@@ -1288,8 +1334,8 @@ var newsSchema = (0, import_core12.list)({
     path: "news",
     labelField: "title",
     listView: {
-      initialColumns: ["title", "newsCategory", "newsNumber"],
-      initialSort: { field: "title", direction: "ASC" },
+      initialColumns: ["title", "newsCategory", "createdAt"],
+      initialSort: { field: "createdAt", direction: "DESC" },
       pageSize: 50
     }
   },
@@ -1357,30 +1403,43 @@ var newsSchema = (0, import_core12.list)({
     }),
     ...(0, import_core13.group)({
       label: "Resources",
-      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.",
+      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden.",
       fields: {
-        resourcesTitle: (0, import_fields11.text)({
-          ui: {
-            description: "This field specifies the title of the resources section."
-          }
-        }),
-        resourcesPreamble: (0, import_fields11.text)({
-          ui: {
-            description: "This field specifies the preamble of the resources section."
-          }
-        }),
         resources: (0, import_fields11.relationship)({
           ref: "Resource",
           many: true,
           ui: {
+            hideCreate: true,
             description: "Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen."
           }
         })
       }
     }),
     createdAt: (0, import_fields11.timestamp)({
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        description: "The date and time the news was created. If not supplied, the current date and time will be used."
+      },
       isRequired: true,
-      defaultValue: { kind: "now" }
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === "create" && !inputData.createdAt) {
+            let date = /* @__PURE__ */ new Date();
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else if (operation === "update" && inputData.createdAt) {
+            let date = new Date(inputData.createdAt);
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else {
+            let date = inputData.createdAt;
+            date.setMilliseconds(0);
+            return date.toISOString();
+          }
+        }
+      }
     }),
     status: (0, import_fields11.select)({
       options: [
@@ -1421,12 +1480,7 @@ var newsCategorySchema = (0, import_core14.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update" || operation === "delete") {
-        const { response, data } = await triggerRevalidation("/news");
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
-          console.log("NextJs Revalidation triggered successfully");
-        }
+        const { data } = await triggerRevalidation("/news");
       }
     }
   },
@@ -1481,10 +1535,8 @@ var resourceSchema = (0, import_core15.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update" || operation === "delete") {
-        const { response, data } = await triggerRevalidation("/resources");
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
+        const { data } = await triggerRevalidation("/resources");
+        if (data.revalidated) {
           console.log("NextJs Revalidation triggered successfully");
         }
       }
@@ -1530,8 +1582,30 @@ var resourceSchema = (0, import_core15.list)({
       }
     }),
     createdAt: (0, import_fields13.timestamp)({
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        description: "The date and time the news was created. If not supplied, the current date and time will be used."
+      },
       isRequired: true,
-      defaultValue: { kind: "now" }
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === "create" && !inputData.createdAt) {
+            let date = /* @__PURE__ */ new Date();
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else if (operation === "update" && inputData.createdAt) {
+            let date = new Date(inputData.createdAt);
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else {
+            let date = inputData.createdAt;
+            date.setMilliseconds(0);
+            return date.toISOString();
+          }
+        }
+      }
     })
   }
 });
@@ -1557,12 +1631,7 @@ var resourceTypeSchema = (0, import_core16.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update" || operation === "delete") {
-        const { response, data } = await triggerRevalidation("/resources");
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
-          console.log("NextJs Revalidation triggered successfully");
-        }
+        const { data } = await triggerRevalidation("/resources");
       }
     }
   },
@@ -1582,17 +1651,18 @@ var resourceTypeSchema = (0, import_core16.list)({
         description: "This required field specifies the type of resource. It will be used to categorize resources and allow users to filter resources based on types."
       }
     }),
-    icon: (0, import_fields14.json)({
-      label: "Icon",
-      validation: { isRequired: true },
-      ui: {
-        description: "This required field specifies the icon that represents the type of resource.",
-        views: "./customViews/fields/IconPickerField.jsx",
-        createView: { fieldMode: "edit" },
-        listView: { fieldMode: "hidden" },
-        itemView: { fieldMode: "edit" }
-      }
-    }),
+    // icon: json({
+    //   label: 'Icon',
+    //   validation: { isRequired: true },
+    //   ui: {
+    //     description:
+    //       'This required field specifies the icon that represents the type of resource.',
+    //     views: './customViews/fields/IconPickerField.jsx',
+    //     createView: { fieldMode: 'edit' },
+    //     listView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'edit' },
+    //   },
+    // }),
     resources: (0, import_fields14.relationship)({
       ref: "Resource.resourceType",
       many: true,
@@ -1630,12 +1700,7 @@ var principleSchema = (0, import_core17.list)({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update") {
-        const { response, data } = await triggerRevalidation(item.slug);
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
-          console.log("NextJs Revalidation triggered successfully");
-        }
+        const { data } = await triggerRevalidation(item.slug);
       }
     }
   },
@@ -1710,11 +1775,13 @@ var principleSchema = (0, import_core17.list)({
       }
     }),
     subHeader: (0, import_fields15.text)({
+      label: "Related Rights",
       validation: {
         isRequired: true
       },
       ui: {
-        description: "This required field is used to provide additional text that will be displayed beneath the title on the principle page as well as on principle sections."
+        description: "This required field is used to provide additional text that will be displayed beneath the title on the principle page as well as on principle sections.",
+        displayMode: "textarea"
       }
     }),
     quote: (0, import_fields15.text)({
@@ -1738,7 +1805,7 @@ var principleSchema = (0, import_core17.list)({
     }),
     subPrinciples: (0, import_fields15.json)({
       ui: {
-        description: "This required field specifies the sub-principles associated with the main principle. These sub-principles will be displayed beneath the fields mentioned above, rendered as a list where each sub-principle is accompanied by a arrow icon pointing to the text.",
+        description: "This required field specifies the bulletpoint list associated with the main principle. These bulletpoint will be displayed beneath the fields mentioned above, rendered as a list where each point is accompanied by a arrow icon pointing to the text.",
         views: "./customViews/fields/SubPrinciplesField.jsx",
         createView: { fieldMode: "edit" },
         listView: { fieldMode: "hidden" },
@@ -1747,18 +1814,8 @@ var principleSchema = (0, import_core17.list)({
     }),
     ...(0, import_core18.group)({
       label: "Resources",
-      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.",
+      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden.",
       fields: {
-        resourcesTitle: (0, import_fields15.text)({
-          ui: {
-            description: "This field specifies the title of the resources section."
-          }
-        }),
-        resourcesPreamble: (0, import_fields15.text)({
-          ui: {
-            description: "This field specifies the preamble of the resources section."
-          }
-        }),
         resources: (0, import_fields15.relationship)({
           ref: "Resource",
           many: true,
@@ -1890,7 +1947,7 @@ var principleCategorySchema = (0, import_core20.list)({
 var import_core21 = require("@keystone-6/core");
 var import_fields18 = require("@keystone-6/core/fields");
 var import_core22 = require("@keystone-6/core");
-var import_fields_document5 = require("@keystone-6/fields-document");
+var import_fields_document6 = require("@keystone-6/fields-document");
 var import_access35 = require("@keystone-6/core/access");
 var caseSchema = (0, import_core21.list)({
   access: {
@@ -1915,12 +1972,7 @@ var caseSchema = (0, import_core21.list)({
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (["create", "update", "delete"].includes(operation) && item.linkType === "internal") {
         const url = operation === "delete" ? "/cases" : item.url;
-        const { response, data } = await triggerRevalidation(url);
-        if (response.status !== 200) {
-          throw new Error("Failed to trigger revalidation of the frontend application.");
-        } else if (data.revalidated) {
-          console.log("NextJs Revalidation triggered successfully");
-        }
+        const { data } = await triggerRevalidation(url);
       }
     }
   },
@@ -1984,7 +2036,7 @@ var caseSchema = (0, import_core21.list)({
         }
       }
     }),
-    preamble: (0, import_fields_document5.document)({
+    preamble: (0, import_fields_document6.document)({
       ui: {
         description: "This is not required component of the case layout. A brief introductory text that complements the title."
       },
@@ -2024,22 +2076,13 @@ var caseSchema = (0, import_core21.list)({
     }),
     ...(0, import_core22.group)({
       label: "Resources",
-      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.",
+      description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden.",
       fields: {
-        resourcesTitle: (0, import_fields18.text)({
-          ui: {
-            description: "This field specifies the title of the resources section."
-          }
-        }),
-        resourcesPreamble: (0, import_fields18.text)({
-          ui: {
-            description: "This field specifies the preamble of the resources section."
-          }
-        }),
         resources: (0, import_fields18.relationship)({
           ref: "Resource",
           many: true,
           ui: {
+            hideCreate: true,
             description: "Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen."
           }
         })
@@ -2061,11 +2104,28 @@ var caseSchema = (0, import_core21.list)({
       }
     }),
     createdAt: (0, import_fields18.timestamp)({
-      isRequired: true,
-      defaultValue: { kind: "now" },
       ui: {
         itemView: {
           fieldPosition: "sidebar"
+        },
+        description: "The date and time the news was created. If not supplied, the current date and time will be used."
+      },
+      isRequired: true,
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === "create" && !inputData.createdAt) {
+            let date = /* @__PURE__ */ new Date();
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else if (operation === "update" && inputData.createdAt) {
+            let date = new Date(inputData.createdAt);
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else {
+            let date = inputData.createdAt;
+            date.setMilliseconds(0);
+            return date.toISOString();
+          }
         }
       }
     })
@@ -2341,7 +2401,7 @@ var import_core26 = require("@keystone-6/core");
 var import_fields22 = require("@keystone-6/core/fields");
 var import_core27 = require("@keystone-6/core");
 var import_access43 = require("@keystone-6/core/access");
-var import_fields_document6 = require("@keystone-6/fields-document");
+var import_fields_document7 = require("@keystone-6/fields-document");
 var testSchema = (0, import_core26.list)({
   access: {
     operation: {

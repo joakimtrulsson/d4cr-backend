@@ -33,14 +33,11 @@ export const newsSchema = list({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === 'create' || operation === 'update' || operation === 'delete') {
-        const url = operation === 'delete' ? '/news' : item.url;
-        const { response, data } = await triggerRevalidation(url);
+        const url = operation === 'delete' ? '/news' : item.slug;
 
-        if (response.status !== 200) {
-          throw new Error('Failed to trigger revalidation of the frontend application.');
-        } else if (data.revalidated) {
-          console.log('NextJs Revalidation triggered successfully');
-        }
+        const { data } = await triggerRevalidation(url);
+
+        if (data.revalidated) console.log('NextJs Revalidation triggered successfully');
       }
     },
   },
@@ -51,8 +48,8 @@ export const newsSchema = list({
     path: 'news',
     labelField: 'title',
     listView: {
-      initialColumns: ['title', 'newsCategory', 'newsNumber'],
-      initialSort: { field: 'title', direction: 'ASC' },
+      initialColumns: ['title', 'newsCategory', 'createdAt'],
+      initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
     },
   },
@@ -138,22 +135,13 @@ export const newsSchema = list({
     ...group({
       label: 'Resources',
       description:
-        'Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.',
+        'Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden.',
       fields: {
-        resourcesTitle: text({
-          ui: {
-            description: 'This field specifies the title of the resources section.',
-          },
-        }),
-        resourcesPreamble: text({
-          ui: {
-            description: 'This field specifies the preamble of the resources section.',
-          },
-        }),
         resources: relationship({
           ref: 'Resource',
           many: true,
           ui: {
+            hideCreate: true,
             description:
               'Choose resources to be displayed in the resources section. Selected resources will be rendered in the order they are chosen.',
           },
@@ -162,8 +150,31 @@ export const newsSchema = list({
     }),
 
     createdAt: timestamp({
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        description:
+          'The date and time the news was created. If not supplied, the current date and time will be used.',
+      },
       isRequired: true,
-      defaultValue: { kind: 'now' },
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === 'create' && !inputData.createdAt) {
+            let date = new Date();
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else if (operation === 'update' && inputData.createdAt) {
+            let date = new Date(inputData.createdAt);
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else {
+            let date = inputData.createdAt;
+            date.setMilliseconds(0);
+            return date.toISOString();
+          }
+        },
+      },
     }),
 
     status: select({

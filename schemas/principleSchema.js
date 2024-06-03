@@ -30,12 +30,7 @@ export const principleSchema = list({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === 'create' || operation === 'update') {
-        const { response, data } = await triggerRevalidation(item.slug);
-        if (response.status !== 200) {
-          throw new Error('Failed to trigger revalidation of the frontend application.');
-        } else if (data.revalidated) {
-          console.log('NextJs Revalidation triggered successfully');
-        }
+        const { data } = await triggerRevalidation(item.slug);
       }
     },
   },
@@ -120,12 +115,14 @@ export const principleSchema = list({
       },
     }),
     subHeader: text({
+      label: 'Related Rights',
       validation: {
         isRequired: true,
       },
       ui: {
         description:
           'This required field is used to provide additional text that will be displayed beneath the title on the principle page as well as on principle sections.',
+        displayMode: 'textarea',
       },
     }),
 
@@ -157,7 +154,7 @@ export const principleSchema = list({
     subPrinciples: json({
       ui: {
         description:
-          'This required field specifies the sub-principles associated with the main principle. These sub-principles will be displayed beneath the fields mentioned above, rendered as a list where each sub-principle is accompanied by a arrow icon pointing to the text.',
+          'This required field specifies the bulletpoint list associated with the main principle. These bulletpoint will be displayed beneath the fields mentioned above, rendered as a list where each point is accompanied by a arrow icon pointing to the text.',
         views: './customViews/fields/SubPrinciplesField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -168,18 +165,8 @@ export const principleSchema = list({
     ...group({
       label: 'Resources',
       description:
-        'Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden. However, if resources are selected, completion of all fields is mandatory.',
+        'Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden.',
       fields: {
-        resourcesTitle: text({
-          ui: {
-            description: 'This field specifies the title of the resources section.',
-          },
-        }),
-        resourcesPreamble: text({
-          ui: {
-            description: 'This field specifies the preamble of the resources section.',
-          },
-        }),
         resources: relationship({
           ref: 'Resource',
           many: true,

@@ -22,12 +22,7 @@ export const resourceTypeSchema = list({
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === 'create' || operation === 'update' || operation === 'delete') {
-        const { response, data } = await triggerRevalidation('/resources');
-        if (response.status !== 200) {
-          throw new Error('Failed to trigger revalidation of the frontend application.');
-        } else if (data.revalidated) {
-          console.log('NextJs Revalidation triggered successfully');
-        }
+        const { data } = await triggerRevalidation('/resources');
       }
     },
   },
@@ -49,18 +44,18 @@ export const resourceTypeSchema = list({
       },
     }),
 
-    icon: json({
-      label: 'Icon',
-      validation: { isRequired: true },
-      ui: {
-        description:
-          'This required field specifies the icon that represents the type of resource.',
-        views: './customViews/fields/IconPickerField.jsx',
-        createView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
-      },
-    }),
+    // icon: json({
+    //   label: 'Icon',
+    //   validation: { isRequired: true },
+    //   ui: {
+    //     description:
+    //       'This required field specifies the icon that represents the type of resource.',
+    //     views: './customViews/fields/IconPickerField.jsx',
+    //     createView: { fieldMode: 'edit' },
+    //     listView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'edit' },
+    //   },
+    // }),
 
     resources: relationship({
       ref: 'Resource.resourceType',

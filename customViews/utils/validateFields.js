@@ -1,6 +1,6 @@
 export function validateStaticFields(data, requiredFields) {
   const emptyFields = requiredFields.filter((field) => {
-    if (field === 'preamble') {
+    if (field === 'preamble' || field === 'bodyText') {
       return (
         !data[field] ||
         data[field].length === 0 ||
@@ -30,10 +30,15 @@ export function validateDynamicFields(objectList, requiredFields) {
       index,
       emptyFields: requiredFields.filter((field) => {
         if (field === 'bodyText') {
-          // Kontrollera om bodyText innehåller någon text
           return (
             !object[field] ||
-            object[field].some((paragraph) => !paragraph.children[0].text)
+            object[field].every((item) => {
+              // Kontrollera om varje objekt, oavsett typ, är tomt
+              return (
+                !item.children ||
+                item.children.every((child) => !child.text || child.text.trim() === '')
+              );
+            })
           );
         } else if (field === 'groupTitle') {
           // Kontrollera om groupTitle finns
