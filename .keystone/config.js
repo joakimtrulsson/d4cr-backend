@@ -1699,8 +1699,9 @@ var principleSchema = (0, import_core17.list)({
   },
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
+      console.log(item.slug);
       if (operation === "create" || operation === "update") {
-        const { data } = await triggerRevalidation(item.slug);
+        const { data } = await triggerRevalidation(`/principles/${item.slug}`);
       }
     }
   },
@@ -2740,7 +2741,7 @@ var sendEmail = async (req, res) => {
       }
     }
     if (req.body.target === "joinslack") {
-      if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn) {
+      if (!req.body.name || !req.body.contactEmail || !req.body.message) {
         res.status(400).send({
           succuess: false,
           message: "Missing or invalid required fields"
@@ -2749,14 +2750,15 @@ var sendEmail = async (req, res) => {
       const mailData = {
         targetEmail: targetEmails.joinSlackEmail,
         name: req.body.name,
-        linkedIn: req.body.linkedIn,
+        linkedIn: req.body.linkedIn ? req.body.linkedIn : "None",
         contactEmail: req.body.contactEmail,
         message: req.body.message
       };
       await new Email(fromEmail, mailData, url).sendJoinSlack();
     }
     if (req.body.target === "shareyourstory") {
-      if (!req.body.name || !req.body.contactEmail || !req.body.message || !req.body.linkedIn || req.body.usingD4CRGuideAndPrinciples === null || req.body.usingD4CRGuideAndPrinciples === void 0 || typeof req.body.usingD4CRGuideAndPrinciples !== "boolean" || req.body.logoFeaturedOnWebpage === null || req.body.logoFeaturedOnWebpage === void 0 || typeof req.body.logoFeaturedOnWebpage !== "boolean") {
+      if (!req.body.name || !req.body.contactEmail || !req.body.message || // !req.body.linkedIn ||
+      req.body.usingD4CRGuideAndPrinciples === null || req.body.usingD4CRGuideAndPrinciples === void 0 || typeof req.body.usingD4CRGuideAndPrinciples !== "boolean" || req.body.logoFeaturedOnWebpage === null || req.body.logoFeaturedOnWebpage === void 0 || typeof req.body.logoFeaturedOnWebpage !== "boolean") {
         return res.status(400).send({
           succuess: false,
           message: "Missing or invalid required fields"
@@ -2765,7 +2767,7 @@ var sendEmail = async (req, res) => {
       const mailData = {
         targetEmail: targetEmails.shareStoryEmail,
         name: req.body.name,
-        linkedIn: req.body.linkedIn,
+        linkedIn: req.body.linkedIn ? req.body.linkedIn : "None",
         contactEmail: req.body.contactEmail,
         message: req.body.message,
         usingD4CRGuideAndPrinciples: req.body.usingD4CRGuideAndPrinciples,

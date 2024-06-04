@@ -39,8 +39,9 @@ const sendEmail = async (req, res) => {
       if (
         !req.body.name ||
         !req.body.contactEmail ||
-        !req.body.message ||
-        !req.body.linkedIn
+        !req.body.message
+        // ||
+        // !req.body.linkedIn
       ) {
         res.status(400).send({
           succuess: false,
@@ -51,7 +52,7 @@ const sendEmail = async (req, res) => {
       const mailData = {
         targetEmail: targetEmails.joinSlackEmail,
         name: req.body.name,
-        linkedIn: req.body.linkedIn,
+        linkedIn: req.body.linkedIn ? req.body.linkedIn : 'None',
         contactEmail: req.body.contactEmail,
         message: req.body.message,
       };
@@ -63,7 +64,7 @@ const sendEmail = async (req, res) => {
         !req.body.name ||
         !req.body.contactEmail ||
         !req.body.message ||
-        !req.body.linkedIn ||
+        // !req.body.linkedIn ||
         req.body.usingD4CRGuideAndPrinciples === null ||
         req.body.usingD4CRGuideAndPrinciples === undefined ||
         typeof req.body.usingD4CRGuideAndPrinciples !== 'boolean' ||
@@ -80,7 +81,7 @@ const sendEmail = async (req, res) => {
       const mailData = {
         targetEmail: targetEmails.shareStoryEmail,
         name: req.body.name,
-        linkedIn: req.body.linkedIn,
+        linkedIn: req.body.linkedIn ? req.body.linkedIn : 'None',
         contactEmail: req.body.contactEmail,
         message: req.body.message,
         usingD4CRGuideAndPrinciples: req.body.usingD4CRGuideAndPrinciples,
