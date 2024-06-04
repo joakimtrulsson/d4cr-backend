@@ -1,5 +1,5 @@
 import { list } from '@keystone-6/core';
-import { text, json, select, relationship } from '@keystone-6/core/fields';
+import { text, json, select, relationship, integer } from '@keystone-6/core/fields';
 import { group } from '@keystone-6/core';
 import { allOperations } from '@keystone-6/core/access';
 import { isSignedIn, permissions, rules } from '../auth/access.js';
@@ -29,7 +29,6 @@ export const principleSchema = list({
   },
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
-      console.log(item.slug);
       if (operation === 'create' || operation === 'update') {
         const { data } = await triggerRevalidation(`/principles${item.slug}`);
       }
@@ -41,8 +40,15 @@ export const principleSchema = list({
     },
     labelField: 'title',
     listView: {
-      initialColumns: ['title', 'principleNumber', 'principleCategory', 'slug', 'status'],
-      initialSort: { field: 'title', direction: 'ASC' },
+      initialColumns: [
+        'title',
+        'principleNumber',
+        'hiddenPrincipleNumber',
+        'principleCategory',
+        'slug',
+        'status',
+      ],
+      initialSort: { field: 'hiddenPrincipleNumber', direction: 'ASC' },
       pageSize: 50,
     },
   },
@@ -202,6 +208,52 @@ export const principleSchema = list({
               'This required field assigns a unique number to each principle. It will be utilized in generating the principles slug and will be displayed alongside the title on the page and in principle sections. This number ensures each principle is distinctly identified and facilitates organized navigation and referencing throughout the site.',
           },
         }),
+      },
+    }),
+
+    hiddenPrincipleNumber: integer({
+      ui: {
+        description:
+          'This field is used to store the principle number as an integer. It is hidden from the admin UI and is used to store the principle number as an integer for sorting purposes.',
+        createView: { fieldMode: 'hidden' },
+        listView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' },
+      },
+
+      hooks: {
+        resolveInput: async ({ inputData, item }) => {
+          let principleNumber = null;
+
+          try {
+            const response = await fetch(process.env.API_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                query: `
+                  query Query($where: PrincipleNumberWhereUniqueInput!) {
+                    principleNumber(where: $where) {
+                      number
+                    }
+                  }
+                `,
+                variables: {
+                  where: {
+                    id: inputData.principleNumber?.connect?.id || item.principleNumberId,
+                  },
+                },
+              }),
+            });
+
+            const { data } = await response.json();
+
+            principleNumber = data.principleNumber.number;
+            return principleNumber;
+          } catch (error) {
+            console.error(error);
+          }
+        },
       },
     }),
 
