@@ -31,7 +31,7 @@ export const principleSchema = list({
     afterOperation: async ({ operation, context, listKey, item }) => {
       console.log(item.slug);
       if (operation === 'create' || operation === 'update') {
-        const { data } = await triggerRevalidation(`/principles/${item.slug}`);
+        const { data } = await triggerRevalidation(`/principles${item.slug}`);
       }
     },
   },

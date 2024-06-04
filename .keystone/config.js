@@ -1701,7 +1701,7 @@ var principleSchema = (0, import_core17.list)({
     afterOperation: async ({ operation, context, listKey, item }) => {
       console.log(item.slug);
       if (operation === "create" || operation === "update") {
-        const { data } = await triggerRevalidation(`/principles/${item.slug}`);
+        const { data } = await triggerRevalidation(`/principles${item.slug}`);
       }
     }
   },
