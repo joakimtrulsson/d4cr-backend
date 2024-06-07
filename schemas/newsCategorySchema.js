@@ -45,8 +45,29 @@ export const newsCategorySchema = list({
     }),
 
     createdAt: timestamp({
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        description:
+          'The date and time the news was created. If not supplied, the current date and time will be used.',
+      },
       isRequired: true,
-      defaultValue: { kind: 'now' },
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === 'create' && !inputData.createdAt) {
+            let date = new Date();
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else if (operation === 'update' && inputData.createdAt) {
+            let date = new Date(inputData.createdAt);
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else {
+            return resolvedData.createdAt;
+          }
+        },
+      },
     }),
 
     relatedNews: relationship({

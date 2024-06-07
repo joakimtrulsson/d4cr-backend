@@ -11,7 +11,7 @@ export const newsSchema = list({
   access: {
     operation: {
       ...allOperations(isSignedIn),
-      create: permissions.canCreateItems,
+      create: permissions.canCreateNews,
       query: () => true,
     },
     filter: {
@@ -22,8 +22,7 @@ export const newsSchema = list({
 
         return { status: { equals: 'published' } };
       },
-      // query: rules.canReadItems,
-      update: rules.canManageItems,
+      update: rules.canCreateNews,
       delete: rules.canManageItems,
     },
   },
@@ -107,8 +106,9 @@ export const newsSchema = list({
       ref: 'Chapter',
       many: true,
       ui: {
+        hideCreate: true,
         description:
-          'This field allows the editor to associate a news article with a specific chapter. By selecting related chapters, the news article becomes linked to the corresponding chapter.',
+          'This field enables the editor to link a news article to specific chapters. By selecting related chapters, the news article is associated with those chapters, allowing for the display of news related to a particular chapter in the News Teaser Section.',
       },
     }),
 
@@ -169,9 +169,7 @@ export const newsSchema = list({
             date.setMilliseconds(0);
             return date.toISOString();
           } else {
-            let date = inputData.createdAt;
-            date.setMilliseconds(0);
-            return date.toISOString();
+            return resolvedData.createdAt;
           }
         },
       },

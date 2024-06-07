@@ -21,6 +21,17 @@ export const frontPageSchema = list({
     },
   },
   isSingleton: true,
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        return 'read';
+      },
+    },
+  },
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === 'create' || operation === 'update') {

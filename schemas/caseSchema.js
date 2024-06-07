@@ -41,6 +41,15 @@ export const caseSchema = list({
   },
   ui: {
     labelField: 'title',
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        return 'read';
+      },
+    },
     listView: {
       initialColumns: ['title', 'principleNumber', 'principleCategory', 'slug', 'status'],
       initialSort: { field: 'title', direction: 'ASC' },
@@ -220,9 +229,7 @@ export const caseSchema = list({
             date.setMilliseconds(0);
             return date.toISOString();
           } else {
-            let date = inputData.createdAt;
-            date.setMilliseconds(0);
-            return date.toISOString();
+            return resolvedData.createdAt;
           }
         },
       },

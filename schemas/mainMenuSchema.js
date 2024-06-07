@@ -19,6 +19,17 @@ export const mainMenuSchema = list({
     },
   },
   isSingleton: true,
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        return 'read';
+      },
+    },
+  },
   fields: {
     navigation: json({
       ui: {

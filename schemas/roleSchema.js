@@ -29,6 +29,8 @@ export const roleSchema = list({
 
     canCreateItems: checkbox({ defaultValue: false }),
 
+    canCreateNews: checkbox({ defaultValue: false }),
+
     canCreateChapters: checkbox({ defaultValue: false }),
 
     canManageAllItems: checkbox({ defaultValue: false }),

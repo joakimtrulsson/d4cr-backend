@@ -33,6 +33,7 @@ const { withAuth } = createAuth({
           name: 'Admin Role',
           canCreateItems: true,
           canCreateChapters: true, // Ny
+          canCreateNews: true, // Ny
           canManageAllItems: true,
           canSeeOtherUsers: true,
           canEditOtherUsers: true,
@@ -55,6 +56,7 @@ const { withAuth } = createAuth({
       id
       name
       canCreateItems
+      canCreateNews
       canCreateChapters
       canManageAllItems
       canSeeOtherUsers

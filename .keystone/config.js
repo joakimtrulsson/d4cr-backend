@@ -33,7 +33,7 @@ __export(keystone_exports, {
 });
 module.exports = __toCommonJS(keystone_exports);
 var import_dotenv = __toESM(require("dotenv"));
-var import_core28 = require("@keystone-6/core");
+var import_core27 = require("@keystone-6/core");
 var import_express = __toESM(require("express"));
 var import_express_rate_limit = require("express-rate-limit");
 
@@ -48,6 +48,7 @@ function isSignedIn({ session: session2 }) {
 }
 var permissions = {
   canCreateItems: ({ session: session2 }) => session2?.data.role?.canCreateItems ?? false,
+  canCreateNews: ({ session: session2 }) => session2?.data.role?.canCreateNews ?? false,
   canCreateChapters: ({ session: session2 }) => session2?.data.role?.canCreateChapters ?? false,
   canManageAllItems: ({ session: session2 }) => session2?.data.role?.canManageAllItems ?? false,
   canManageUsers: ({ session: session2 }) => session2?.data.role?.canManageUsers ?? false,
@@ -149,6 +150,7 @@ var userSchema = (0, import_core.list)({
         update: permissions.canManageUsers
       },
       ui: {
+        hideCreate: true,
         itemView: {
           fieldMode: (args) => permissions.canManageUsers(args) ? "edit" : "read"
         }
@@ -197,6 +199,7 @@ var roleSchema = (0, import_core2.list)({
   fields: {
     name: (0, import_fields2.text)({ validation: { isRequired: true } }),
     canCreateItems: (0, import_fields2.checkbox)({ defaultValue: false }),
+    canCreateNews: (0, import_fields2.checkbox)({ defaultValue: false }),
     canCreateChapters: (0, import_fields2.checkbox)({ defaultValue: false }),
     canManageAllItems: (0, import_fields2.checkbox)({ defaultValue: false }),
     canSeeOtherUsers: (0, import_fields2.checkbox)({ defaultValue: false }),
@@ -496,10 +499,12 @@ var chapterSchema = (0, import_core3.list)({
     },
     filter: {
       query: ({ session: session2 }) => {
-        if (session2) {
-          return true;
+        if (!session2) {
+          return { status: { equals: "published" } };
         }
-        return { status: { equals: "published" } };
+        if (session2.data.role?.canManageAllItems)
+          return true;
+        return { contentOwner: { some: { id: { equals: session2.itemId } } } };
       },
       update: rules.canManageItems,
       delete: rules.canManageItems
@@ -521,7 +526,7 @@ var chapterSchema = (0, import_core3.list)({
       defaultFieldMode: ({ session: session2, item }) => {
         if (session2?.data.role?.canManageAllItems)
           return "edit";
-        if (session2.data.chapters[0].id === item.id)
+        if (session2.data.chapters.some((chapter) => chapter.id === item.id))
           return "edit";
         return "read";
       }
@@ -544,7 +549,14 @@ var chapterSchema = (0, import_core3.list)({
     title: (0, import_fields3.text)({
       validation: { isRequired: true },
       ui: {
-        description: 'This required field specifies the title of the chapter, which is prominently displayed below the image and "D4CR PRESENTS" on the chapter page. Additionally, the word "Chapter" will be rendered along with the title on the chapters page and will also appear in the browser tab.'
+        label: "Administrative Title",
+        description: "This required field specifies the administrative title of the chapter, which the slug will be based on and it will be used in the admin interface. The title should be unique and is not visible to users."
+      }
+    }),
+    publicTitle: (0, import_fields3.text)({
+      validation: { isRequired: true },
+      ui: {
+        description: 'This required field specifies the public title of the chapter, which is prominently displayed below the image and "D4CR PRESENTS" on the chapter page. Additionally, the word "Chapter" will be rendered along with the title on the chapters page and will also appear in the browser tab.'
       }
     }),
     slug: (0, import_fields3.text)({
@@ -636,17 +648,7 @@ var chapterSchema = (0, import_core3.list)({
       ui: {
         views: "./customViews/fields/AllSectionsField.jsx",
         createView: { fieldMode: "edit" },
-        listView: { fieldMode: "hidden" },
-        // itemView: { fieldMode: 'edit' },
-        itemView: {
-          fieldMode: ({ session: session2, item }) => {
-            if (session2?.data.role?.canManageAllItems)
-              return "edit";
-            if (session2.data.chapters[0].id === item.id)
-              return "edit";
-            return "hidden";
-          }
-        }
+        listView: { fieldMode: "hidden" }
       }
     }),
     news: (0, import_fields3.virtual)({
@@ -860,6 +862,17 @@ var frontPageSchema = (0, import_core6.list)({
     }
   },
   isSingleton: true,
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    }
+  },
   hooks: {
     afterOperation: async ({ operation, context, listKey, item }) => {
       if (operation === "create" || operation === "update") {
@@ -957,6 +970,17 @@ var footerBannerSchema = (0, import_core7.list)({
     }
   },
   isSingleton: true,
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    }
+  },
   fields: {
     title: (0, import_fields6.text)({
       validation: { isRequired: true },
@@ -997,7 +1021,16 @@ function validateEmail(email) {
 // schemas/formEmailSchema.js
 var formEmailSchema = (0, import_core8.list)({
   ui: {
-    label: "Form - Contact us"
+    label: "Form - Contact us",
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    }
   },
   access: {
     operation: {
@@ -1142,6 +1175,17 @@ var footerJoinUsSchema = (0, import_core9.list)({
     }
   },
   isSingleton: true,
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    }
+  },
   fields: {
     url1: (0, import_fields8.text)({
       validation: { isRequired: true },
@@ -1231,6 +1275,17 @@ var mainMenuSchema = (0, import_core10.list)({
     }
   },
   isSingleton: true,
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    }
+  },
   fields: {
     navigation: (0, import_fields9.json)({
       ui: {
@@ -1277,6 +1332,17 @@ var footerMenuSchema = (0, import_core11.list)({
     }
   },
   isSingleton: true,
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    }
+  },
   fields: {
     navigation: (0, import_fields10.json)({
       ui: {
@@ -1299,7 +1365,7 @@ var newsSchema = (0, import_core12.list)({
   access: {
     operation: {
       ...(0, import_access21.allOperations)(isSignedIn),
-      create: permissions.canCreateItems,
+      create: permissions.canCreateNews,
       query: () => true
     },
     filter: {
@@ -1309,8 +1375,7 @@ var newsSchema = (0, import_core12.list)({
         }
         return { status: { equals: "published" } };
       },
-      // query: rules.canReadItems,
-      update: rules.canManageItems,
+      update: rules.canCreateNews,
       delete: rules.canManageItems
     }
   },
@@ -1381,7 +1446,8 @@ var newsSchema = (0, import_core12.list)({
       ref: "Chapter",
       many: true,
       ui: {
-        description: "This field allows the editor to associate a news article with a specific chapter. By selecting related chapters, the news article becomes linked to the corresponding chapter."
+        hideCreate: true,
+        description: "This field enables the editor to link a news article to specific chapters. By selecting related chapters, the news article is associated with those chapters, allowing for the display of news related to a particular chapter in the News Teaser Section."
       }
     }),
     image: (0, import_fields11.json)({
@@ -1434,9 +1500,7 @@ var newsSchema = (0, import_core12.list)({
             date.setMilliseconds(0);
             return date.toISOString();
           } else {
-            let date = inputData.createdAt;
-            date.setMilliseconds(0);
-            return date.toISOString();
+            return resolvedData.createdAt;
           }
         }
       }
@@ -1501,8 +1565,28 @@ var newsCategorySchema = (0, import_core14.list)({
       }
     }),
     createdAt: (0, import_fields12.timestamp)({
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        description: "The date and time the news was created. If not supplied, the current date and time will be used."
+      },
       isRequired: true,
-      defaultValue: { kind: "now" }
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === "create" && !inputData.createdAt) {
+            let date = /* @__PURE__ */ new Date();
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else if (operation === "update" && inputData.createdAt) {
+            let date = new Date(inputData.createdAt);
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else {
+            return resolvedData.createdAt;
+          }
+        }
+      }
     }),
     relatedNews: (0, import_fields12.relationship)({
       ref: "News.newsCategory",
@@ -1544,6 +1628,15 @@ var resourceSchema = (0, import_core15.list)({
   },
   ui: {
     labelField: "title",
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    },
     listView: {
       initialColumns: ["title", "category", "type", "createdAt"],
       initialSort: { field: "title", direction: "ASC" },
@@ -1581,6 +1674,14 @@ var resourceSchema = (0, import_core15.list)({
         description: 'This required field specifies the type of the resource. It will be rendered in the resource card on the predefined page "/resources" and allows visitors to filter resources based on their type. '
       }
     }),
+    resourceCategory: (0, import_fields13.relationship)({
+      validation: { isRequired: true },
+      ref: "ResourceCategory.resources",
+      many: false,
+      ui: {
+        description: "This required field specifies the category of the resource. Allows visitors to filter resources based on their category."
+      }
+    }),
     createdAt: (0, import_fields13.timestamp)({
       ui: {
         itemView: {
@@ -1600,9 +1701,7 @@ var resourceSchema = (0, import_core15.list)({
             date.setMilliseconds(0);
             return date.toISOString();
           } else {
-            let date = inputData.createdAt;
-            date.setMilliseconds(0);
-            return date.toISOString();
+            return resolvedData.createdAt;
           }
         }
       }
@@ -1638,6 +1737,15 @@ var resourceTypeSchema = (0, import_core16.list)({
   ui: {
     description: "This list is used to categorize resources based on their types.",
     labelField: "type",
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    },
     listView: {
       initialColumns: ["type", "icon"],
       initialSort: { field: "type", direction: "ASC" },
@@ -1651,18 +1759,6 @@ var resourceTypeSchema = (0, import_core16.list)({
         description: "This required field specifies the type of resource. It will be used to categorize resources and allow users to filter resources based on types."
       }
     }),
-    // icon: json({
-    //   label: 'Icon',
-    //   validation: { isRequired: true },
-    //   ui: {
-    //     description:
-    //       'This required field specifies the icon that represents the type of resource.',
-    //     views: './customViews/fields/IconPickerField.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
     resources: (0, import_fields14.relationship)({
       ref: "Resource.resourceType",
       many: true,
@@ -1673,15 +1769,70 @@ var resourceTypeSchema = (0, import_core16.list)({
   }
 });
 
-// schemas/principleSchema.js
+// schemas/resourceCategorySchema.js
 var import_core17 = require("@keystone-6/core");
 var import_fields15 = require("@keystone-6/core/fields");
-var import_core18 = require("@keystone-6/core");
 var import_access29 = require("@keystone-6/core/access");
-var principleSchema = (0, import_core17.list)({
+var resourceCategorySchema = (0, import_core17.list)({
   access: {
     operation: {
       ...(0, import_access29.allOperations)(isSignedIn),
+      create: permissions.canCreateItems,
+      query: () => true
+    },
+    filter: {
+      query: () => true,
+      // query: rules.canReadItems,
+      update: rules.canManageItems,
+      delete: rules.canManageItems
+    }
+  },
+  hooks: {
+    afterOperation: async ({ operation, context, listKey, item }) => {
+      if (operation === "create" || operation === "update" || operation === "delete") {
+        const { response, data } = await triggerRevalidation("/resources");
+        if (response.status !== 200) {
+          throw new Error("Failed to trigger revalidation of the frontend application.");
+        } else if (data.revalidated) {
+          console.log("NextJs Revalidation triggered successfully");
+        }
+      }
+    }
+  },
+  ui: {
+    // Om användaren har canManageAllItems så kan de redigera alla Chapters.
+    // Annars så kan de bara uppdatera sitt egna Chapters.
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    }
+  },
+  fields: {
+    title: (0, import_fields15.text)({ isIndexed: "unique", validation: { isRequired: true } }),
+    resources: (0, import_fields15.relationship)({
+      ref: "Resource.resourceCategory",
+      many: true,
+      ui: {
+        description: "Resources belonging to this category."
+      }
+    })
+  }
+});
+
+// schemas/principleSchema.js
+var import_core18 = require("@keystone-6/core");
+var import_fields16 = require("@keystone-6/core/fields");
+var import_core19 = require("@keystone-6/core");
+var import_access31 = require("@keystone-6/core/access");
+var principleSchema = (0, import_core18.list)({
+  access: {
+    operation: {
+      ...(0, import_access31.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1705,8 +1856,14 @@ var principleSchema = (0, import_core17.list)({
     }
   },
   ui: {
-    isHidden: (args) => {
-      return !permissions?.canManageAllItems(args);
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
     },
     labelField: "title",
     listView: {
@@ -1723,13 +1880,13 @@ var principleSchema = (0, import_core17.list)({
     }
   },
   fields: {
-    title: (0, import_fields15.text)({
+    title: (0, import_fields16.text)({
       validation: { isRequired: true },
       ui: {
         description: "This required field is used to specify the title of the principle, which appears at the top of the principle page, represents the name of the principle and will also appear in the browser tab."
       }
     }),
-    slug: (0, import_fields15.text)({
+    slug: (0, import_fields16.text)({
       isIndexed: "unique",
       ui: {
         itemView: {
@@ -1781,7 +1938,7 @@ var principleSchema = (0, import_core17.list)({
         }
       }
     }),
-    subHeader: (0, import_fields15.text)({
+    subHeader: (0, import_fields16.text)({
       label: "Related Rights",
       validation: {
         isRequired: true
@@ -1791,17 +1948,17 @@ var principleSchema = (0, import_core17.list)({
         displayMode: "textarea"
       }
     }),
-    quote: (0, import_fields15.text)({
+    quote: (0, import_fields16.text)({
       ui: {
         description: "This field is utilized to display a quote that complements the title and subHeader at the top of the page."
       }
     }),
-    quoteAuthor: (0, import_fields15.text)({
+    quoteAuthor: (0, import_fields16.text)({
       ui: {
         description: "This field specifies the source or author of the quote displayed alongside the title, subHeader, and quote on the principle page."
       }
     }),
-    image: (0, import_fields15.json)({
+    image: (0, import_fields16.json)({
       ui: {
         description: "This field specifies the image that will be displayed beneath the quote on the page, as well as in Principle Sections. For optimal user experience, the image is recommended to have a transparent background.",
         views: "./customViews/fields/ImageLibraryField.jsx",
@@ -1810,7 +1967,7 @@ var principleSchema = (0, import_core17.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    subPrinciples: (0, import_fields15.json)({
+    subPrinciples: (0, import_fields16.json)({
       ui: {
         description: "This required field specifies the bulletpoint list associated with the main principle. These bulletpoint will be displayed beneath the fields mentioned above, rendered as a list where each point is accompanied by a arrow icon pointing to the text.",
         views: "./customViews/fields/SubPrinciplesField.jsx",
@@ -1819,11 +1976,11 @@ var principleSchema = (0, import_core17.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    ...(0, import_core18.group)({
+    ...(0, import_core19.group)({
       label: "Resources",
       description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden.",
       fields: {
-        resources: (0, import_fields15.relationship)({
+        resources: (0, import_fields16.relationship)({
           ref: "Resource",
           many: true,
           ui: {
@@ -1832,11 +1989,11 @@ var principleSchema = (0, import_core17.list)({
         })
       }
     }),
-    ...(0, import_core18.group)({
+    ...(0, import_core19.group)({
       label: "Principle Taxonomy",
       description: "Select the principle category and number for this principle.",
       fields: {
-        principleCategory: (0, import_fields15.relationship)({
+        principleCategory: (0, import_fields16.relationship)({
           ref: "PrincipleCategory.principles",
           many: false,
           validation: { isRequired: true },
@@ -1844,7 +2001,7 @@ var principleSchema = (0, import_core17.list)({
             description: "This required field specifies the category assigned to the principle. The principle categories will be utilized in principle sections to organize and list all principles accordingly. Principles will be sorted based on this category."
           }
         }),
-        principleNumber: (0, import_fields15.relationship)({
+        principleNumber: (0, import_fields16.relationship)({
           validation: { isRequired: true },
           ref: "PrincipleNumber.principles",
           many: false,
@@ -1854,7 +2011,7 @@ var principleSchema = (0, import_core17.list)({
         })
       }
     }),
-    hiddenPrincipleNumber: (0, import_fields15.integer)({
+    hiddenPrincipleNumber: (0, import_fields16.integer)({
       ui: {
         description: "This field is used to store the principle number as an integer. It is hidden from the admin UI and is used to store the principle number as an integer for sorting purposes.",
         createView: { fieldMode: "hidden" },
@@ -1894,7 +2051,7 @@ var principleSchema = (0, import_core17.list)({
         }
       }
     }),
-    status: (0, import_fields15.select)({
+    status: (0, import_fields16.select)({
       options: [
         { label: "Published", value: "published" },
         { label: "Draft", value: "draft" }
@@ -1913,13 +2070,13 @@ var principleSchema = (0, import_core17.list)({
 });
 
 // schemas/principleNumberSchema.js
-var import_core19 = require("@keystone-6/core");
-var import_fields16 = require("@keystone-6/core/fields");
-var import_access31 = require("@keystone-6/core/access");
-var principleNumberSchema = (0, import_core19.list)({
+var import_core20 = require("@keystone-6/core");
+var import_fields17 = require("@keystone-6/core/fields");
+var import_access33 = require("@keystone-6/core/access");
+var principleNumberSchema = (0, import_core20.list)({
   access: {
     operation: {
-      ...(0, import_access31.allOperations)(isSignedIn),
+      ...(0, import_access33.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1937,12 +2094,12 @@ var principleNumberSchema = (0, import_core19.list)({
     labelField: "number"
   },
   fields: {
-    number: (0, import_fields16.integer)({
+    number: (0, import_fields17.integer)({
       isIndexed: "unique",
       validation: { isRequired: true },
       ui: { description: "The numbers available to be selected for the principles." }
     }),
-    principles: (0, import_fields16.relationship)({
+    principles: (0, import_fields17.relationship)({
       ref: "Principle.principleNumber",
       many: false,
       ui: {
@@ -1953,13 +2110,13 @@ var principleNumberSchema = (0, import_core19.list)({
 });
 
 // schemas/principleCategorySchema.js
-var import_core20 = require("@keystone-6/core");
-var import_fields17 = require("@keystone-6/core/fields");
-var import_access33 = require("@keystone-6/core/access");
-var principleCategorySchema = (0, import_core20.list)({
+var import_core21 = require("@keystone-6/core");
+var import_fields18 = require("@keystone-6/core/fields");
+var import_access35 = require("@keystone-6/core/access");
+var principleCategorySchema = (0, import_core21.list)({
   access: {
     operation: {
-      ...(0, import_access33.allOperations)(isSignedIn),
+      ...(0, import_access35.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -1970,17 +2127,48 @@ var principleCategorySchema = (0, import_core20.list)({
       delete: rules.canManageItems
     }
   },
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    }
+  },
   fields: {
-    title: (0, import_fields17.text)({
+    title: (0, import_fields18.text)({
       isIndexed: "unique",
       validation: { isRequired: true },
       ui: { description: "The categories available to be selected for the principles." }
     }),
-    createdAt: (0, import_fields17.timestamp)({
+    createdAt: (0, import_fields18.timestamp)({
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        description: "The date and time the news was created. If not supplied, the current date and time will be used."
+      },
       isRequired: true,
-      defaultValue: { kind: "now" }
+      hooks: {
+        resolveInput: ({ operation, resolvedData, inputData }) => {
+          if (operation === "create" && !inputData.createdAt) {
+            let date = /* @__PURE__ */ new Date();
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else if (operation === "update" && inputData.createdAt) {
+            let date = new Date(inputData.createdAt);
+            date.setMilliseconds(0);
+            return date.toISOString();
+          } else {
+            return resolvedData.createdAt;
+          }
+        }
+      }
     }),
-    principles: (0, import_fields17.relationship)({
+    principles: (0, import_fields18.relationship)({
       ref: "Principle.principleCategory",
       many: true,
       ui: {
@@ -1991,15 +2179,15 @@ var principleCategorySchema = (0, import_core20.list)({
 });
 
 // schemas/caseSchema.js
-var import_core21 = require("@keystone-6/core");
-var import_fields18 = require("@keystone-6/core/fields");
 var import_core22 = require("@keystone-6/core");
+var import_fields19 = require("@keystone-6/core/fields");
+var import_core23 = require("@keystone-6/core");
 var import_fields_document6 = require("@keystone-6/fields-document");
-var import_access35 = require("@keystone-6/core/access");
-var caseSchema = (0, import_core21.list)({
+var import_access37 = require("@keystone-6/core/access");
+var caseSchema = (0, import_core22.list)({
   access: {
     operation: {
-      ...(0, import_access35.allOperations)(isSignedIn),
+      ...(0, import_access37.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -2025,6 +2213,15 @@ var caseSchema = (0, import_core21.list)({
   },
   ui: {
     labelField: "title",
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
+    },
     listView: {
       initialColumns: ["title", "principleNumber", "principleCategory", "slug", "status"],
       initialSort: { field: "title", direction: "ASC" },
@@ -2032,13 +2229,13 @@ var caseSchema = (0, import_core21.list)({
     }
   },
   fields: {
-    title: (0, import_fields18.text)({
+    title: (0, import_fields19.text)({
       validation: { isRequired: true },
       ui: {
         description: "This required field is used to specify the title of the case, which appears at the top of the page, represents the name of the case and will also appear in the browser tab."
       }
     }),
-    linkType: (0, import_fields18.select)({
+    linkType: (0, import_fields19.select)({
       isRequired: true,
       options: [
         { label: "Internal", value: "internal" },
@@ -2051,7 +2248,7 @@ var caseSchema = (0, import_core21.list)({
         displayMode: "segmented-control"
       }
     }),
-    url: (0, import_fields18.text)({
+    url: (0, import_fields19.text)({
       ui: {
         itemView: {
           fieldPosition: "form"
@@ -2098,7 +2295,7 @@ var caseSchema = (0, import_core21.list)({
         softBreaks: true
       }
     }),
-    caseImage: (0, import_fields18.json)({
+    caseImage: (0, import_fields19.json)({
       ui: {
         description: 'This required image will only be displayed on the predefined page "/cases". It is used to illustrate the case in a case card ',
         views: "./customViews/fields/ImageLibraryField.jsx",
@@ -2107,13 +2304,13 @@ var caseSchema = (0, import_core21.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    quote: (0, import_fields18.text)({
+    quote: (0, import_fields19.text)({
       validation: { isRequired: true },
       ui: {
         description: 'This required quote will only be rendered on the predefined page "/cases" and will serve as the descriptive text for the case.'
       }
     }),
-    sections: (0, import_fields18.json)({
+    sections: (0, import_fields19.json)({
       ui: {
         views: "./customViews/fields/AllSectionsField.jsx",
         createView: { fieldMode: "edit" },
@@ -2121,11 +2318,11 @@ var caseSchema = (0, import_core21.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    ...(0, import_core22.group)({
+    ...(0, import_core23.group)({
       label: "Resources",
       description: "Select resources to showcase in the designated resources section, consistently located at the bottom of the page. If no resources are chosen, the section will remain hidden.",
       fields: {
-        resources: (0, import_fields18.relationship)({
+        resources: (0, import_fields19.relationship)({
           ref: "Resource",
           many: true,
           ui: {
@@ -2135,7 +2332,7 @@ var caseSchema = (0, import_core21.list)({
         })
       }
     }),
-    status: (0, import_fields18.select)({
+    status: (0, import_fields19.select)({
       options: [
         { label: "Published", value: "published" },
         { label: "Draft", value: "draft" }
@@ -2150,7 +2347,7 @@ var caseSchema = (0, import_core21.list)({
         displayMode: "segmented-control"
       }
     }),
-    createdAt: (0, import_fields18.timestamp)({
+    createdAt: (0, import_fields19.timestamp)({
       ui: {
         itemView: {
           fieldPosition: "sidebar"
@@ -2169,9 +2366,7 @@ var caseSchema = (0, import_core21.list)({
             date.setMilliseconds(0);
             return date.toISOString();
           } else {
-            let date = inputData.createdAt;
-            date.setMilliseconds(0);
-            return date.toISOString();
+            return resolvedData.createdAt;
           }
         }
       }
@@ -2180,13 +2375,13 @@ var caseSchema = (0, import_core21.list)({
 });
 
 // schemas/peopleSchema.js
-var import_core23 = require("@keystone-6/core");
-var import_fields19 = require("@keystone-6/core/fields");
-var import_access37 = require("@keystone-6/core/access");
-var peopleSchema = (0, import_core23.list)({
+var import_core24 = require("@keystone-6/core");
+var import_fields20 = require("@keystone-6/core/fields");
+var import_access39 = require("@keystone-6/core/access");
+var peopleSchema = (0, import_core24.list)({
   access: {
     operation: {
-      ...(0, import_access37.allOperations)(isSignedIn),
+      ...(0, import_access39.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -2202,8 +2397,14 @@ var peopleSchema = (0, import_core23.list)({
     plural: "PeopleList"
   },
   ui: {
-    isHidden: (args) => {
-      return !permissions?.canManageAllItems(args);
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session: session2, item }) => {
+        if (session2?.data.role?.canManageAllItems)
+          return "edit";
+        return "read";
+      }
     },
     listView: {
       initialColumns: ["fullName", "role", "city", "country"],
@@ -2212,16 +2413,21 @@ var peopleSchema = (0, import_core23.list)({
     }
   },
   fields: {
-    fullName: (0, import_fields19.text)({ validation: { isRequired: true } }),
-    role: (0, import_fields19.text)({
+    fullName: (0, import_fields20.text)({ validation: { isRequired: true } }),
+    role: (0, import_fields20.text)({
       validation: { isRequired: true },
       ui: {
         description: "This required field specifies the role or position of the person, which will be rendered beneath the name on the Person Card. "
       }
     }),
-    city: (0, import_fields19.text)({ validation: { isRequired: true } }),
-    country: (0, import_fields19.text)({ validation: { isRequired: true } }),
-    image: (0, import_fields19.json)({
+    company: (0, import_fields20.text)({
+      ui: {
+        description: "This required field specifies the company of the person, which will be rendered beneath the role on the Person Card. "
+      }
+    }),
+    city: (0, import_fields20.text)({ validation: { isRequired: true } }),
+    country: (0, import_fields20.text)({ validation: { isRequired: true } }),
+    image: (0, import_fields20.json)({
       ui: {
         description: "This field specifies the image of the person.",
         views: "./customViews/fields/ImageLibraryField.jsx",
@@ -2230,13 +2436,13 @@ var peopleSchema = (0, import_core23.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    socialMediaUrl1: (0, import_fields19.text)({
+    socialMediaUrl1: (0, import_fields20.text)({
       label: "Socialmedia Link 1",
       ui: {
         description: "Url"
       }
     }),
-    socialMediaIcon1: (0, import_fields19.json)({
+    socialMediaIcon1: (0, import_fields20.json)({
       label: "Socialmedia icon 1",
       ui: {
         description: "This field specifies the icon for the first social media link.",
@@ -2246,13 +2452,13 @@ var peopleSchema = (0, import_core23.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    socialMediaUrl2: (0, import_fields19.text)({
+    socialMediaUrl2: (0, import_fields20.text)({
       label: "Socialmedia Link 2",
       ui: {
         description: "Url"
       }
     }),
-    socialMediaIcon2: (0, import_fields19.json)({
+    socialMediaIcon2: (0, import_fields20.json)({
       label: "Socialmedia icon 2",
       ui: {
         description: "This field specifies the icon for the second social media link.",
@@ -2262,7 +2468,7 @@ var peopleSchema = (0, import_core23.list)({
         itemView: { fieldMode: "edit" }
       }
     }),
-    createdAt: (0, import_fields19.timestamp)({
+    createdAt: (0, import_fields20.timestamp)({
       ui: {
         itemView: { fieldMode: "hidden" }
       },
@@ -2273,13 +2479,13 @@ var peopleSchema = (0, import_core23.list)({
 });
 
 // schemas/imageSchema.js
-var import_core24 = require("@keystone-6/core");
-var import_fields20 = require("@keystone-6/core/fields");
-var import_access39 = require("@keystone-6/core/access");
-var imageSchema = (0, import_core24.list)({
+var import_core25 = require("@keystone-6/core");
+var import_fields21 = require("@keystone-6/core/fields");
+var import_access41 = require("@keystone-6/core/access");
+var imageSchema = (0, import_core25.list)({
   access: {
     operation: {
-      ...(0, import_access39.allOperations)(isSignedIn),
+      ...(0, import_access41.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -2291,7 +2497,7 @@ var imageSchema = (0, import_core24.list)({
     }
   },
   fields: {
-    title: (0, import_fields20.text)({
+    title: (0, import_fields21.text)({
       hooks: {
         resolveInput: ({ operation, resolvedData, inputData }) => {
           if (operation === "create" && !inputData.title) {
@@ -2310,15 +2516,15 @@ var imageSchema = (0, import_core24.list)({
         }
       }
     }),
-    altText: (0, import_fields20.text)({
+    altText: (0, import_fields21.text)({
       validation: { isRequired: true },
       ui: {
         description: "This required field specifies the alternative text for the image. Alt text provides a textual description of the image, which is essential for accessibility and SEO purpose."
       }
     }),
-    file: (0, import_fields20.image)({ label: "Image", storage: "imageStorage" }),
-    createdAt: (0, import_fields20.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
-    size: (0, import_fields20.integer)({
+    file: (0, import_fields21.image)({ label: "Image", storage: "imageStorage" }),
+    createdAt: (0, import_fields21.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
+    size: (0, import_fields21.integer)({
       ui: {
         createView: {
           fieldMode: "hidden"
@@ -2335,7 +2541,7 @@ var imageSchema = (0, import_core24.list)({
         }
       }
     }),
-    url: (0, import_fields20.text)({
+    url: (0, import_fields21.text)({
       ui: {
         createView: {
           fieldMode: "hidden"
@@ -2357,13 +2563,13 @@ var imageSchema = (0, import_core24.list)({
 });
 
 // schemas/videoSchema.js
-var import_core25 = require("@keystone-6/core");
-var import_fields21 = require("@keystone-6/core/fields");
-var import_access41 = require("@keystone-6/core/access");
-var videoSchema = (0, import_core25.list)({
+var import_core26 = require("@keystone-6/core");
+var import_fields22 = require("@keystone-6/core/fields");
+var import_access43 = require("@keystone-6/core/access");
+var videoSchema = (0, import_core26.list)({
   access: {
     operation: {
-      ...(0, import_access41.allOperations)(isSignedIn),
+      ...(0, import_access43.allOperations)(isSignedIn),
       create: permissions.canCreateItems,
       query: () => true
     },
@@ -2375,7 +2581,7 @@ var videoSchema = (0, import_core25.list)({
     }
   },
   fields: {
-    title: (0, import_fields21.text)({
+    title: (0, import_fields22.text)({
       hooks: {
         resolveInput: ({ operation, resolvedData, inputData }) => {
           if (operation === "create" && !inputData.title) {
@@ -2394,17 +2600,17 @@ var videoSchema = (0, import_core25.list)({
         }
       }
     }),
-    altText: (0, import_fields21.text)({
+    altText: (0, import_fields22.text)({
       validation: { isRequired: true },
       ui: {
         description: "This required field specifies the alternative text for the video. Alt text provides a textual description of the video, which is essential for accessibility and SEO purpose."
       }
     }),
-    file: (0, import_fields21.file)({
+    file: (0, import_fields22.file)({
       storage: "videoStorage"
     }),
-    createdAt: (0, import_fields21.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
-    size: (0, import_fields21.integer)({
+    createdAt: (0, import_fields22.timestamp)({ isRequired: true, defaultValue: { kind: "now" } }),
+    size: (0, import_fields22.integer)({
       ui: {
         createView: {
           fieldMode: "hidden"
@@ -2421,8 +2627,8 @@ var videoSchema = (0, import_core25.list)({
         }
       }
     }),
-    thumbnailUrl: (0, import_fields21.text)({}),
-    url: (0, import_fields21.text)({
+    thumbnailUrl: (0, import_fields22.text)({}),
+    url: (0, import_fields22.text)({
       ui: {
         createView: {
           fieldMode: "hidden"
@@ -2443,109 +2649,6 @@ var videoSchema = (0, import_core25.list)({
   }
 });
 
-// schemas/testSchema.js
-var import_core26 = require("@keystone-6/core");
-var import_fields22 = require("@keystone-6/core/fields");
-var import_core27 = require("@keystone-6/core");
-var import_access43 = require("@keystone-6/core/access");
-var import_fields_document7 = require("@keystone-6/fields-document");
-var testSchema = (0, import_core26.list)({
-  access: {
-    operation: {
-      ...(0, import_access43.allOperations)(isSignedIn),
-      create: permissions.canCreateItems,
-      query: () => true
-    },
-    filter: {
-      query: () => true,
-      // query: rules.canReadItems,
-      update: rules.canManageItems,
-      delete: rules.canManageItems
-    }
-  },
-  fields: {
-    ...(0, import_core27.group)({
-      label: "Sections",
-      // description: 'Sections description',
-      fields: {
-        sections: (0, import_fields22.json)({
-          ui: {
-            views: "./customViews/fields/AllSectionsField.jsx",
-            createView: { fieldMode: "edit" },
-            listView: { fieldMode: "hidden" },
-            itemView: { fieldMode: "edit", fieldPosition: "form" }
-          }
-        })
-        /* ... */
-      }
-    })
-    // content: document({
-    //   layouts: [
-    //     [1, 1],
-    //     [1, 1, 1],
-    //   ],
-    //   formatting: {
-    //     inlineMarks: {
-    //       bold: true,
-    //       italic: true,
-    //       underline: true,
-    //       strikethrough: true,
-    //       code: true,
-    //       superscript: true,
-    //       subscript: true,
-    //       keyboard: true,
-    //     },
-    //     listTypes: {
-    //       ordered: true,
-    //       unordered: true,
-    //     },
-    //     alignment: {
-    //       center: true,
-    //       end: true,
-    //     },
-    //     headingLevels: [1, 2, 3, 4, 5, 6],
-    //     blockTypes: {
-    //       blockquote: true,
-    //       code: true,
-    //     },
-    //     softBreaks: true,
-    //   },
-    // }),
-    // testwysiwyg: json({
-    //   ui: {
-    //     views: './customViews/TestWysiwyg.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
-    // sections: json({
-    //   ui: {
-    //     views: './customViews/AllSections.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
-    // principles: json({
-    //   ui: {
-    //     views: './customViews/Principles.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
-    // resources: json({
-    //   ui: {
-    //     views: './customViews/Resources.jsx',
-    //     createView: { fieldMode: 'edit' },
-    //     listView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'edit' },
-    //   },
-    // }),
-  }
-});
-
 // schema.js
 var lists = {
   User: userSchema,
@@ -2562,14 +2665,14 @@ var lists = {
   NewsCategory: newsCategorySchema,
   Resource: resourceSchema,
   ResourceType: resourceTypeSchema,
+  ResourceCategory: resourceCategorySchema,
   Image: imageSchema,
   Video: videoSchema,
   Principle: principleSchema,
   PrincipleNumber: principleNumberSchema,
   PrincipleCategory: principleCategorySchema,
   People: peopleSchema,
-  Case: caseSchema,
-  Test: testSchema
+  Case: caseSchema
 };
 
 // storage/imageStorage.js
@@ -2690,6 +2793,8 @@ var { withAuth } = (0, import_auth.createAuth)({
           canCreateItems: true,
           canCreateChapters: true,
           // Ny
+          canCreateNews: true,
+          // Ny
           canManageAllItems: true,
           canSeeOtherUsers: true,
           canEditOtherUsers: true,
@@ -2711,6 +2816,7 @@ var { withAuth } = (0, import_auth.createAuth)({
       id
       name
       canCreateItems
+      canCreateNews
       canCreateChapters
       canManageAllItems
       canSeeOtherUsers
@@ -2868,7 +2974,7 @@ var signInLimiter = (0, import_express_rate_limit.rateLimit)({
   message: "Too many requests, please try again later."
 });
 var keystone_default = withAuth(
-  (0, import_core28.config)({
+  (0, import_core27.config)({
     server: {
       port: PORT,
       maxFileSize: MAX_FILE_SIZE,

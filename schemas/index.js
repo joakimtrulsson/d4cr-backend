@@ -20,6 +20,7 @@ export { newsCategorySchema as NewsCategory } from './newsCategorySchema.js';
 // Resources
 export { resourceSchema as Resource } from './resourceSchema.js';
 export { resourceTypeSchema as ResourceType } from './resourceTypeSchema.js';
+export { resourceCategorySchema as ResourceCategory } from './resourceCategorySchema.js';
 
 // Principles
 export { principleSchema as Principle } from './principleSchema.js';
@@ -35,6 +36,3 @@ export { peopleSchema as People } from './peopleSchema.js';
 // Files
 export { imageSchema as Image } from './imageSchema.js';
 export { videoSchema as Video } from './videoSchema.js';
-
-// Test schema for developing sections
-export { testSchema as Test } from './testSchema.js';

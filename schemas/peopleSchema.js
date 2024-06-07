@@ -23,8 +23,14 @@ export const peopleSchema = list({
     plural: 'PeopleList',
   },
   ui: {
-    isHidden: (args) => {
-      return !permissions?.canManageAllItems(args);
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        return 'read';
+      },
     },
     listView: {
       initialColumns: ['fullName', 'role', 'city', 'country'],
@@ -41,6 +47,13 @@ export const peopleSchema = list({
       ui: {
         description:
           'This required field specifies the role or position of the person, which will be rendered beneath the name on the Person Card. ',
+      },
+    }),
+
+    company: text({
+      ui: {
+        description:
+          'This required field specifies the company of the person, which will be rendered beneath the role on the Person Card. ',
       },
     }),
 

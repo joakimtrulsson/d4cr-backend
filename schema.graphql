@@ -170,6 +170,7 @@ type Role {
   id: ID!
   name: String
   canCreateItems: Boolean
+  canCreateNews: Boolean
   canCreateChapters: Boolean
   canManageAllItems: Boolean
   canSeeOtherUsers: Boolean
@@ -191,6 +192,7 @@ input RoleWhereInput {
   id: IDFilter
   name: StringFilter
   canCreateItems: BooleanFilter
+  canCreateNews: BooleanFilter
   canCreateChapters: BooleanFilter
   canManageAllItems: BooleanFilter
   canSeeOtherUsers: BooleanFilter
@@ -215,6 +217,7 @@ input RoleOrderByInput {
   id: OrderDirection
   name: OrderDirection
   canCreateItems: OrderDirection
+  canCreateNews: OrderDirection
   canCreateChapters: OrderDirection
   canManageAllItems: OrderDirection
   canSeeOtherUsers: OrderDirection
@@ -226,6 +229,7 @@ input RoleOrderByInput {
 input RoleUpdateInput {
   name: String
   canCreateItems: Boolean
+  canCreateNews: Boolean
   canCreateChapters: Boolean
   canManageAllItems: Boolean
   canSeeOtherUsers: Boolean
@@ -250,6 +254,7 @@ input RoleUpdateArgs {
 input RoleCreateInput {
   name: String
   canCreateItems: Boolean
+  canCreateNews: Boolean
   canCreateChapters: Boolean
   canManageAllItems: Boolean
   canSeeOtherUsers: Boolean
@@ -267,6 +272,7 @@ input UserRelateToManyForCreateInput {
 type Chapter {
   id: ID!
   title: String
+  publicTitle: String
   slug: String
   preamble: Chapter_preamble_Document
   heroImage: JSON
@@ -295,6 +301,7 @@ input ChapterWhereInput {
   NOT: [ChapterWhereInput!]
   id: IDFilter
   title: StringFilter
+  publicTitle: StringFilter
   slug: StringFilter
   chapterLanguage: StringNullableFilter
   translatedChapters: ChapterManyRelationFilter
@@ -320,6 +327,7 @@ input StringNullableFilter {
 input ChapterOrderByInput {
   id: OrderDirection
   title: OrderDirection
+  publicTitle: OrderDirection
   slug: OrderDirection
   chapterLanguage: OrderDirection
   status: OrderDirection
@@ -327,6 +335,7 @@ input ChapterOrderByInput {
 
 input ChapterUpdateInput {
   title: String
+  publicTitle: String
   slug: String
   preamble: JSON
   heroImage: JSON
@@ -344,6 +353,7 @@ input ChapterUpdateArgs {
 
 input ChapterCreateInput {
   title: String
+  publicTitle: String
   slug: String
   preamble: JSON
   heroImage: JSON
@@ -905,6 +915,7 @@ type Resource {
   url: String
   image: JSON
   resourceType: ResourceType
+  resourceCategory: ResourceCategory
   createdAt: DateTime
 }
 
@@ -921,6 +932,7 @@ input ResourceWhereInput {
   title: StringFilter
   url: StringFilter
   resourceType: ResourceTypeWhereInput
+  resourceCategory: ResourceCategoryWhereInput
   createdAt: DateTimeNullableFilter
 }
 
@@ -936,12 +948,19 @@ input ResourceUpdateInput {
   url: String
   image: JSON
   resourceType: ResourceTypeRelateToOneForUpdateInput
+  resourceCategory: ResourceCategoryRelateToOneForUpdateInput
   createdAt: DateTime
 }
 
 input ResourceTypeRelateToOneForUpdateInput {
   create: ResourceTypeCreateInput
   connect: ResourceTypeWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ResourceCategoryRelateToOneForUpdateInput {
+  create: ResourceCategoryCreateInput
+  connect: ResourceCategoryWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -955,12 +974,18 @@ input ResourceCreateInput {
   url: String
   image: JSON
   resourceType: ResourceTypeRelateToOneForCreateInput
+  resourceCategory: ResourceCategoryRelateToOneForCreateInput
   createdAt: DateTime
 }
 
 input ResourceTypeRelateToOneForCreateInput {
   create: ResourceTypeCreateInput
   connect: ResourceTypeWhereUniqueInput
+}
+
+input ResourceCategoryRelateToOneForCreateInput {
+  create: ResourceCategoryCreateInput
+  connect: ResourceCategoryWhereUniqueInput
 }
 
 type ResourceType {
@@ -1000,6 +1025,47 @@ input ResourceTypeUpdateArgs {
 
 input ResourceTypeCreateInput {
   type: String
+  resources: ResourceRelateToManyForCreateInput
+}
+
+type ResourceCategory {
+  id: ID!
+  title: String
+  resources(where: ResourceWhereInput! = {}, orderBy: [ResourceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceWhereUniqueInput): [Resource!]
+  resourcesCount(where: ResourceWhereInput! = {}): Int
+}
+
+input ResourceCategoryWhereUniqueInput {
+  id: ID
+  title: String
+}
+
+input ResourceCategoryWhereInput {
+  AND: [ResourceCategoryWhereInput!]
+  OR: [ResourceCategoryWhereInput!]
+  NOT: [ResourceCategoryWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  resources: ResourceManyRelationFilter
+}
+
+input ResourceCategoryOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+}
+
+input ResourceCategoryUpdateInput {
+  title: String
+  resources: ResourceRelateToManyForUpdateInput
+}
+
+input ResourceCategoryUpdateArgs {
+  where: ResourceCategoryWhereUniqueInput!
+  data: ResourceCategoryUpdateInput!
+}
+
+input ResourceCategoryCreateInput {
+  title: String
   resources: ResourceRelateToManyForCreateInput
 }
 
@@ -1405,6 +1471,7 @@ type People {
   id: ID!
   fullName: String
   role: String
+  company: String
   city: String
   country: String
   image: JSON
@@ -1426,6 +1493,7 @@ input PeopleWhereInput {
   id: IDFilter
   fullName: StringFilter
   role: StringFilter
+  company: StringFilter
   city: StringFilter
   country: StringFilter
   socialMediaUrl1: StringFilter
@@ -1437,6 +1505,7 @@ input PeopleOrderByInput {
   id: OrderDirection
   fullName: OrderDirection
   role: OrderDirection
+  company: OrderDirection
   city: OrderDirection
   country: OrderDirection
   socialMediaUrl1: OrderDirection
@@ -1447,6 +1516,7 @@ input PeopleOrderByInput {
 input PeopleUpdateInput {
   fullName: String
   role: String
+  company: String
   city: String
   country: String
   image: JSON
@@ -1465,6 +1535,7 @@ input PeopleUpdateArgs {
 input PeopleCreateInput {
   fullName: String
   role: String
+  company: String
   city: String
   country: String
   image: JSON
@@ -1551,39 +1622,6 @@ input CaseCreateInput {
   resources: ResourceRelateToManyForCreateInput
   status: String
   createdAt: DateTime
-}
-
-type Test {
-  id: ID!
-  sections: JSON
-}
-
-input TestWhereUniqueInput {
-  id: ID
-}
-
-input TestWhereInput {
-  AND: [TestWhereInput!]
-  OR: [TestWhereInput!]
-  NOT: [TestWhereInput!]
-  id: IDFilter
-}
-
-input TestOrderByInput {
-  id: OrderDirection
-}
-
-input TestUpdateInput {
-  sections: JSON
-}
-
-input TestUpdateArgs {
-  where: TestWhereUniqueInput!
-  data: TestUpdateInput!
-}
-
-input TestCreateInput {
-  sections: JSON
 }
 
 """
@@ -1676,6 +1714,12 @@ type Mutation {
   updateResourceTypes(data: [ResourceTypeUpdateArgs!]!): [ResourceType]
   deleteResourceType(where: ResourceTypeWhereUniqueInput!): ResourceType
   deleteResourceTypes(where: [ResourceTypeWhereUniqueInput!]!): [ResourceType]
+  createResourceCategory(data: ResourceCategoryCreateInput!): ResourceCategory
+  createResourceCategories(data: [ResourceCategoryCreateInput!]!): [ResourceCategory]
+  updateResourceCategory(where: ResourceCategoryWhereUniqueInput!, data: ResourceCategoryUpdateInput!): ResourceCategory
+  updateResourceCategories(data: [ResourceCategoryUpdateArgs!]!): [ResourceCategory]
+  deleteResourceCategory(where: ResourceCategoryWhereUniqueInput!): ResourceCategory
+  deleteResourceCategories(where: [ResourceCategoryWhereUniqueInput!]!): [ResourceCategory]
   createImage(data: ImageCreateInput!): Image
   createImages(data: [ImageCreateInput!]!): [Image]
   updateImage(where: ImageWhereUniqueInput!, data: ImageUpdateInput!): Image
@@ -1718,12 +1762,6 @@ type Mutation {
   updateCases(data: [CaseUpdateArgs!]!): [Case]
   deleteCase(where: CaseWhereUniqueInput!): Case
   deleteCases(where: [CaseWhereUniqueInput!]!): [Case]
-  createTest(data: TestCreateInput!): Test
-  createTests(data: [TestCreateInput!]!): [Test]
-  updateTest(where: TestWhereUniqueInput!, data: TestUpdateInput!): Test
-  updateTests(data: [TestUpdateArgs!]!): [Test]
-  deleteTest(where: TestWhereUniqueInput!): Test
-  deleteTests(where: [TestWhereUniqueInput!]!): [Test]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -1809,6 +1847,9 @@ type Query {
   resourceTypes(where: ResourceTypeWhereInput! = {}, orderBy: [ResourceTypeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceTypeWhereUniqueInput): [ResourceType!]
   resourceType(where: ResourceTypeWhereUniqueInput!): ResourceType
   resourceTypesCount(where: ResourceTypeWhereInput! = {}): Int
+  resourceCategories(where: ResourceCategoryWhereInput! = {}, orderBy: [ResourceCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResourceCategoryWhereUniqueInput): [ResourceCategory!]
+  resourceCategory(where: ResourceCategoryWhereUniqueInput!): ResourceCategory
+  resourceCategoriesCount(where: ResourceCategoryWhereInput! = {}): Int
   images(where: ImageWhereInput! = {}, orderBy: [ImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ImageWhereUniqueInput): [Image!]
   image(where: ImageWhereUniqueInput!): Image
   imagesCount(where: ImageWhereInput! = {}): Int
@@ -1830,9 +1871,6 @@ type Query {
   cases(where: CaseWhereInput! = {}, orderBy: [CaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CaseWhereUniqueInput): [Case!]
   case(where: CaseWhereUniqueInput!): Case
   casesCount(where: CaseWhereInput! = {}): Int
-  tests(where: TestWhereInput! = {}, orderBy: [TestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TestWhereUniqueInput): [Test!]
-  test(where: TestWhereUniqueInput!): Test
-  testsCount(where: TestWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

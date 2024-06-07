@@ -18,11 +18,16 @@ export const chapterSchema = list({
     },
     filter: {
       query: ({ session }) => {
-        if (session) {
-          return true;
+        if (!session) {
+          // Om ingen användare är inloggad (dvs. en frontend-klient gör en begäran), låt alla kapitel hämtas
+          return { status: { equals: 'published' } };
         }
 
-        return { status: { equals: 'published' } };
+        // Om användaren har canManageAllItems behörighet, låt dem se alla kapitel
+        if (session.data.role?.canManageAllItems) return true;
+
+        // Annars, låt användaren endast se sina egna kapitel
+        return { contentOwner: { some: { id: { equals: session.itemId } } } };
       },
       update: rules.canManageItems,
       delete: rules.canManageItems,
@@ -44,7 +49,8 @@ export const chapterSchema = list({
       defaultFieldMode: ({ session, item }) => {
         if (session?.data.role?.canManageAllItems) return 'edit';
 
-        if (session.data.chapters[0].id === item.id) return 'edit';
+        if (session.data.chapters.some((chapter) => chapter.id === item.id))
+          return 'edit';
 
         return 'read';
       },
@@ -67,8 +73,17 @@ export const chapterSchema = list({
     title: text({
       validation: { isRequired: true },
       ui: {
+        label: 'Administrative Title',
         description:
-          'This required field specifies the title of the chapter, which is prominently displayed below the image and "D4CR PRESENTS" on the chapter page. Additionally, the word "Chapter" will be rendered along with the title on the chapters page and will also appear in the browser tab.',
+          'This required field specifies the administrative title of the chapter, which the slug will be based on and it will be used in the admin interface. The title should be unique and is not visible to users.',
+      },
+    }),
+
+    publicTitle: text({
+      validation: { isRequired: true },
+      ui: {
+        description:
+          'This required field specifies the public title of the chapter, which is prominently displayed below the image and "D4CR PRESENTS" on the chapter page. Additionally, the word "Chapter" will be rendered along with the title on the chapters page and will also appear in the browser tab.',
       },
     }),
 
@@ -180,16 +195,6 @@ export const chapterSchema = list({
         views: './customViews/fields/AllSectionsField.jsx',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
-        // itemView: { fieldMode: 'edit' },
-        itemView: {
-          fieldMode: ({ session, item }) => {
-            if (session?.data.role?.canManageAllItems) return 'edit';
-
-            if (session.data.chapters[0].id === item.id) return 'edit';
-
-            return 'hidden';
-          },
-        },
       },
     }),
 

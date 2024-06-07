@@ -11,6 +11,15 @@ import triggerRevalidation from '../utils/triggerRevalidation.js';
 export const formEmailSchema = list({
   ui: {
     label: 'Form - Contact us',
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        return 'read';
+      },
+    },
   },
   access: {
     operation: {
@@ -26,6 +35,7 @@ export const formEmailSchema = list({
     },
   },
   isSingleton: true,
+
   fields: {
     contactEmail: text({
       validation: { isRequired: true },

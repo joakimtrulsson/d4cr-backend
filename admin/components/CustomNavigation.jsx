@@ -20,15 +20,13 @@ export function CustomNavigation({ authenticatedItem, lists }) {
     'Case',
     'News',
     'People',
-    'Test',
   ];
   const underTaxonomyLists = [
     'ResourceType',
-    // 'ResourceCategory',
+    'ResourceCategory',
     'PrincipleCategory',
     'PrincipleNumber',
     'NewsCategory',
-    // 'NewsNumber',
   ];
   const underMediaLibraryLists = ['Image', 'Video'];
 

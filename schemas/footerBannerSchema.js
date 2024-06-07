@@ -12,6 +12,7 @@ export const footerBannerSchema = list({
       create: permissions.canCreateItems,
       query: () => true,
     },
+
     filter: {
       query: () => true,
       // query: rules.canReadItems,
@@ -19,7 +20,21 @@ export const footerBannerSchema = list({
       delete: rules.canManageItems,
     },
   },
+
   isSingleton: true,
+
+  ui: {
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        return 'read';
+      },
+    },
+  },
+
   fields: {
     title: text({
       validation: { isRequired: true },

@@ -73,6 +73,7 @@ export const userSchema = list({
         update: permissions.canManageUsers,
       },
       ui: {
+        hideCreate: true,
         itemView: {
           fieldMode: (args) => (permissions.canManageUsers(args) ? 'edit' : 'read'),
         },

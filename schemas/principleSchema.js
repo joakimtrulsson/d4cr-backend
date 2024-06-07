@@ -35,8 +35,14 @@ export const principleSchema = list({
     },
   },
   ui: {
-    isHidden: (args) => {
-      return !permissions?.canManageAllItems(args);
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        return 'read';
+      },
     },
     labelField: 'title',
     listView: {

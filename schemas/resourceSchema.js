@@ -32,6 +32,15 @@ export const resourceSchema = list({
   },
   ui: {
     labelField: 'title',
+    hideCreate: (args) => !permissions.canCreateItems(args),
+    hideDelete: (args) => !permissions.canManageAllItems(args),
+    itemView: {
+      defaultFieldMode: ({ session, item }) => {
+        if (session?.data.role?.canManageAllItems) return 'edit';
+
+        return 'read';
+      },
+    },
     listView: {
       initialColumns: ['title', 'category', 'type', 'createdAt'],
       initialSort: { field: 'title', direction: 'ASC' },
@@ -77,6 +86,16 @@ export const resourceSchema = list({
       },
     }),
 
+    resourceCategory: relationship({
+      validation: { isRequired: true },
+      ref: 'ResourceCategory.resources',
+      many: false,
+      ui: {
+        description:
+          'This required field specifies the category of the resource. Allows visitors to filter resources based on their category.',
+      },
+    }),
+
     createdAt: timestamp({
       ui: {
         itemView: {
@@ -97,9 +116,7 @@ export const resourceSchema = list({
             date.setMilliseconds(0);
             return date.toISOString();
           } else {
-            let date = inputData.createdAt;
-            date.setMilliseconds(0);
-            return date.toISOString();
+            return resolvedData.createdAt;
           }
         },
       },

@@ -13,6 +13,7 @@ import {
   NewsCategory,
   Resource,
   ResourceType,
+  ResourceCategory,
   Image,
   Video,
   Principle,
@@ -20,7 +21,6 @@ import {
   PrincipleCategory,
   People,
   Case,
-  Test,
 } from './schemas/index.js';
 
 export const lists = {
@@ -38,6 +38,7 @@ export const lists = {
   NewsCategory,
   Resource,
   ResourceType,
+  ResourceCategory,
   Image,
   Video,
   Principle,
@@ -45,5 +46,4 @@ export const lists = {
   PrincipleCategory,
   People,
   Case,
-  Test,
 };
