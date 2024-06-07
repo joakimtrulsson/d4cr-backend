@@ -35,6 +35,9 @@ export const newsSchema = list({
         const url = operation === 'delete' ? '/news' : item.slug;
 
         const { data } = await triggerRevalidation(url);
+        if (operation !== 'delete') {
+          await triggerRevalidation('/news');
+        }
 
         if (data.revalidated) console.log('NextJs Revalidation triggered successfully');
       }

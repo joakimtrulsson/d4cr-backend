@@ -1387,6 +1387,9 @@ var newsSchema = (0, import_core12.list)({
       if (operation === "create" || operation === "update" || operation === "delete") {
         const url = operation === "delete" ? "/news" : item.slug;
         const { data } = await triggerRevalidation(url);
+        if (operation !== "delete") {
+          await triggerRevalidation("/news");
+        }
         if (data.revalidated)
           console.log("NextJs Revalidation triggered successfully");
       }
@@ -2208,6 +2211,9 @@ var caseSchema = (0, import_core22.list)({
       if (["create", "update", "delete"].includes(operation) && item.linkType === "internal") {
         const url = operation === "delete" ? "/cases" : item.url;
         const { data } = await triggerRevalidation(url);
+        if (operation !== "delete") {
+          await triggerRevalidation("/cases");
+        }
       }
     }
   },

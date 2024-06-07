@@ -36,6 +36,10 @@ export const caseSchema = list({
       ) {
         const url = operation === 'delete' ? '/cases' : item.url;
         const { data } = await triggerRevalidation(url);
+
+        if (operation !== 'delete') {
+          await triggerRevalidation('/cases');
+        }
       }
     },
   },
